@@ -82,7 +82,7 @@ var createScene = async function() {
 
   // LIGHTS AND BACKGROUND
 
-  scene.scene.clearColor = new BABYLON.Color3(0, 0, 0)
+  scene.clearColor = new BABYLON.Color3(0, 0, 0)
 
   var light = new BABYLON.DirectionalLight(
     "pointLight",
