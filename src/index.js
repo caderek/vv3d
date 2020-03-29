@@ -7,7 +7,7 @@ const state = {
 }
 
 const getObject = (mesh) => {
-  if (mesh.parent.id === "__root__") {
+  if (mesh.id === "__root__" || mesh.parent.id === "__root__") {
     return mesh
   }
 
@@ -24,14 +24,6 @@ var engine = new BABYLON.Engine(canvas, true, {
 var createScene = async function() {
   // Create a scene.
   var scene = new BABYLON.Scene(engine)
-
-  scene.clearColor = new BABYLON.Color3(0, 0, 0, 1)
-
-  var light = new BABYLON.PointLight(
-    "pointLight",
-    new BABYLON.Vector3(1, 10, 1),
-    scene,
-  )
 
   // var shadowGenerator = new BABYLON.ShadowGenerator(1024, light)
 
@@ -58,7 +50,8 @@ var createScene = async function() {
   })
 
   // Create a default arc rotate camera and light.
-  scene.createDefaultCameraOrLight(true, true, true)
+  // scene.createDefaultCameraOrLight(true, true, true)
+  scene.createDefaultCamera(true, true, true)
 
   const ground = scene.meshes.find((mesh) => mesh.name === "ground")
 
@@ -84,6 +77,41 @@ var createScene = async function() {
     scene.meshes.map(({ id }, index) => [id, index]),
   )
 
+  // LIGHTS AND BACKGROUND
+
+  scene.clearColor = new BABYLON.Color3(0, 0, 0)
+
+  var light = new BABYLON.DirectionalLight(
+    "pointLight",
+    new BABYLON.Vector3(2, -5, 2),
+    scene,
+  )
+  light.diffuse = new BABYLON.Color3(1, 1, 1)
+  light.intensity = 5
+
+  var shadowGenerator = new BABYLON.ShadowGenerator(1024, light)
+  shadowGenerator.addShadowCaster(scene.meshes[indexes["tank"]])
+
+  shadowGenerator.usePercentageCloserFiltering = true
+  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH
+  // shadowGenerator.bias = 0.0001
+
+  scene.meshes.forEach((mesh) => {
+    if (mesh.id.includes("ground")) {
+      shadowGenerator.addShadowCaster(mesh)
+      mesh.receiveShadows = true
+    }
+  })
+
+  var ambient = new BABYLON.HemisphericLight(
+    "HemiLight",
+    new BABYLON.Vector3(0, 1, 0),
+    scene,
+  )
+  ambient.intensity = 0.1
+
+  // LIGHTS END
+
   scene.animationGroups.forEach((animation) => {
     animation.play(true)
   })
@@ -92,7 +120,7 @@ var createScene = async function() {
   // Rotate the camera by 180 degrees to the front of the asset.
   scene.activeCamera.alpha += 1.25 * Math.PI
   engine.runRenderLoop(function() {
-    // scene.meshes[ids.tank].position.x += 0.005
+    scene.meshes[indexes["tank"]].position.x += 0.01
     scene.render()
   })
   window.addEventListener("click", function() {
@@ -100,7 +128,7 @@ var createScene = async function() {
     const { hit, pickedMesh } = scene.pick(scene.pointerX, scene.pointerY)
     if (hit === true) {
       const mesh = getObject(pickedMesh)
-      console.log({ picked: mesh.name })
+      console.log({ picked: mesh.id })
       mesh.position.y += 0.1
     } else {
       state.active = null
