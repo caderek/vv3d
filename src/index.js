@@ -88,6 +88,7 @@ var createScene = async function() {
   )
   light.diffuse = new BABYLON.Color3(1, 1, 1)
   light.intensity = 5
+  light.autoUpdateExtends = false
 
   var shadowGenerator = new BABYLON.ShadowGenerator(1024, light)
   shadowGenerator.addShadowCaster(scene.meshes[indexes["tank"]])
