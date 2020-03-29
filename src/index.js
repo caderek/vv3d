@@ -98,7 +98,7 @@ var createScene = async function() {
 
   shadowGenerator.usePercentageCloserFiltering = true
   shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH
-  shadowGenerator.bias = 0.0001
+  // shadowGenerator.bias = 0.0001
 
   scene.meshes.forEach((mesh) => {
     if (mesh.id.includes("ground")) {
