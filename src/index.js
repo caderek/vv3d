@@ -41,12 +41,15 @@ var createScene = async function() {
   await new Promise((resolve, reject) => {
     BABYLON.SceneLoader.Append(
       "models/",
-      "ground.glb",
+      "unit.glb",
       scene,
       resolve,
       null,
       reject,
     )
+  })
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append("models/", "ground.glb", scene, resolve, null)
   })
 
   // Create a default arc rotate camera and light.
@@ -79,7 +82,7 @@ var createScene = async function() {
 
   // LIGHTS AND BACKGROUND
 
-  scene.clearColor = new BABYLON.Color3(0, 0, 0)
+  scene.scene.clearColor = new BABYLON.Color3(0, 0, 0)
 
   var light = new BABYLON.DirectionalLight(
     "pointLight",
@@ -109,7 +112,7 @@ var createScene = async function() {
     new BABYLON.Vector3(0, 1, 0),
     scene,
   )
-  ambient.intensity = 0.1
+  ambient.intensity = 0.5
 
   // LIGHTS END
 
