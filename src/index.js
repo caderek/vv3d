@@ -28,26 +28,16 @@ var createScene = async function() {
   // var shadowGenerator = new BABYLON.ShadowGenerator(1024, light)
 
   // Append glTF model to scene.
-  await new Promise((resolve, reject) => {
-    BABYLON.SceneLoader.Append(
-      "models/",
-      "tank.glb",
-      scene,
-      resolve,
-      null,
-      reject,
-    )
-  })
-  await new Promise((resolve, reject) => {
-    BABYLON.SceneLoader.Append(
-      "models/",
-      "unit.glb",
-      scene,
-      resolve,
-      null,
-      reject,
-    )
-  })
+  // await new Promise((resolve, reject) => {
+  //   BABYLON.SceneLoader.Append(
+  //     "models/",
+  //     "unit.glb",
+  //     scene,
+  //     resolve,
+  //     null,
+  //     reject,
+  //   )
+  // })
   await new Promise((resolve, reject) => {
     BABYLON.SceneLoader.Append("models/", "ground.glb", scene, resolve, null)
   })
@@ -55,26 +45,6 @@ var createScene = async function() {
   // Create a default arc rotate camera and light.
   // scene.createDefaultCameraOrLight(true, true, true)
   scene.createDefaultCamera(true, true, true)
-
-  const ground = scene.meshes.find((mesh) => mesh.name === "ground")
-
-  const board = Array.from({ length: state.mapSize }, () =>
-    Array.from({ length: 8 }, () => null),
-  )
-
-  const groundSize = ground.getBoundingInfo().boundingBox.extendSize.x
-
-  console.log({ groundSize })
-
-  for (let y = 0; y < state.mapSize; y++) {
-    for (let x = 0; x < state.mapSize; x++) {
-      board[y][x] = ground.clone(`ground_${y}_${x}`)
-      board[y][x].position.x = groundSize * x * 2
-      board[y][x].position.z = groundSize * y * 2
-    }
-  }
-
-  ground.isVisible = false
 
   const indexes = Object.fromEntries(
     scene.meshes.map(({ id }, index) => [id, index]),
@@ -94,18 +64,6 @@ var createScene = async function() {
   light.autoUpdateExtends = false
 
   var shadowGenerator = new BABYLON.ShadowGenerator(1024, light)
-  shadowGenerator.addShadowCaster(scene.meshes[indexes["tank"]])
-
-  shadowGenerator.usePercentageCloserFiltering = true
-  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH
-  // shadowGenerator.bias = 0.0001
-
-  scene.meshes.forEach((mesh) => {
-    if (mesh.id.includes("ground")) {
-      shadowGenerator.addShadowCaster(mesh)
-      mesh.receiveShadows = true
-    }
-  })
 
   var ambient = new BABYLON.HemisphericLight(
     "HemiLight",
@@ -124,7 +82,7 @@ var createScene = async function() {
   // Rotate the camera by 180 degrees to the front of the asset.
   scene.activeCamera.alpha += 1.25 * Math.PI
   engine.runRenderLoop(function() {
-    scene.meshes[indexes["tank"]].position.x += 0.01
+    // scene.meshes[indexes["tank"]].position.x += 0.01
     scene.render()
   })
   window.addEventListener("click", function() {
