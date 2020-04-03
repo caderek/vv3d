@@ -3,7 +3,7 @@ const addLightsAndShadows = (scene) => {
 
   const topLight = new BABYLON.DirectionalLight(
     "topLight",
-    new BABYLON.Vector3(2, -5, 2),
+    new BABYLON.Vector3(2, -50, 2),
     scene,
   )
   topLight.diffuse = new BABYLON.Color3(1, 1, 1)
@@ -12,7 +12,7 @@ const addLightsAndShadows = (scene) => {
 
   const bottomLight = new BABYLON.DirectionalLight(
     "bottomLight",
-    new BABYLON.Vector3(2, 10, 2),
+    new BABYLON.Vector3(2, 50, 2),
     scene,
   )
 
@@ -24,6 +24,17 @@ const addLightsAndShadows = (scene) => {
   ambient.intensity = 0.5
 
   const shadowGenerator = new BABYLON.ShadowGenerator(1024, topLight)
+
+  shadowGenerator.usePercentageCloserFiltering = true
+  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_MEDIUM
+  // shadowGenerator.bias = 0.0001
+
+  scene.meshes.forEach((mesh) => {
+    if (mesh.id.includes("ground")) {
+      shadowGenerator.addShadowCaster(mesh)
+      mesh.receiveShadows = true
+    }
+  })
 
   return scene
 }
