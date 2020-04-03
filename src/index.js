@@ -4,7 +4,7 @@ import addLightsAndShadows from "./addLightsAndShadows"
 
 const state = {
   active: null,
-  mapSize: 7,
+  mapSize: 8,
 }
 
 const getObject = (mesh) => {
@@ -31,7 +31,7 @@ const createScene = async (engine) => {
 
   const ground = scene.meshes.find((mesh) => mesh.name === "ground")
 
-  const board = Array.from({ length: state.mapSize / 2 }, () =>
+  const board = Array.from({ length: state.mapSize }, () =>
     Array.from({ length: state.mapSize }, () =>
       Array.from({ length: state.mapSize }, () => null),
     ),
@@ -41,7 +41,7 @@ const createScene = async (engine) => {
 
   console.log({ groundSize })
 
-  for (let z = 0; z < state.mapSize / 2; z++) {
+  for (let z = 0; z < state.mapSize; z++) {
     for (let y = 0; y < state.mapSize; y++) {
       for (let x = 0; x < state.mapSize; x++) {
         board[z][y][x] = ground.clone(`ground_${y}_${x}`)
