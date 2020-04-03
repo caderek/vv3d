@@ -3,16 +3,16 @@ const addLightsAndShadows = (scene) => {
 
   const topLight = new BABYLON.DirectionalLight(
     "topLight",
-    new BABYLON.Vector3(2, -50, 2),
+    new BABYLON.Vector3(30, -50, 30),
     scene,
   )
-  topLight.diffuse = new BABYLON.Color3(1, 1, 1)
+  topLight.diffuse = new BABYLON.Color3(1, 1, 0.8)
   topLight.intensity = 5
   topLight.autoUpdateExtends = false
 
   const bottomLight = new BABYLON.DirectionalLight(
     "bottomLight",
-    new BABYLON.Vector3(2, 50, 2),
+    new BABYLON.Vector3(-50, 50, -50),
     scene,
   )
 

@@ -4,7 +4,7 @@ import addLightsAndShadows from "./addLightsAndShadows"
 
 const state = {
   active: null,
-  mapSize: 11,
+  mapSize: 12,
 }
 
 const getObject = (mesh) => {
@@ -48,14 +48,13 @@ const createScene = async (engine) => {
         board[z][y][x].position.x = groundSize * x
         board[z][y][x].position.z = groundSize * y
         board[z][y][x].position.y = groundSize * z
+        board[z][y][x].cullingStrategy =
+          BABYLON.AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY
       }
     }
   }
 
   ground.isVisible = false
-
-  scene.createDefaultCamera(true, true, true)
-  scene.activeCamera.alpha += 1.25 * Math.PI
 
   const indexes = Object.fromEntries(
     scene.meshes.map(({ id }, index) => [id, index]),
@@ -72,10 +71,14 @@ const createScene = async (engine) => {
   })
 
   window.addEventListener("click", function() {
-    const { hit, pickedMesh } = scene.pick(scene.pointerX, scene.pointerY)
+    const { hit, pickedMesh, faceId } = scene.pick(
+      scene.pointerX,
+      scene.pointerY,
+    )
 
     if (hit === true) {
       const mesh = getObject(pickedMesh)
+      console.log(faceId)
       mesh.isVisible = false
     } else {
       state.active = null
@@ -94,6 +97,20 @@ const main = async () => {
   })
 
   const scene = await createScene(engine)
+  // Parameters: alpha, beta, radius, target position, scene
+  // var camera = new BABYLON.ArcRotateCamera(
+  //   "Camera",
+  //   0,
+  //   0,
+  //   10,
+  //   new BABYLON.Vector3(6, 0, 6),
+  //   scene,
+  // )
+
+  // // This attaches the camera to the canvas
+  // camera.attachControl(canvas, true)
+  scene.createDefaultCamera(true, true, true)
+  scene.activeCamera.alpha += 1.25 * Math.PI
 }
 
 main()
