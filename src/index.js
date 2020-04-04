@@ -4,7 +4,7 @@ import addLightsAndShadows from "./addLightsAndShadows"
 
 const state = {
   active: null,
-  mapSize: 8,
+  mapSize: 12,
 }
 
 const getObject = (mesh) => {
@@ -62,9 +62,22 @@ const createScene = async (engine) => {
 
   addLightsAndShadows(scene)
 
-  scene.animationGroups.forEach((animation) => {
-    animation.play(true)
-  })
+  // scene.animationGroups.forEach((animation) => {
+  //   animation.play(true)
+  // })
+
+  // BABYLON.SceneOptimizer.OptimizeAsync(
+  //   scene,
+  //   BABYLON.SceneOptimizerOptions.ModerateDegradationAllowed(),
+  //   function () {
+  //     // On success
+  //     console.log("Optimized!")
+  //   },
+  //   function () {
+  //     // FPS target not reached
+  //     console.log("Not optimized!")
+  //   },
+  // )
 
   engine.runRenderLoop(function () {
     scene.render()
@@ -87,7 +100,7 @@ const createScene = async (engine) => {
   })
 
   window.addEventListener("contextmenu", function () {
-    const { hit, pickedMesh, faceId } = scene.pick(
+    const { hit, pickedMesh, pickedPoint, faceId } = scene.pick(
       scene.pointerX,
       scene.pointerY,
     )
@@ -95,7 +108,7 @@ const createScene = async (engine) => {
     if (hit === true) {
       const mesh = getObject(pickedMesh)
       console.log(faceId)
-      // console.log(mesh)
+      console.log({ faceId, pickedPoint, pickedMesh })
       // mesh.isVisible = false
     } else {
       state.active = null
