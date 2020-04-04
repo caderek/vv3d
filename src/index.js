@@ -104,8 +104,6 @@ const createScene = async (engine) => {
       scene.meshes
         .find((mesh) => mesh.id === `ground_${pickedMesh.id}`)
         .dispose()
-    } else {
-      config.active = null
     }
   })
 
@@ -113,13 +111,11 @@ const createScene = async (engine) => {
     const { hit, pickedMesh, pickedPoint, faceId } = scene.pick(
       scene.pointerX,
       scene.pointerY,
+      (mesh) => mesh.isPickable && mesh.isEnabled,
     )
 
     if (hit === true) {
-      console.log(faceId)
-      console.log({ id: pickedMesh.id, faceId, pickedPoint, pickedMesh })
-    } else {
-      config.active = null
+      console.log({ id: pickedMesh.id, faceId })
     }
   })
 

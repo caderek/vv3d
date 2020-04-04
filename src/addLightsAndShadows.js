@@ -25,10 +25,10 @@ const addLightsAndShadows = (scene) => {
   )
   ambient.intensity = 0.3
 
-  const shadowGenerator = new BABYLON.ShadowGenerator(1024, topLight)
+  const shadowGenerator = new BABYLON.ShadowGenerator(2048, topLight)
 
   shadowGenerator.usePercentageCloserFiltering = true
-  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_MEDIUM
+  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH
   scene.meshes.find((mesh) => mesh.id === "ground").receiveShadows = true
 
   // // shadowGenerator.bias = 0.0001
