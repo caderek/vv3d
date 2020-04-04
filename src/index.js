@@ -1,18 +1,11 @@
 import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
 import addLightsAndShadows from "./addLightsAndShadows"
+import { MeshAssetTask } from "babylonjs"
 
-const state = {
-  active: null,
+const config = {
   mapSize: 12,
-}
-
-const getObject = (mesh) => {
-  if (mesh.id === "__root__" || mesh.parent.id === "__root__") {
-    return mesh
-  }
-
-  return getObject(mesh.parent)
+  blockSize: 1,
 }
 
 const createScene = async (engine) => {
@@ -31,25 +24,41 @@ const createScene = async (engine) => {
 
   const ground = scene.meshes.find((mesh) => mesh.name === "ground")
 
-  const board = Array.from({ length: state.mapSize }, () =>
-    Array.from({ length: state.mapSize }, () =>
-      Array.from({ length: state.mapSize }, () => null),
+  const board = Array.from({ length: config.mapSize }, () =>
+    Array.from({ length: config.mapSize }, () =>
+      Array.from({ length: config.mapSize }, () => null),
     ),
   )
 
   const groundSize = ground.getBoundingInfo().boundingBox.extendSize.x
 
-  console.log({ groundSize })
+  ground.setParent(null)
 
-  for (let z = 0; z < state.mapSize; z++) {
-    for (let y = 0; y < state.mapSize; y++) {
-      for (let x = 0; x < state.mapSize; x++) {
-        board[z][y][x] = ground.clone(`ground_${y}_${x}`)
-        board[z][y][x].position.x = groundSize * x
-        board[z][y][x].position.z = groundSize * y
-        board[z][y][x].position.y = groundSize * z
-        board[z][y][x].cullingStrategy =
-          BABYLON.AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY
+  for (let z = 0; z < config.mapSize; z++) {
+    for (let y = 0; y < config.mapSize; y++) {
+      for (let x = 0; x < config.mapSize; x++) {
+        board[z][y][x] = ground.createInstance(`ground_${z}_${y}_${x}`)
+        // board[z][y][x].setParent(ground)
+        board[z][y][x].position.x = config.blockSize * x
+        board[z][y][x].position.z = config.blockSize * y
+        board[z][y][x].position.y = config.blockSize * z
+        board[z][y][x].isPickable = false
+
+        var box = BABYLON.MeshBuilder.CreateBox(
+          `${z}_${y}_${x}`,
+          {
+            width: config.blockSize,
+            height: config.blockSize,
+            depth: config.blockSize,
+          },
+          scene,
+        )
+        // box.material = new BABYLON.StandardMaterial("sm", scene)
+        // box.material.alpha = 0.0
+        box.position.x = config.blockSize * x
+        box.position.z = config.blockSize * y
+        box.position.y = config.blockSize * z
+        box.isVisible = false
       }
     }
   }
@@ -87,15 +96,16 @@ const createScene = async (engine) => {
     const { hit, pickedMesh, faceId } = scene.pick(
       scene.pointerX,
       scene.pointerY,
+      (mesh) => mesh.isPickable && mesh.isEnabled,
     )
 
     if (hit === true) {
-      const mesh = getObject(pickedMesh)
-      console.log(faceId)
-      // console.log(mesh)
-      mesh.isVisible = false
+      pickedMesh.dispose()
+      scene.meshes
+        .find((mesh) => mesh.id === `ground_${pickedMesh.id}`)
+        .dispose()
     } else {
-      state.active = null
+      config.active = null
     }
   })
 
@@ -106,12 +116,10 @@ const createScene = async (engine) => {
     )
 
     if (hit === true) {
-      const mesh = getObject(pickedMesh)
       console.log(faceId)
-      console.log({ faceId, pickedPoint, pickedMesh })
-      // mesh.isVisible = false
+      console.log({ id: pickedMesh.id, faceId, pickedPoint, pickedMesh })
     } else {
-      state.active = null
+      config.active = null
     }
   })
 
@@ -141,6 +149,7 @@ const main = async () => {
   // camera.attachControl(canvas, true)
   scene.createDefaultCamera(true, true, true)
   scene.activeCamera.alpha += 1.25 * Math.PI
+  scene.activeCamera.inertia = 0
 }
 
 main()

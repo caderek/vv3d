@@ -1,3 +1,5 @@
+import { Mesh } from "three"
+
 const addLightsAndShadows = (scene) => {
   scene.clearColor = new BABYLON.Color3(0, 0, 0)
 
@@ -18,21 +20,23 @@ const addLightsAndShadows = (scene) => {
 
   const ambient = new BABYLON.HemisphericLight(
     "ambientLight",
-    new BABYLON.Vector3(0, 1, 0),
+    new BABYLON.Vector3(0, 50, 0),
     scene,
   )
-  ambient.intensity = 0.5
+  ambient.intensity = 0.3
 
   const shadowGenerator = new BABYLON.ShadowGenerator(1024, topLight)
 
   shadowGenerator.usePercentageCloserFiltering = true
   shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_MEDIUM
-  // shadowGenerator.bias = 0.0001
+  scene.meshes.find((mesh) => mesh.id === "ground").receiveShadows = true
+
+  // // shadowGenerator.bias = 0.0001
 
   scene.meshes.forEach((mesh) => {
     if (mesh.id.includes("ground_")) {
       shadowGenerator.addShadowCaster(mesh)
-      mesh.receiveShadows = true
+      // mesh.receiveShadows = true
     }
   })
 
