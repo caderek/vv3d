@@ -212,7 +212,7 @@ const createScene = async (engine) => {
       moved = 0
       input.down = false
     } else if (input.up) {
-      if (moved > 3) {
+      if (moved > 10) {
         return
       }
 
