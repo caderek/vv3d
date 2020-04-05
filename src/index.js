@@ -5,13 +5,28 @@ import addLightsAndShadows from "./addLightsAndShadows"
 import { MeshAssetTask } from "babylonjs"
 
 const config = {
-  worldSize: 100,
+  worldSize: 20,
   mapSize: {
-    x: 50,
-    y: 1,
-    z: 50,
+    x: 20,
+    y: 3,
+    z: 20,
   },
   blockSize: 1,
+}
+
+const incrementByFace = {
+  0: { z: 1, y: 0, x: 0 },
+  1: { z: 1, y: 0, x: 0 },
+  2: { z: -1, y: 0, x: 0 },
+  3: { z: -1, y: 0, x: 0 },
+  4: { z: 0, y: 0, x: 1 },
+  5: { z: 0, y: 0, x: 1 },
+  6: { z: 0, y: 0, x: -1 },
+  7: { z: 0, y: 0, x: -1 },
+  8: { z: 0, y: 1, x: 0 },
+  9: { z: 0, y: 1, x: 0 },
+  10: { z: 0, y: 1, x: 0 },
+  11: { z: 0, y: 1, x: 0 },
 }
 
 const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
@@ -80,7 +95,7 @@ const createScene = async (engine) => {
     scene.render()
   })
 
-  window.addEventListener("click", function () {
+  const action1 = () => {
     const { hit, pickedMesh, faceId } = scene.pick(
       scene.pointerX,
       scene.pointerY,
@@ -93,24 +108,9 @@ const createScene = async (engine) => {
         .find((mesh) => mesh.id === `ground_${pickedMesh.id}`)
         .dispose()
     }
-  })
-
-  const incrementByFace = {
-    0: { z: 1, y: 0, x: 0 },
-    1: { z: 1, y: 0, x: 0 },
-    2: { z: -1, y: 0, x: 0 },
-    3: { z: -1, y: 0, x: 0 },
-    4: { z: 0, y: 0, x: 1 },
-    5: { z: 0, y: 0, x: 1 },
-    6: { z: 0, y: 0, x: -1 },
-    7: { z: 0, y: 0, x: -1 },
-    8: { z: 0, y: 1, x: 0 },
-    9: { z: 0, y: 1, x: 0 },
-    10: { z: 0, y: 1, x: 0 },
-    11: { z: 0, y: 1, x: 0 },
   }
 
-  window.addEventListener("contextmenu", function () {
+  const action2 = () => {
     const { hit, pickedMesh, pickedPoint, faceId } = scene.pick(
       scene.pointerX,
       scene.pointerY,
@@ -135,6 +135,35 @@ const createScene = async (engine) => {
       } else {
         // console.log("Outside!")
       }
+    }
+  }
+
+  let start = 0
+  let stop = 0
+  let right = false
+
+  window.addEventListener("contextmenu", () => {
+    right = true
+  })
+
+  scene.onPointerObservable.add((pointerInfo) => {
+    switch (pointerInfo.type) {
+      case BABYLON.PointerEventTypes.POINTERDOWN:
+        console.log("down")
+        start = Date.now()
+        break
+      case BABYLON.PointerEventTypes.POINTERUP:
+        stop = Date.now()
+        const duration = stop - start
+        if (duration >= 200 || right) {
+          action2()
+          right = false
+        } else {
+          action1()
+        }
+        start = 0
+        stop = 0
+        break
     }
   })
 
