@@ -32,6 +32,7 @@
         touch-action: none;
         -webkit-tap-highlight-color: transparent;
         user-select: none;
+        -webkit-user-select: none;
       }
 
       .toolbox-switch {
@@ -72,7 +73,7 @@
     </style>
   </head>
   <body>
-    <canvas id="viewport" touch-action="none"></canvas>
+    <canvas id="viewport" touch-action="none" role="application"></canvas>
     <div id="toolbox" class="toolbox hidden"></div>
     <button id="toolbox-switch" class="toolbox-switch">TOOLBOX</button>
     <script src="main.js"></script>
