@@ -11,6 +11,7 @@
         border: none;
         -webkit-tap-highlight-color: transparent;
         user-select: none;
+        -webkit-user-select: none;
       }
       body {
         margin: 0;
@@ -72,7 +73,7 @@
       }
     </style>
   </head>
-  <body>
+  <body role="application">
     <canvas id="viewport" touch-action="none" role="application"></canvas>
     <div id="toolbox" class="toolbox hidden"></div>
     <button id="toolbox-switch" class="toolbox-switch">TOOLBOX</button>
