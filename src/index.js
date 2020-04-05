@@ -145,15 +145,9 @@ const createScene = async (engine) => {
     pointer: {
       down: false,
       up: false,
-      move: false,
+      moved: 0,
     },
   }
-
-  engine.runRenderLoop(function () {
-    stats.begin()
-    scene.render()
-    stats.end()
-  })
 
   const action1 = () => {
     const { hit, pickedMesh, faceId } = scene.pick(
@@ -210,6 +204,35 @@ const createScene = async (engine) => {
   let right = false
   let moved = 0
 
+  engine.runRenderLoop(function () {
+    stats.begin()
+
+    if (input.down) {
+      start = Date.now()
+      moved = 0
+      input.down = false
+    } else if (input.up) {
+      if (moved > 3) {
+        return
+      }
+
+      stop = Date.now()
+      const duration = stop - start
+      if (duration >= 400 || right) {
+        action2()
+        right = false
+      } else {
+        action1()
+      }
+      start = 0
+      stop = 0
+      input.up = false
+    }
+
+    scene.render()
+    stats.end()
+  })
+
   window.addEventListener("contextmenu", () => {
     right = true
   })
@@ -217,28 +240,13 @@ const createScene = async (engine) => {
   scene.onPointerObservable.add((pointerInfo) => {
     switch (pointerInfo.type) {
       case BABYLON.PointerEventTypes.POINTERDOWN:
-        start = Date.now()
-        moved = 0
+        input.down = true
         break
       case BABYLON.PointerEventTypes.POINTERUP:
-        console.log(moved)
-        if (moved > 3) {
-          return
-        }
-
-        stop = Date.now()
-        const duration = stop - start
-        if (duration >= 400 || right) {
-          action2()
-          right = false
-        } else {
-          action1()
-        }
-        start = 0
-        stop = 0
+        input.up = true
         break
       case BABYLON.PointerEventTypes.POINTERMOVE:
-        moved++
+        input.moved++
         break
     }
   })
