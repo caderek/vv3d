@@ -1,14 +1,15 @@
+import "pepjs"
 import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
 import addLightsAndShadows from "./addLightsAndShadows"
 import { MeshAssetTask } from "babylonjs"
 
 const config = {
-  worldSize: 20,
+  worldSize: 100,
   mapSize: {
-    x: 20,
-    y: 3,
-    z: 20,
+    x: 50,
+    y: 1,
+    z: 50,
   },
   blockSize: 1,
 }
