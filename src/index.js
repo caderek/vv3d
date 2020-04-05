@@ -192,16 +192,17 @@ const createScene = async (engine) => {
   }
 
   const input = {
-    pointer: {
-      down: false,
-      up: false,
-    },
+    down: false,
+    isDown: false,
+    up: false,
+    isUp: true,
   }
 
   let start = 0
   let stop = 0
   let right = false
   let moved = 0
+  let duration = 0
 
   engine.runRenderLoop(function () {
     stats.begin()
