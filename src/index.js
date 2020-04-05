@@ -2,7 +2,11 @@ import "pepjs"
 import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
 import addLightsAndShadows from "./addLightsAndShadows"
-import { MeshAssetTask } from "babylonjs"
+import Stats from "stats.js"
+
+const stats = new Stats()
+stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild(stats.dom)
 
 const config = {
   worldSize: 20,
@@ -92,7 +96,9 @@ const createScene = async (engine) => {
   ground.isVisible = false
 
   engine.runRenderLoop(function () {
+    stats.begin()
     scene.render()
+    stats.end()
   })
 
   const action1 = () => {
