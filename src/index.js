@@ -122,8 +122,6 @@ const createScene = async (engine) => {
       const z = pickedMesh.position.z + inc.z
       const x = pickedMesh.position.x + inc.x
 
-      console.log({ y, z, x })
-
       if (
         y >= 0 &&
         y < config.worldSize &&
@@ -134,7 +132,7 @@ const createScene = async (engine) => {
       ) {
         createBox(scene, board, ground, shadowGenerator, y, z, x)
       } else {
-        console.log("Outside!")
+        // console.log("Outside!")
       }
     }
   })
