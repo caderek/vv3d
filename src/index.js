@@ -147,6 +147,7 @@ const createScene = async (engine) => {
   let start = 0
   let stop = 0
   let right = false
+  let moved = 0
 
   window.addEventListener("contextmenu", () => {
     right = true
@@ -155,13 +156,18 @@ const createScene = async (engine) => {
   scene.onPointerObservable.add((pointerInfo) => {
     switch (pointerInfo.type) {
       case BABYLON.PointerEventTypes.POINTERDOWN:
-        console.log("down")
         start = Date.now()
+        moved = 0
         break
       case BABYLON.PointerEventTypes.POINTERUP:
+        console.log(moved)
+        if (moved > 3) {
+          return
+        }
+
         stop = Date.now()
         const duration = stop - start
-        if (duration >= 200 || right) {
+        if (duration >= 400 || right) {
           action2()
           right = false
         } else {
@@ -169,6 +175,9 @@ const createScene = async (engine) => {
         }
         start = 0
         stop = 0
+        break
+      case BABYLON.PointerEventTypes.POINTERMOVE:
+        moved++
         break
     }
   })
