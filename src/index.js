@@ -141,14 +141,6 @@ const createScene = async (engine) => {
     baseBlocks[key].isVisible = false
   }
 
-  const input = {
-    pointer: {
-      down: false,
-      up: false,
-      moved: 0,
-    },
-  }
-
   const action1 = () => {
     const { hit, pickedMesh, faceId } = scene.pick(
       scene.pointerX,
@@ -199,6 +191,13 @@ const createScene = async (engine) => {
     }
   }
 
+  const input = {
+    pointer: {
+      down: false,
+      up: false,
+    },
+  }
+
   let start = 0
   let stop = 0
   let right = false
@@ -246,7 +245,7 @@ const createScene = async (engine) => {
         input.up = true
         break
       case BABYLON.PointerEventTypes.POINTERMOVE:
-        input.moved++
+        moved++
         break
     }
   })
