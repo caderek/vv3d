@@ -9,14 +9,41 @@ stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
 
 const config = {
-  worldSize: 20,
+  worldSize: 30,
   mapSize: {
-    x: 20,
-    y: 3,
-    z: 20,
+    x: 30,
+    y: 2,
+    z: 30,
   },
   blockSize: 1,
 }
+
+const state = {
+  activeBlock: "stone-green",
+}
+
+const blockTypes = [
+  { name: "stone-white", iconColor: "#fff" },
+  { name: "stone-lightgray", iconColor: "#aaaaaa" },
+  { name: "stone-darkgray", iconColor: "#555555" },
+  { name: "stone-black", iconColor: "#000" },
+  { name: "stone-red", iconColor: "#FF2225" },
+  { name: "stone-lightred", iconColor: "#FF6969" },
+  { name: "stone-darkred", iconColor: "#700F10" },
+  { name: "stone-green", iconColor: "#2A942C" },
+  { name: "stone-lightgreen", iconColor: "#7FC524" },
+  { name: "stone-darkgreen", iconColor: "#195A1B" },
+  { name: "stone-blue", iconColor: "#2462FF" },
+  { name: "stone-lightblue", iconColor: "#4BBCFF" },
+  { name: "stone-darkblue", iconColor: "#1226FF" },
+  { name: "stone-pink", iconColor: "#FF1FB7" },
+  { name: "stone-purple", iconColor: "#810AFF" },
+  { name: "stone-yellow", iconColor: "#FFBD1D" },
+  { name: "stone-orange", iconColor: "#FF6A28" },
+  { name: "stone-brown", iconColor: "#922B00" },
+  { name: "stone-lightbrown", iconColor: "#BB7744" },
+  { name: "stone-darkbrown", iconColor: "#754100" },
+]
 
 const incrementByFace = {
   0: { z: 1, y: 0, x: 0 },
@@ -34,9 +61,7 @@ const incrementByFace = {
 }
 
 const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
-  board[y][z][x] = parentMesh.createInstance(
-    `${parentMesh.name}_${y}_${z}_${x}`,
-  )
+  board[y][z][x] = parentMesh.createInstance(`item_${y}_${z}_${x}`)
   board[y][z][x].position.y = config.blockSize * y
   board[y][z][x].position.z = config.blockSize * z
   board[y][z][x].position.x = config.blockSize * x
@@ -63,19 +88,28 @@ const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
 const createScene = async (engine) => {
   const scene = new BABYLON.Scene(engine)
 
-  await new Promise((resolve, reject) => {
-    BABYLON.SceneLoader.Append(
-      "models/",
-      "ground.glb",
-      scene,
-      resolve,
-      null,
-      reject,
-    )
-  })
+  for (const blockType of blockTypes) {
+    await new Promise((resolve, reject) => {
+      BABYLON.SceneLoader.Append(
+        "models/",
+        `${blockType.name}.glb`,
+        scene,
+        resolve,
+        null,
+        reject,
+      )
+    })
+  }
+
   const { shadowGenerator } = addLightsAndShadows(scene)
 
-  const ground = scene.meshes.find((mesh) => mesh.name === "ground")
+  const baseBlocks = Object.fromEntries(
+    blockTypes.map(({ name }) => {
+      return [name, scene.meshes.find((mesh) => mesh.name === name)]
+    }),
+  )
+
+  console.log({ baseBlocks })
 
   const board = Array.from({ length: config.worldSize }, () =>
     Array.from({ length: config.worldSize }, () =>
@@ -83,17 +117,37 @@ const createScene = async (engine) => {
     ),
   )
 
-  ground.setParent(null)
+  for (const key in baseBlocks) {
+    baseBlocks[key].setParent(null)
+  }
 
   for (let y = 0; y < config.mapSize.y; y++) {
     for (let z = 0; z < config.mapSize.z; z++) {
       for (let x = 0; x < config.mapSize.x; x++) {
-        createBox(scene, board, ground, shadowGenerator, y, z, x)
+        createBox(
+          scene,
+          board,
+          baseBlocks["stone-green"],
+          shadowGenerator,
+          y,
+          z,
+          x,
+        )
       }
     }
   }
 
-  ground.isVisible = false
+  for (const key in baseBlocks) {
+    baseBlocks[key].isVisible = false
+  }
+
+  const input = {
+    pointer: {
+      down: false,
+      up: false,
+      move: false,
+    },
+  }
 
   engine.runRenderLoop(function () {
     stats.begin()
@@ -105,22 +159,23 @@ const createScene = async (engine) => {
     const { hit, pickedMesh, faceId } = scene.pick(
       scene.pointerX,
       scene.pointerY,
-      (mesh) => mesh.isPickable && mesh.isEnabled && mesh.id !== "ground",
+      (mesh) =>
+        mesh.isPickable &&
+        mesh.isEnabled &&
+        !["white", "black", "red", "green", "blue"].includes(mesh.id),
     )
 
     if (hit === true) {
       pickedMesh.dispose()
-      scene.meshes
-        .find((mesh) => mesh.id === `ground_${pickedMesh.id}`)
-        .dispose()
+      scene.meshes.find((mesh) => mesh.id === `item_${pickedMesh.id}`).dispose()
     }
   }
 
   const action2 = () => {
-    const { hit, pickedMesh, pickedPoint, faceId } = scene.pick(
+    const { hit, pickedMesh, faceId } = scene.pick(
       scene.pointerX,
       scene.pointerY,
-      (mesh) => mesh.isPickable && mesh.isEnabled && mesh.id !== "ground",
+      (mesh) => mesh.isPickable && mesh.isEnabled && !mesh.id.includes("stone"),
     )
 
     if (hit === true) {
@@ -137,9 +192,15 @@ const createScene = async (engine) => {
         x >= 0 &&
         x < config.worldSize
       ) {
-        createBox(scene, board, ground, shadowGenerator, y, z, x)
-      } else {
-        // console.log("Outside!")
+        createBox(
+          scene,
+          board,
+          baseBlocks[state.activeBlock],
+          shadowGenerator,
+          y,
+          z,
+          x,
+        )
       }
     }
   }
@@ -198,7 +259,7 @@ const main = async () => {
   scene.createDefaultCamera(true, true, true)
   scene.activeCamera.alpha += 0.25 * Math.PI
   scene.activeCamera.beta -= 0.15 * Math.PI
-  scene.activeCamera.inertia = 0
+  scene.activeCamera.inertia = 0.1
 }
 
 main()
@@ -206,3 +267,31 @@ main()
 window.addEventListener("resize", function () {
   engine.resize()
 })
+
+const toolbox = document.getElementById("toolbox")
+
+document.getElementById("toolbox-switch").addEventListener("click", () => {
+  toolbox.classList.toggle("hidden")
+})
+
+toolbox.addEventListener("click", ({ target }) => {
+  if (target.dataset.type === "item") {
+    state.activeBlock = target.dataset.id
+    toolbox.classList.toggle("hidden")
+  }
+})
+
+const renderToolboxItem = (name, iconColor) => `
+  <div
+    class="item"
+    data-type="item"
+    data-id="${name}"
+    style="background-color: ${iconColor};"
+  ></div>
+`
+
+const toolboxItems = blockTypes
+  .map(({ name, iconColor }) => renderToolboxItem(name, iconColor))
+  .join("\n")
+
+toolbox.innerHTML = toolboxItems

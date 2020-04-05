@@ -1,5 +1,3 @@
-import { Mesh } from "three"
-
 const addLightsAndShadows = (scene) => {
   scene.clearColor = new BABYLON.Color3(0, 0, 0)
 
@@ -29,10 +27,14 @@ const addLightsAndShadows = (scene) => {
 
   shadowGenerator.usePercentageCloserFiltering = true
   shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH
-  scene.meshes.find((mesh) => mesh.id === "ground").receiveShadows = true
+  scene.meshes
+    .filter((mesh) => mesh.name.includes("stone-"))
+    .forEach((mesh) => {
+      mesh.receiveShadows = true
+    })
 
   scene.meshes.forEach((mesh) => {
-    if (mesh.id.includes("ground_")) {
+    if (mesh.id.includes("stone_")) {
       shadowGenerator.addShadowCaster(mesh)
     }
   })
