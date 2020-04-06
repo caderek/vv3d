@@ -12,11 +12,11 @@ stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
 
 const config = {
-  worldSize: 12,
+  worldSize: 30,
   mapSize: {
-    x: 12,
+    x: 30,
     y: 4,
-    z: 12,
+    z: 30,
   },
   blockSize: 1,
 }
@@ -218,6 +218,8 @@ const createScene = async (engine) => {
         if (moved > 5) {
           return
         }
+
+        console.log("Moved:", moved)
 
         if (right) {
           action2()
