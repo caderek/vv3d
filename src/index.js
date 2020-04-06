@@ -26,29 +26,32 @@ const state = {
 }
 
 const blockTypes = [
-  { name: "stone-white", iconColor: "#fff" },
-  { name: "stone-lightgray", iconColor: "#aaaaaa" },
-  { name: "stone-darkgray", iconColor: "#555555" },
-  { name: "stone-black", iconColor: "#000" },
-  { name: "stone-red", iconColor: "#FF2225" },
-  { name: "stone-lightred", iconColor: "#FF6969" },
-  { name: "stone-darkred", iconColor: "#700F10" },
-  { name: "stone-green", iconColor: "#2A942C" },
-  { name: "stone-lightgreen", iconColor: "#7FC524" },
-  { name: "stone-darkgreen", iconColor: "#195A1B" },
-  { name: "stone-blue", iconColor: "#2462FF" },
-  { name: "stone-lightblue", iconColor: "#4BBCFF" },
-  { name: "stone-darkblue", iconColor: "#1226FF" },
-  { name: "stone-pink", iconColor: "#FF1FB7" },
-  { name: "stone-purple", iconColor: "#810AFF" },
-  { name: "stone-yellow", iconColor: "#FFBD1D" },
-  { name: "stone-orange", iconColor: "#FF6A28" },
-  { name: "stone-brown", iconColor: "#922B00" },
-  { name: "stone-lightbrown", iconColor: "#BB7744" },
-  { name: "stone-darkbrown", iconColor: "#754100" },
-  { name: "glow-yellow", iconColor: "yellow" },
-  { name: "glow-cyan", iconColor: "cyan" },
-  { name: "glow-magenta", iconColor: "magenta" },
+  { name: "stone-white" },
+  { name: "stone-lightgray" },
+  { name: "stone-darkgray" },
+  { name: "stone-black" },
+  { name: "stone-red" },
+  { name: "stone-lightred" },
+  { name: "stone-darkred" },
+  { name: "stone-green" },
+  { name: "stone-lightgreen" },
+  { name: "stone-darkgreen" },
+  { name: "stone-blue" },
+  { name: "stone-lightblue" },
+  { name: "stone-darkblue" },
+  { name: "stone-pink" },
+  { name: "stone-purple" },
+  { name: "stone-yellow" },
+  { name: "stone-orange" },
+  { name: "stone-brown" },
+  { name: "stone-lightbrown" },
+  { name: "stone-darkbrown" },
+  { name: "glow-white" },
+  { name: "glow-yellow" },
+  { name: "glow-red" },
+  { name: "glow-magenta" },
+  { name: "glow-cyan" },
+  { name: "glow-green" },
 ]
 
 const incrementByFace = {
@@ -300,17 +303,17 @@ toolbox.addEventListener("click", ({ target }) => {
   }
 })
 
-const renderToolboxItem = (name, iconColor) => `
+const renderToolboxItem = (name) => `
   <div
     class="item"
     data-type="item"
     data-id="${name}"
-    style="background-color: ${iconColor};"
+    style="background-image: url(/models/ico/${name}.png);"
   ></div>
 `
 
 const toolboxItems = blockTypes
-  .map(({ name, iconColor }) => renderToolboxItem(name, iconColor))
+  .map(({ name }) => renderToolboxItem(name))
   .join("\n")
 
 toolbox.innerHTML = toolboxItems
