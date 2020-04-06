@@ -109,8 +109,6 @@ const createScene = async (engine) => {
     }),
   )
 
-  console.log({ baseBlocks })
-
   const board = Array.from({ length: config.worldSize }, () =>
     Array.from({ length: config.worldSize }, () =>
       Array.from({ length: config.worldSize }, () => null),
@@ -202,31 +200,46 @@ const createScene = async (engine) => {
   let stop = 0
   let right = false
   let moved = 0
-  let duration = 0
+  let cycle = 0
+  let isCycling = false
 
   engine.runRenderLoop(function () {
     stats.begin()
+    if (cycle !== 0) {
+      cycle++
+    }
+
+    if (cycle > 20) {
+      action2()
+      cycle = 1
+      isCycling = true
+    }
 
     if (input.down) {
+      input.down = false
       start = Date.now()
       moved = 0
-      input.down = false
+      cycle = 1
     } else if (input.up) {
-      if (moved > 10) {
+      input.up = false
+      cycle = 0
+
+      if (moved > 5) {
         return
       }
 
       stop = Date.now()
       const duration = stop - start
-      if (duration >= 400 || right) {
+      if (right) {
         action2()
         right = false
-      } else {
+      } else if (!isCycling) {
         action1()
+      } else {
+        isCycling = false
       }
       start = 0
       stop = 0
-      input.up = false
     }
 
     scene.render()
