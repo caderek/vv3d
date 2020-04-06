@@ -209,7 +209,7 @@ const createScene = async (engine) => {
       cycle++
     }
 
-    if (cycle > 20) {
+    if (cycle > 20 && moved < 10) {
       action2()
       cycle = 1
       isCycling = true
@@ -217,7 +217,6 @@ const createScene = async (engine) => {
 
     if (input.down) {
       input.down = false
-      start = Date.now()
       moved = 0
       cycle = 1
     } else if (input.up) {
@@ -228,8 +227,6 @@ const createScene = async (engine) => {
         return
       }
 
-      stop = Date.now()
-      const duration = stop - start
       if (right) {
         action2()
         right = false

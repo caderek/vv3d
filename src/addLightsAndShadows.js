@@ -23,7 +23,7 @@ const addLightsAndShadows = (scene) => {
   )
   ambientLight.intensity = 0.3
 
-  const shadowGenerator = new BABYLON.ShadowGenerator(2048, topLight)
+  const shadowGenerator = new BABYLON.ShadowGenerator(4096, topLight)
 
   shadowGenerator.usePercentageCloserFiltering = true
   shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH
