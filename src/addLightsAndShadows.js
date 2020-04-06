@@ -1,3 +1,5 @@
+import * as BABYLON from "babylonjs"
+
 const addLightsAndShadows = (scene) => {
   scene.clearColor = new BABYLON.Color3(0, 0, 0)
 
