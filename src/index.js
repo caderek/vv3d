@@ -56,8 +56,8 @@ const incrementByFace = {
   7: { z: 0, y: 0, x: -1 },
   8: { z: 0, y: 1, x: 0 },
   9: { z: 0, y: 1, x: 0 },
-  10: { z: 0, y: 1, x: 0 },
-  11: { z: 0, y: 1, x: 0 },
+  10: { z: 0, y: -1, x: 0 },
+  11: { z: 0, y: -1, x: 0 },
 }
 
 const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
