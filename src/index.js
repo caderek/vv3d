@@ -46,7 +46,9 @@ const blockTypes = [
   { name: "stone-brown", iconColor: "#922B00" },
   { name: "stone-lightbrown", iconColor: "#BB7744" },
   { name: "stone-darkbrown", iconColor: "#754100" },
-  { name: "stone-yellow-glow", iconColor: "yellow" },
+  { name: "glow-yellow", iconColor: "yellow" },
+  { name: "glow-cyan", iconColor: "cyan" },
+  { name: "glow-magenta", iconColor: "magenta" },
 ]
 
 const incrementByFace = {
@@ -71,7 +73,9 @@ const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
   board[y][z][x].position.x = config.blockSize * x
   board[y][z][x].isPickable = false
 
-  shadowGenerator.addShadowCaster(board[y][z][x])
+  if (!parentMesh.name.includes("glow")) {
+    shadowGenerator.addShadowCaster(board[y][z][x])
+  }
 
   const box = BABYLON.MeshBuilder.CreateBox(
     `${y}_${z}_${x}`,
@@ -144,7 +148,7 @@ const createScene = async (engine) => {
   }
 
   var gl = new BABYLON.GlowLayer("glow", scene)
-  gl.intensity = 1
+  gl.intensity = 0.5
 
   const action1 = () => {
     const { hit, pickedMesh, faceId } = scene.pick(
