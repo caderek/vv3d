@@ -3,17 +3,20 @@ import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
 import addLightsAndShadows from "./addLightsAndShadows"
 import Stats from "stats.js"
+import isMobile from "is-mobile"
+
+const mobile = isMobile()
 
 const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
 
 const config = {
-  worldSize: 30,
+  worldSize: 12,
   mapSize: {
-    x: 30,
-    y: 2,
-    z: 30,
+    x: 12,
+    y: 4,
+    z: 12,
   },
   blockSize: 1,
 }
@@ -43,6 +46,7 @@ const blockTypes = [
   { name: "stone-brown", iconColor: "#922B00" },
   { name: "stone-lightbrown", iconColor: "#BB7744" },
   { name: "stone-darkbrown", iconColor: "#754100" },
+  { name: "stone-yellow-glow", iconColor: "yellow" },
 ]
 
 const incrementByFace = {
@@ -139,6 +143,9 @@ const createScene = async (engine) => {
     baseBlocks[key].isVisible = false
   }
 
+  var gl = new BABYLON.GlowLayer("glow", scene)
+  gl.intensity = 1
+
   const action1 = () => {
     const { hit, pickedMesh, faceId } = scene.pick(
       scene.pointerX,
@@ -192,51 +199,34 @@ const createScene = async (engine) => {
   const input = {
     down: false,
     isDown: false,
-    up: false,
-    isUp: true,
   }
 
-  let start = 0
-  let stop = 0
   let right = false
+  let left = false
   let moved = 0
-  let cycle = 0
-  let isCycling = false
 
   engine.runRenderLoop(function () {
     stats.begin()
-    if (cycle !== 0) {
-      cycle++
-    }
 
-    if (cycle > 20 && moved < 10) {
-      action2()
-      cycle = 1
-      isCycling = true
-    }
+    if (!mobile) {
+      if (input.down) {
+        input.down = false
+        moved = 0
+      } else if (input.up) {
+        input.up = false
 
-    if (input.down) {
-      input.down = false
-      moved = 0
-      cycle = 1
-    } else if (input.up) {
-      input.up = false
-      cycle = 0
+        if (moved > 5) {
+          return
+        }
 
-      if (moved > 5) {
-        return
+        if (right) {
+          action2()
+          right = false
+        } else if (left) {
+          action1()
+          left = false
+        }
       }
-
-      if (right) {
-        action2()
-        right = false
-      } else if (!isCycling) {
-        action1()
-      } else {
-        isCycling = false
-      }
-      start = 0
-      stop = 0
     }
 
     scene.render()
@@ -245,6 +235,11 @@ const createScene = async (engine) => {
 
   window.addEventListener("contextmenu", () => {
     right = true
+  })
+
+  window.addEventListener("click", () => {
+    console.log("left")
+    left = true
   })
 
   scene.onPointerObservable.add((pointerInfo) => {
