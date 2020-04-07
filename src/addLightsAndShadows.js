@@ -9,7 +9,7 @@ const addLightsAndShadows = (scene) => {
     scene,
   )
   topLight.diffuse = new BABYLON.Color3(1, 1, 0.8)
-  topLight.intensity = 0.1
+  topLight.intensity = 4
   topLight.autoUpdateExtends = false
 
   const bottomLight = new BABYLON.DirectionalLight(
@@ -17,14 +17,14 @@ const addLightsAndShadows = (scene) => {
     new BABYLON.Vector3(-50, 50, -50),
     scene,
   )
-  bottomLight.intensity = 0
+  bottomLight.intensity = 0.2
 
   const ambientLight = new BABYLON.HemisphericLight(
     "ambientLight",
     new BABYLON.Vector3(0, 50, 0),
     scene,
   )
-  ambientLight.intensity = 0.02
+  ambientLight.intensity = 0.2
 
   const shadowGenerator = new BABYLON.ShadowGenerator(4096, topLight)
 
