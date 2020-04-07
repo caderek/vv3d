@@ -40,7 +40,7 @@
         position: absolute;
         bottom: 20px;
         right: 20px;
-        background: #0066cc;
+        background: MediumVioletRed;
         color: white;
         padding: 20px;
         font-size: 18px;
@@ -56,6 +56,17 @@
         top: 0;
         padding: 20px;
         text-align: center;
+      }
+
+      .toolbox__img {
+        width: 128px;
+        border-radius: 10px;
+      }
+
+      .toolbox-switch p {
+        margin-top: 10px;
+        text-align: center;
+        font-family: sans-serif;
       }
 
       .item {
@@ -77,7 +88,14 @@
   <body role="application">
     <canvas id="viewport" touch-action="none" role="application"></canvas>
     <div id="toolbox" class="toolbox hidden"></div>
-    <button id="toolbox-switch" class="toolbox-switch">TOOLBOX</button>
+    <div id="toolbox-switch" class="toolbox-switch">
+      <img
+        id="active-item"
+        class="toolbox__img"
+        src="/models/ico/stone-green.png"
+      />
+      <p>TOOLBOX</p>
+    </div>
     <script src="main.js"></script>
   </body>
 </html>

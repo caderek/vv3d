@@ -15,7 +15,7 @@ const config = {
   worldSize: 30,
   mapSize: {
     x: 30,
-    y: 4,
+    y: 3,
     z: 30,
   },
   blockSize: 1,
@@ -52,6 +52,7 @@ const blockTypes = [
   { name: "glow-magenta" },
   { name: "glow-cyan" },
   { name: "glow-green" },
+  // { name: "glass" },
 ]
 
 const incrementByFace = {
@@ -119,6 +120,11 @@ const createScene = async (engine) => {
       return [name, scene.meshes.find((mesh) => mesh.name === name)]
     }),
   )
+
+  // for (const key in baseBlocks) {
+  //   if (baseBlocks[key].name.includes("glass"))
+  //     baseBlocks[key].material.alpha = 0.3
+  // }
 
   const board = Array.from({ length: config.worldSize }, () =>
     Array.from({ length: config.worldSize }, () =>
@@ -291,6 +297,7 @@ window.addEventListener("resize", function () {
 })
 
 const toolbox = document.getElementById("toolbox")
+const toolboxSwitchImg = document.getElementById("active-item")
 
 document.getElementById("toolbox-switch").addEventListener("click", () => {
   toolbox.classList.toggle("hidden")
@@ -300,6 +307,7 @@ toolbox.addEventListener("click", ({ target }) => {
   if (target.dataset.type === "item") {
     state.activeBlock = target.dataset.id
     toolbox.classList.toggle("hidden")
+    toolboxSwitchImg.src = `/models/ico/${target.dataset.id}.png`
   }
 })
 
