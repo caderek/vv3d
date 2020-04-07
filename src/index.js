@@ -12,14 +12,23 @@ stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
 
 const config = {
-  worldSize: 30,
+  worldSize: 12,
   mapSize: {
-    x: 30,
-    y: 3,
-    z: 30,
+    x: 12,
+    y: 4,
+    z: 12,
   },
   blockSize: 1,
 }
+// const config = {
+//   worldSize: 30,
+//   mapSize: {
+//     x: 30,
+//     y: 3,
+//     z: 30,
+//   },
+//   blockSize: 1,
+// }
 
 const state = {
   activeBlock: "stone-green",
