@@ -102,7 +102,7 @@ const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
   board[y][z][x].position.x = config.blockSize * x
   board[y][z][x].isPickable = false
   board[y][z][x].isVisible = true
-  board[y][z][x].material.maxSimultaneousLights = 20
+  board[y][z][x].material.maxSimultaneousLights = 10
 
   if (!parentMesh.name.includes("glow")) {
     shadowGenerator.addShadowCaster(board[y][z][x])
