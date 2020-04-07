@@ -11,24 +11,24 @@ const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
 
-// const config = {
-//   worldSize: 12,
-//   mapSize: {
-//     x: 12,
-//     y: 4,
-//     z: 12,
-//   },
-//   blockSize: 1,
-// }
 const config = {
-  worldSize: 30,
+  worldSize: 12,
   mapSize: {
-    x: 30,
-    y: 2,
-    z: 30,
+    x: 12,
+    y: 3,
+    z: 12,
   },
   blockSize: 1,
 }
+// const config = {
+//   worldSize: 30,
+//   mapSize: {
+//     x: 30,
+//     y: 3,
+//     z: 30,
+//   },
+//   blockSize: 1,
+// }
 
 const state = {
   activeBlock: "stone-green",
@@ -61,8 +61,9 @@ const blockTypes = [
   { name: "glow-magenta" },
   { name: "glow-cyan" },
   { name: "glow-green" },
-  // { name: "glass" },
 ]
+
+const blockNames = blockTypes.map(({ name }) => name)
 
 const incrementByFace = {
   0: { z: 1, y: 0, x: 0 },
@@ -79,15 +80,42 @@ const incrementByFace = {
   11: { z: 0, y: -1, x: 0 },
 }
 
+const getItemsWithinRadius = (scene, radius, y, z, x) => {
+  const meshes = []
+  for (let i = -radius + y; i <= radius + y; i++) {
+    for (let j = -radius + z; j <= radius + z; j++) {
+      for (let k = -radius + x; k <= radius + x; k++) {
+        const mesh = scene.getMeshByName(`item_${i}_${j}_${k}`)
+        if (mesh) {
+          meshes.push(mesh)
+        }
+      }
+    }
+  }
+  return meshes
+}
+
 const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
-  board[y][z][x] = parentMesh.createInstance(`item_${y}_${z}_${x}`)
+  board[y][z][x] = parentMesh.clone(`item_${y}_${z}_${x}`)
   board[y][z][x].position.y = config.blockSize * y
   board[y][z][x].position.z = config.blockSize * z
   board[y][z][x].position.x = config.blockSize * x
   board[y][z][x].isPickable = false
+  board[y][z][x].isVisible = true
+  board[y][z][x].material.maxSimultaneousLights = 10
 
   if (!parentMesh.name.includes("glow")) {
     shadowGenerator.addShadowCaster(board[y][z][x])
+  }
+
+  if (parentMesh.name.includes("glow-white")) {
+    const light = new BABYLON.PointLight(
+      `light_${y}_${z}_${x}`,
+      new BABYLON.Vector3(x, y, z),
+      scene,
+    )
+    light.intensity = 10
+    // light.includedOnlyMeshes = getItemsWithinRadius(scene, 4, y, z, x)
   }
 
   const box = BABYLON.MeshBuilder.CreateBox(
@@ -108,6 +136,30 @@ const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
 
 const createScene = async (engine) => {
   const scene = new BABYLON.Scene(engine)
+  scene.blockMaterialDirtyMechanism = true
+  var gl = new BABYLON.GlowLayer("glow", scene)
+  gl.intensity = 0.5
+
+  var options = new BABYLON.SceneOptimizerOptions()
+  options.addOptimization(new BABYLON.HardwareScalingOptimization(4, 4))
+
+  // Optimizer
+  var optimizer = new BABYLON.SceneOptimizer(scene, options)
+  optimizer.targetFrameRate = 30
+
+  const boxx = BABYLON.MeshBuilder.CreateBox(
+    `reference`,
+    {
+      width: 2,
+      height: 0.5,
+      depth: 2,
+    },
+    scene,
+  )
+
+  boxx.position.y = -0.25
+  boxx.position.z = 0.5
+  boxx.position.x = 0.5
 
   for (const blockType of blockTypes) {
     await new Promise((resolve, reject) => {
@@ -129,11 +181,6 @@ const createScene = async (engine) => {
       return [name, scene.meshes.find((mesh) => mesh.name === name)]
     }),
   )
-
-  // for (const key in baseBlocks) {
-  //   if (baseBlocks[key].name.includes("glass"))
-  //     baseBlocks[key].material.alpha = 0.3
-  // }
 
   const board = Array.from({ length: config.worldSize }, () =>
     Array.from({ length: config.worldSize }, () =>
@@ -165,22 +212,21 @@ const createScene = async (engine) => {
     baseBlocks[key].isVisible = false
   }
 
-  var gl = new BABYLON.GlowLayer("glow", scene)
-  gl.intensity = 0.5
-
   const action1 = () => {
-    const { hit, pickedMesh, faceId } = scene.pick(
+    const { hit, pickedMesh } = scene.pick(
       scene.pointerX,
       scene.pointerY,
       (mesh) =>
-        mesh.isPickable &&
-        mesh.isEnabled &&
-        !["white", "black", "red", "green", "blue"].includes(mesh.id),
+        mesh.isPickable && mesh.isEnabled && !blockNames.includes(mesh.id),
     )
 
     if (hit === true) {
       pickedMesh.dispose()
-      scene.meshes.find((mesh) => mesh.id === `item_${pickedMesh.id}`).dispose()
+      scene.getMeshByName(`item_${pickedMesh.id}`).dispose()
+      const light = scene.getLightByID(`light_${pickedMesh.id}`)
+      if (light) {
+        light.dispose()
+      }
     }
   }
 
@@ -188,7 +234,8 @@ const createScene = async (engine) => {
     const { hit, pickedMesh, faceId } = scene.pick(
       scene.pointerX,
       scene.pointerY,
-      (mesh) => mesh.isPickable && mesh.isEnabled && !mesh.id.includes("stone"),
+      (mesh) =>
+        mesh.isPickable && mesh.isEnabled && !blockNames.includes(mesh.id),
     )
 
     if (hit === true) {
@@ -261,9 +308,20 @@ const createScene = async (engine) => {
     right = true
   })
 
-  window.addEventListener("click", () => {
-    console.log("left")
+  window.addEventListener("click", (e) => {
     left = true
+  })
+
+  window.addEventListener("keydown", (e) => {
+    const { hit, pickedMesh, faceId } = scene.pick(
+      scene.pointerX,
+      scene.pointerY,
+      (mesh) => !mesh.isPickable,
+    )
+
+    if (hit) {
+      console.log({ hit, id: pickedMesh.id, pickedMesh })
+    }
   })
 
   scene.onPointerObservable.add((pointerInfo) => {
