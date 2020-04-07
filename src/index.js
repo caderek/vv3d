@@ -96,13 +96,13 @@ const getItemsWithinRadius = (scene, radius, y, z, x) => {
 }
 
 const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
-  board[y][z][x] = parentMesh.clone(`item_${y}_${z}_${x}`)
+  board[y][z][x] = parentMesh.createInstance(`item_${y}_${z}_${x}`)
   board[y][z][x].position.y = config.blockSize * y
   board[y][z][x].position.z = config.blockSize * z
   board[y][z][x].position.x = config.blockSize * x
   board[y][z][x].isPickable = false
   board[y][z][x].isVisible = true
-  board[y][z][x].material.maxSimultaneousLights = 10
+  board[y][z][x].material.maxSimultaneousLights = 20
 
   if (!parentMesh.name.includes("glow")) {
     shadowGenerator.addShadowCaster(board[y][z][x])
