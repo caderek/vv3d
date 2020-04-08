@@ -48,10 +48,15 @@
         cursor: pointer;
       }
 
-      .light-switch {
+      .options {
         position: absolute;
         bottom: 20px;
         left: 20px;
+      }
+
+      .light-switch {
+        display: inline-block;
+        margin-right: 5px;
         background: MediumVioletRed;
         color: white;
         padding: 20px;
@@ -103,6 +108,8 @@
     <div id="toolbox" class="toolbox hidden"></div>
     <div class="options">
       <div id="light-switch" class="light-switch">DAY / NIGHT</div>
+      <div id="reset" class="light-switch">RESET</div>
+      <div id="screenshot" class="light-switch">TAKE SCREENSHOT</div>
     </div>
     <div id="toolbox-switch" class="toolbox-switch">
       <img

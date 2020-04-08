@@ -74,6 +74,14 @@ const saveWorld = (world) => {
   window.localStorage.setItem("world", JSON.stringify(world))
 }
 
+function downloadImage(data, filename = "untitled.jpeg") {
+  var a = document.createElement("a")
+  a.href = data
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+}
+
 const blockNames = blockTypes.map(({ name }) => name)
 
 const incrementByFace = {
@@ -379,7 +387,7 @@ const createScene = async (engine) => {
     }
   })
 
-  return scene
+  return { scene, world }
 }
 
 const main = async () => {
@@ -390,7 +398,7 @@ const main = async () => {
     stencil: true,
   })
 
-  const scene = await createScene(engine)
+  const { scene, world } = await createScene(engine)
 
   scene.createDefaultCamera(true, true, true)
   scene.activeCamera.alpha += 0.25 * Math.PI
@@ -411,6 +419,18 @@ const main = async () => {
         ? { top: 4, bottom: 0.5, ambient: 0.2 }
         : { top: 0.1, bottom: 0.01, ambient: 0.01 },
     )
+  })
+
+  document.getElementById("reset").addEventListener("click", () => {
+    console.log("reset")
+  })
+
+  document.getElementById("screenshot").addEventListener("click", () => {
+    console.log("screenshot")
+
+    const dataURL = canvas.toDataURL("image/png", 1.0)
+
+    downloadImage(dataURL, "my-world.png")
   })
 }
 
