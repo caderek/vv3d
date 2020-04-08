@@ -430,7 +430,8 @@ const main = async () => {
   })
 
   document.getElementById("reset").addEventListener("click", () => {
-    console.log("reset")
+    window.localStorage.removeItem("world")
+    location.reload()
   })
 
   document.getElementById("screenshot").addEventListener("click", () => {
