@@ -18,7 +18,7 @@ const config = mobile
       worldSize: 20,
       mapSize: {
         x: 20,
-        y: 3,
+        y: 2,
         z: 20,
       },
       blockSize: 1,
