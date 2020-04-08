@@ -267,25 +267,28 @@ const createScene = async (engine) => {
 
   let right = false
   let left = false
-  let moved = 0
   let timer = 0
   let cycle = false
+  let prevCameraPosition = { x: null, y: null, z: null }
 
   engine.runRenderLoop(function () {
     stats.begin()
 
+    const cameraNotMoved =
+      scene.activeCamera.position.x === prevCameraPosition.x &&
+      scene.activeCamera.position.y === prevCameraPosition.y &&
+      scene.activeCamera.position.z === prevCameraPosition.z
+
     if (!mobile) {
       if (input.down) {
+        prevCameraPosition = { ...scene.activeCamera.position }
         input.down = false
-        moved = 0
       } else if (input.up) {
         input.up = false
 
-        if (moved > 5) {
+        if (!cameraNotMoved) {
           return
         }
-
-        console.log("Moved:", moved)
 
         if (right) {
           action2()
@@ -300,7 +303,7 @@ const createScene = async (engine) => {
         timer++
       }
 
-      if (timer > 15) {
+      if (timer > 15 && cameraNotMoved) {
         action1()
         cycle = true
         timer = 1
@@ -309,8 +312,9 @@ const createScene = async (engine) => {
       if (input.down) {
         timer = 1
         input.down = false
+        prevCameraPosition = { ...scene.activeCamera.position }
       } else if (input.up) {
-        if (timer <= 15 && !cycle) {
+        if (timer <= 15 && !cycle && cameraNotMoved) {
           action2()
         }
         timer = 0
@@ -350,9 +354,6 @@ const createScene = async (engine) => {
         break
       case BABYLON.PointerEventTypes.POINTERUP:
         input.up = true
-        break
-      case BABYLON.PointerEventTypes.POINTERMOVE:
-        moved++
         break
     }
   })
