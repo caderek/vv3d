@@ -252,6 +252,9 @@ const createScene = async (engine) => {
       if (light) {
         light.dispose()
       }
+      const [y, z, x] = pickedMesh.id.split("_")
+      world[y][z][x].type = null
+      saveWorld(world)
     }
   }
 
