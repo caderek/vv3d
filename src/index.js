@@ -63,6 +63,12 @@ const blockTypes = [
   { name: "glow-green" },
 ]
 
+const changeLight = (scene, { top, bottom, ambient }) => {
+  scene.getLightByID("topLight").intensity = top
+  scene.getLightByID("bottomLight").intensity = bottom
+  scene.getLightByID("ambientLight").intensity = ambient
+}
+
 const blockNames = blockTypes.map(({ name }) => name)
 
 const incrementByFace = {
@@ -341,13 +347,25 @@ const main = async () => {
   scene.activeCamera.alpha += 0.25 * Math.PI
   scene.activeCamera.beta -= 0.15 * Math.PI
   scene.activeCamera.inertia = 0.1
+
+  window.addEventListener("resize", function () {
+    engine.resize()
+  })
+
+  let day = true
+
+  document.getElementById("light-switch").addEventListener("click", () => {
+    day = !day
+    changeLight(
+      scene,
+      day
+        ? { top: 4, bottom: 0.5, ambient: 0.2 }
+        : { top: 0.1, bottom: 0.01, ambient: 0.01 },
+    )
+  })
 }
 
 main()
-
-window.addEventListener("resize", function () {
-  engine.resize()
-})
 
 const toolbox = document.getElementById("toolbox")
 const toolboxSwitchImg = document.getElementById("active-item")

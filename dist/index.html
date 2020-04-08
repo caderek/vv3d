@@ -48,6 +48,19 @@
         cursor: pointer;
       }
 
+      .light-switch {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: MediumVioletRed;
+        color: white;
+        padding: 20px;
+        font-size: 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: sans-serif;
+      }
+
       .toolbox {
         width: 100%;
         height: 100%;
@@ -88,6 +101,7 @@
   <body role="application">
     <canvas id="viewport" touch-action="none" role="application"></canvas>
     <div id="toolbox" class="toolbox hidden"></div>
+    <div id="light-switch" class="light-switch">DAY / NIGHT</div>
     <div id="toolbox-switch" class="toolbox-switch">
       <img
         id="active-item"

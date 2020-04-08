@@ -17,7 +17,7 @@ const addLightsAndShadows = (scene) => {
     new BABYLON.Vector3(-50, 50, -50),
     scene,
   )
-  bottomLight.intensity = 0.2
+  bottomLight.intensity = 0.5
 
   const ambientLight = new BABYLON.HemisphericLight(
     "ambientLight",
