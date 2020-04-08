@@ -15,11 +15,11 @@ document.body.appendChild(stats.dom)
 
 const config = mobile
   ? {
-      worldSize: 15,
+      worldSize: 20,
       mapSize: {
-        x: 15,
+        x: 20,
         y: 3,
-        z: 15,
+        z: 20,
       },
       blockSize: 1,
     }
