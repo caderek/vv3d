@@ -7,28 +7,31 @@ import isMobile from "is-mobile"
 
 const mobile = isMobile()
 
+console.log("moble:", mobile)
+
 const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
 
-// const config = {
-//   worldSize: 12,
-//   mapSize: {
-//     x: 12,
-//     y: 3,
-//     z: 12,
-//   },
-//   blockSize: 1,
-// }
-const config = {
-  worldSize: 30,
-  mapSize: {
-    x: 30,
-    y: 3,
-    z: 30,
-  },
-  blockSize: 1,
-}
+const config = mobile
+  ? {
+      worldSize: 15,
+      mapSize: {
+        x: 15,
+        y: 3,
+        z: 15,
+      },
+      blockSize: 1,
+    }
+  : {
+      worldSize: 30,
+      mapSize: {
+        x: 30,
+        y: 3,
+        z: 30,
+      },
+      blockSize: 1,
+    }
 
 const state = {
   activeBlock: "stone-green",
@@ -265,6 +268,8 @@ const createScene = async (engine) => {
   let right = false
   let left = false
   let moved = 0
+  let timer = 0
+  let cycle = false
 
   engine.runRenderLoop(function () {
     stats.begin()
@@ -289,6 +294,28 @@ const createScene = async (engine) => {
           action1()
           left = false
         }
+      }
+    } else {
+      if (timer !== 0) {
+        timer++
+      }
+
+      if (timer > 15) {
+        action1()
+        cycle = true
+        timer = 1
+      }
+
+      if (input.down) {
+        timer = 1
+        input.down = false
+      } else if (input.up) {
+        if (timer <= 15 && !cycle) {
+          action2()
+        }
+        timer = 0
+        input.up = false
+        cycle = false
       }
     }
 
