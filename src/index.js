@@ -201,10 +201,16 @@ const createScene = async (engine) => {
     }),
   )
 
-  const savedWorld = window.localStorage.getItem("world")
+  let savedWorld = window.localStorage.getItem("world")
+
+  if (savedWorld) {
+    savedWorld = JSON.parse(savedWorld)
+  }
+
+  const worldSize = savedWorld ? savedWorld.length : config.worldSize
 
   const world = savedWorld
-    ? JSON.parse(savedWorld)
+    ? savedWorld
     : Array.from({ length: config.worldSize }, (_, y) =>
         Array.from({ length: config.worldSize }, (_, z) =>
           Array.from({ length: config.worldSize }, (_, x) => ({
@@ -218,13 +224,15 @@ const createScene = async (engine) => {
         ),
       )
 
+  saveWorld(world)
+
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
   }
 
-  for (let y = 0; y < config.worldSize; y++) {
-    for (let z = 0; z < config.worldSize; z++) {
-      for (let x = 0; x < config.worldSize; x++) {
+  for (let y = 0; y < worldSize; y++) {
+    for (let z = 0; z < worldSize; z++) {
+      for (let x = 0; x < worldSize; x++) {
         if (world[y][z][x].type) {
           createBox(
             scene,
@@ -426,11 +434,13 @@ const main = async () => {
   })
 
   document.getElementById("screenshot").addEventListener("click", () => {
-    console.log("screenshot")
+    const dataUrl = canvas.toDataURL("image/png")
 
-    const dataURL = canvas.toDataURL("image/png", 1.0)
-
-    downloadImage(dataURL, "my-world.png")
+    if (mobile) {
+      window.open(dataUrl, "My world")
+    } else {
+      downloadImage(dataUrl, "my-world.png")
+    }
   })
 }
 
