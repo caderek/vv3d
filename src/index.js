@@ -7,8 +7,6 @@ import isMobile from "is-mobile"
 
 const mobile = isMobile()
 
-console.log("moble:", mobile)
-
 const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
@@ -72,6 +70,10 @@ const changeLight = (scene, { top, bottom, ambient }) => {
   scene.getLightByID("ambientLight").intensity = ambient
 }
 
+const saveWorld = (world) => {
+  window.localStorage.setItem("world", JSON.stringify(world))
+}
+
 const blockNames = blockTypes.map(({ name }) => name)
 
 const incrementByFace = {
@@ -104,17 +106,27 @@ const getItemsWithinRadius = (scene, radius, y, z, x) => {
   return meshes
 }
 
-const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
-  board[y][z][x] = parentMesh.createInstance(`item_${y}_${z}_${x}`)
-  board[y][z][x].position.y = config.blockSize * y
-  board[y][z][x].position.z = config.blockSize * z
-  board[y][z][x].position.x = config.blockSize * x
-  board[y][z][x].isPickable = false
-  board[y][z][x].isVisible = true
-  board[y][z][x].material.maxSimultaneousLights = 10
+const createBox = (
+  scene,
+  world,
+  parentMesh,
+  shadowGenerator,
+  y,
+  z,
+  x,
+  save = true,
+) => {
+  world[y][z][x].type = parentMesh.name
+  const item = parentMesh.createInstance(`item_${y}_${z}_${x}`)
+  item.position.y = config.blockSize * y
+  item.position.z = config.blockSize * z
+  item.position.x = config.blockSize * x
+  item.isPickable = false
+  item.isVisible = true
+  item.material.maxSimultaneousLights = 10
 
   if (!parentMesh.name.includes("glow")) {
-    shadowGenerator.addShadowCaster(board[y][z][x])
+    shadowGenerator.addShadowCaster(item)
   }
 
   if (parentMesh.name.includes("glow-white")) {
@@ -141,6 +153,10 @@ const createBox = (scene, board, parentMesh, shadowGenerator, y, z, x) => {
   box.position.z = config.blockSize * z
   box.position.x = config.blockSize * x
   box.isVisible = false
+
+  if (save) {
+    saveWorld(world)
+  }
 }
 
 const createScene = async (engine) => {
@@ -177,28 +193,42 @@ const createScene = async (engine) => {
     }),
   )
 
-  const board = Array.from({ length: config.worldSize }, () =>
-    Array.from({ length: config.worldSize }, () =>
-      Array.from({ length: config.worldSize }, () => null),
-    ),
-  )
+  const savedWorld = window.localStorage.getItem("world")
+
+  const world = savedWorld
+    ? JSON.parse(savedWorld)
+    : Array.from({ length: config.worldSize }, (_, y) =>
+        Array.from({ length: config.worldSize }, (_, z) =>
+          Array.from({ length: config.worldSize }, (_, x) => ({
+            type:
+              y < config.mapSize.y &&
+              z < config.mapSize.z &&
+              x < config.mapSize.x
+                ? "stone-green"
+                : null,
+          })),
+        ),
+      )
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
   }
 
-  for (let y = 0; y < config.mapSize.y; y++) {
-    for (let z = 0; z < config.mapSize.z; z++) {
-      for (let x = 0; x < config.mapSize.x; x++) {
-        createBox(
-          scene,
-          board,
-          baseBlocks["stone-green"],
-          shadowGenerator,
-          y,
-          z,
-          x,
-        )
+  for (let y = 0; y < config.worldSize; y++) {
+    for (let z = 0; z < config.worldSize; z++) {
+      for (let x = 0; x < config.worldSize; x++) {
+        if (world[y][z][x].type) {
+          createBox(
+            scene,
+            world,
+            baseBlocks[world[y][z][x].type],
+            shadowGenerator,
+            y,
+            z,
+            x,
+            false,
+          )
+        }
       }
     }
   }
@@ -249,7 +279,7 @@ const createScene = async (engine) => {
       ) {
         createBox(
           scene,
-          board,
+          world,
           baseBlocks[state.activeBlock],
           shadowGenerator,
           y,
@@ -333,18 +363,6 @@ const createScene = async (engine) => {
 
   window.addEventListener("click", (e) => {
     left = true
-  })
-
-  window.addEventListener("keydown", (e) => {
-    const { hit, pickedMesh, faceId } = scene.pick(
-      scene.pointerX,
-      scene.pointerY,
-      (mesh) => !mesh.isPickable,
-    )
-
-    if (hit) {
-      console.log({ hit, id: pickedMesh.id, pickedMesh })
-    }
   })
 
   scene.onPointerObservable.add((pointerInfo) => {
