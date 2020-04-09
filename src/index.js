@@ -9,7 +9,7 @@ const mobile = isMobile()
 
 const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild(stats.dom)
+// document.body.appendChild(stats.dom)
 
 const configs = {
   s: {
@@ -86,6 +86,32 @@ const blockTypes = [
   { name: "glow-green" },
 ]
 
+var limitLoop = function (fn, fps) {
+  var then = Date.now()
+
+  // custom fps, otherwise fallback to 60
+  fps = fps || 60
+  var interval = 1000 / fps
+
+  return (function loop(time) {
+    requestAnimationFrame(loop)
+
+    // again, Date.now() if it's available
+    var now = Date.now()
+    var delta = now - then
+
+    if (delta > interval) {
+      // Update time
+      // now - (delta % interval) is an improvement over just
+      // using then = now, which can end up lowering overall fps
+      then = now - (delta % interval)
+
+      // call the fn
+      fn()
+    }
+  })(0)
+}
+
 const changeLight = (scene, { top, bottom, ambient }) => {
   scene.getLightByID("topLight").intensity = top
   scene.getLightByID("bottomLight").intensity = bottom
@@ -153,7 +179,7 @@ const createBox = (
   item.position.x = config.blockSize * x
   item.isPickable = false
   item.isVisible = true
-  item.material.maxSimultaneousLights = 10
+  item.material.maxSimultaneousLights = 13
 
   if (!parentMesh.name.includes("glow")) {
     shadowGenerator.addShadowCaster(item)
@@ -245,8 +271,6 @@ const createScene = async (engine) => {
           })),
         ),
       )
-
-  saveWorld(world)
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
@@ -342,7 +366,7 @@ const createScene = async (engine) => {
   let cycle = false
   let prevCameraPosition = { x: null, y: null, z: null }
 
-  engine.runRenderLoop(function () {
+  limitLoop(function () {
     stats.begin()
 
     const cameraNotMoved =
@@ -374,7 +398,7 @@ const createScene = async (engine) => {
         timer++
       }
 
-      if (timer > 15 && cameraNotMoved) {
+      if (timer > 7 && cameraNotMoved) {
         action1()
         cycle = true
         timer = 1
@@ -396,7 +420,7 @@ const createScene = async (engine) => {
 
     scene.render()
     stats.end()
-  })
+  }, 20)
 
   window.addEventListener("contextmenu", () => {
     right = true
