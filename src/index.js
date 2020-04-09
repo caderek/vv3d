@@ -84,6 +84,7 @@ const blockTypes = [
   { name: "glow-magenta" },
   { name: "glow-cyan" },
   { name: "glow-green" },
+  // { name: "metal-gold" },
 ]
 
 var limitLoop = function (fn, fps) {
@@ -201,7 +202,13 @@ const createBox = (
   box.position.y = config.blockSize * y
   box.position.z = config.blockSize * z
   box.position.x = config.blockSize * x
+  box.material = new BABYLON.StandardMaterial("none", scene)
+  box.material.alpha = 0
   box.isVisible = false
+  box.enableEdgesRendering()
+  box.edgesWidth = 3
+
+  box.edgesColor = new BABYLON.Color4(1, 1, 1, 0.2)
 
   if (save) {
     saveWorld(world)
@@ -233,6 +240,26 @@ const createScene = async (engine) => {
       )
     })
   }
+
+  const marker = BABYLON.MeshBuilder.CreateBox(
+    `marker`,
+    {
+      width: config.blockSize,
+      height: config.blockSize,
+      depth: config.blockSize,
+    },
+    scene,
+  )
+
+  // marker.position.y = 2
+  // marker.position.z = 0
+  // marker.position.x = 0
+  // marker.isVisible = true
+  // marker.material = new BABYLON.StandardMaterial("marker", scene)
+  // marker.material.alpha = 0
+  // marker.enableEdgesRendering()
+  // marker.edgesWidth = 1
+  // marker.edgesColor = new BABYLON.Color4(1, 1, 1, 0.2)
 
   const { shadowGenerator } = addLightsAndShadows(scene)
 
