@@ -11,25 +11,47 @@ const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom)
 
-const config = mobile
-  ? {
-      worldSize: 20,
-      mapSize: {
-        x: 20,
-        y: 2,
-        z: 20,
-      },
-      blockSize: 1,
-    }
-  : {
-      worldSize: 30,
-      mapSize: {
-        x: 30,
-        y: 3,
-        z: 30,
-      },
-      blockSize: 1,
-    }
+const configs = {
+  s: {
+    worldSize: 12,
+    mapSize: {
+      x: 12,
+      y: 2,
+      z: 12,
+    },
+    blockSize: 1,
+  },
+
+  m: {
+    worldSize: 20,
+    mapSize: {
+      x: 20,
+      y: 2,
+      z: 20,
+    },
+    blockSize: 1,
+  },
+
+  l: {
+    worldSize: 30,
+    mapSize: {
+      x: 30,
+      y: 2,
+      z: 30,
+    },
+    blockSize: 1,
+  },
+}
+
+let config = {
+  worldSize: 20,
+  mapSize: {
+    x: 20,
+    y: 2,
+    z: 20,
+  },
+  blockSize: 1,
+}
 
 const state = {
   activeBlock: "stone-green",
@@ -449,14 +471,27 @@ const main = async () => {
   })
 }
 
-main()
-
 const toolbox = document.getElementById("toolbox")
+const splash = document.getElementById("splash")
 const toolboxSwitchImg = document.getElementById("active-item")
 
 document.getElementById("toolbox-switch").addEventListener("click", () => {
   toolbox.classList.toggle("hidden")
 })
+
+if (!window.localStorage.getItem("world")) {
+  splash.classList.remove("hidden")
+  splash.addEventListener("click", ({ target }) => {
+    if (target.dataset.type === "size") {
+      config = configs[target.dataset.value]
+    }
+
+    main()
+    splash.classList.toggle("hidden")
+  })
+} else {
+  main()
+}
 
 toolbox.addEventListener("click", ({ target }) => {
   if (target.dataset.type === "item") {

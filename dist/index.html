@@ -66,7 +66,8 @@
         font-family: sans-serif;
       }
 
-      .toolbox {
+      .toolbox,
+      .splash {
         width: 100%;
         height: 100%;
         background: #222;
@@ -74,6 +75,26 @@
         top: 0;
         padding: 20px;
         text-align: center;
+      }
+
+      .splash p {
+        margin-top: 30px;
+        color: white;
+        font-size: 18px;
+        font-family: sans-serif;
+        text-align: center;
+      }
+
+      .size {
+        display: block;
+        width: 300px;
+        background-color: #d92949;
+        padding: 10px;
+        margin: 20px auto;
+        font-size: 18px;
+        font-family: sans-serif;
+        color: white;
+        cursor: pointer;
       }
 
       .toolbox__img {
@@ -122,6 +143,18 @@
         src="/models/ico/stone-green.png"
       />
       <p>TOOLBOX</p>
+    </div>
+    <div id="splash" class="splash hidden">
+      <p>World size:</p>
+      <button data-type="size" data-value="s" class="size">
+        SMALL (12x12x12)
+      </button>
+      <button data-type="size" data-value="m" class="size">
+        MEDIUM (20x20x20)
+      </button>
+      <button data-type="size" data-value="l" class="size">
+        LARGE (30x30x30)
+      </button>
     </div>
     <script src="main.js"></script>
   </body>
