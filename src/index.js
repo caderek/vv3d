@@ -2,15 +2,15 @@ import "pepjs"
 import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
 import addLightsAndShadows from "./addLightsAndShadows"
-import Stats from "stats.js"
+// import Stats from "stats.js"
 import isMobile from "is-mobile"
 
 const mobile = isMobile()
-const targetFPS = 60
+const targetFPS = 20
 
-const stats = new Stats()
-stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild(stats.dom)
+// const stats = new Stats()
+// stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+// document.body.appendChild(stats.dom)
 
 const configs = {
   s: {
@@ -384,7 +384,7 @@ const createScene = async (engine) => {
   let prevCameraPosition = { x: null, y: null, z: null }
 
   limitLoop(function () {
-    stats.begin()
+    // stats.begin()
 
     const cameraNotMoved =
       scene.activeCamera.position.x === prevCameraPosition.x &&
@@ -436,7 +436,7 @@ const createScene = async (engine) => {
     }
 
     scene.render()
-    stats.end()
+    // stats.end()
   }, targetFPS)
 
   window.addEventListener("contextmenu", () => {
