@@ -6,10 +6,11 @@ import Stats from "stats.js"
 import isMobile from "is-mobile"
 
 const mobile = isMobile()
+const targetFPS = 60
 
 const stats = new Stats()
 stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
-// document.body.appendChild(stats.dom)
+document.body.appendChild(stats.dom)
 
 const configs = {
   s: {
@@ -205,10 +206,6 @@ const createBox = (
   box.material = new BABYLON.StandardMaterial("none", scene)
   box.material.alpha = 0
   box.isVisible = false
-  box.enableEdgesRendering()
-  box.edgesWidth = 3
-
-  box.edgesColor = new BABYLON.Color4(1, 1, 1, 0.2)
 
   if (save) {
     saveWorld(world)
@@ -241,15 +238,15 @@ const createScene = async (engine) => {
     })
   }
 
-  const marker = BABYLON.MeshBuilder.CreateBox(
-    `marker`,
-    {
-      width: config.blockSize,
-      height: config.blockSize,
-      depth: config.blockSize,
-    },
-    scene,
-  )
+  // const marker = BABYLON.MeshBuilder.CreateBox(
+  //   `marker`,
+  //   {
+  //     width: config.blockSize,
+  //     height: config.blockSize,
+  //     depth: config.blockSize,
+  //   },
+  //   scene,
+  // )
 
   // marker.position.y = 2
   // marker.position.z = 0
@@ -440,7 +437,7 @@ const createScene = async (engine) => {
 
     scene.render()
     stats.end()
-  }, 20)
+  }, targetFPS)
 
   window.addEventListener("contextmenu", () => {
     right = true
