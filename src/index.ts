@@ -1,7 +1,9 @@
 import "pepjs"
 import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
-import addLightsAndShadows from "./addLightsAndShadows"
+import { addBackground } from "./background"
+import { addLights } from "./lights"
+import { addShadows } from "./shadows"
 import * as Stats from "stats.js"
 import * as isMobile from "is-mobile"
 
@@ -281,7 +283,9 @@ const createScene = async (engine) => {
   // marker.edgesWidth = 1
   // marker.edgesColor = new BABYLON.Color4(1, 1, 1, 0.2)
 
-  const { shadowGenerator } = addLightsAndShadows(scene)
+  addBackground(scene)
+  const lights = addLights(scene)
+  const shadowGenerator = addShadows(scene, lights.top)
 
   const baseBlocks = Object.fromEntries(
     blockTypes.map(({ name }) => {
