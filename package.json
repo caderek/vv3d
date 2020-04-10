@@ -22,8 +22,6 @@
     "babylonjs-loaders": "^4.1.0",
     "is-mobile": "^2.2.1",
     "pepjs": "^0.5.2",
-    "stats.js": "^0.17.0",
-    "stockfish": "^10.0.2",
-    "three": "^0.114.0"
+    "stats.js": "^0.17.0"
   }
 }
