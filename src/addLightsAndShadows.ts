@@ -1,7 +1,7 @@
 import * as BABYLON from "babylonjs"
 
 const addLightsAndShadows = (scene) => {
-  scene.clearColor = new BABYLON.Color3(0, 0, 0)
+  scene.clearColor = new BABYLON.Color3.FromInts(0, 0, 0)
 
   const topLight = new BABYLON.DirectionalLight(
     "topLight",
@@ -11,6 +11,8 @@ const addLightsAndShadows = (scene) => {
   topLight.diffuse = new BABYLON.Color3(1, 1, 0.8)
   topLight.intensity = 4
   topLight.autoUpdateExtends = false
+  // topLight.shadowOrthoScale = 0
+  topLight.autoCalcShadowZBounds = true
 
   const bottomLight = new BABYLON.DirectionalLight(
     "bottomLight",
@@ -26,10 +28,11 @@ const addLightsAndShadows = (scene) => {
   )
   ambientLight.intensity = 0.2
 
-  const shadowGenerator = new BABYLON.ShadowGenerator(4096, topLight)
+  const shadowGenerator = new BABYLON.ShadowGenerator(1024, topLight)
+  shadowGenerator.bias = 0.01
 
   shadowGenerator.usePercentageCloserFiltering = true
-  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_HIGH
+  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_MEDIUM
   scene.meshes
     .filter((mesh) => mesh.name.includes("stone-"))
     .forEach((mesh) => {

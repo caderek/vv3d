@@ -2,15 +2,15 @@ import "pepjs"
 import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
 import addLightsAndShadows from "./addLightsAndShadows"
-// import Stats from "stats.js"
-import isMobile from "is-mobile"
+import * as Stats from "stats.js"
+import * as isMobile from "is-mobile"
 
 const mobile = isMobile()
 const targetFPS = 20
 
-// const stats = new Stats()
-// stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
-// document.body.appendChild(stats.dom)
+const stats = new Stats()
+stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild(stats.dom)
 
 const configs = {
   s: {
@@ -85,7 +85,9 @@ const blockTypes = [
   { name: "glow-magenta" },
   { name: "glow-cyan" },
   { name: "glow-green" },
-  // { name: "metal-gold" },
+  { name: "column-white" },
+  { name: "fence" },
+  { name: "half-white" },
 ]
 
 var limitLoop = function (fn, fps) {
@@ -107,7 +109,8 @@ var limitLoop = function (fn, fps) {
   })(0)
 }
 
-const changeLight = (scene, { top, bottom, ambient }) => {
+const changeLight = (scene, { top, bottom, ambient, sky }) => {
+  scene.clearColor = new BABYLON.Color3.FromHexString(sky)
   scene.getLightByID("topLight").intensity = top
   scene.getLightByID("bottomLight").intensity = bottom
   scene.getLightByID("ambientLight").intensity = ambient
@@ -215,8 +218,28 @@ const createBox = (
 const createScene = async (engine) => {
   const scene = new BABYLON.Scene(engine)
   scene.blockMaterialDirtyMechanism = true
+
+  var skybox = BABYLON.Mesh.CreateBox(
+    "skyBox",
+    16,
+    scene,
+    false,
+    BABYLON.Mesh.BACKSIDE,
+  )
+  var skyboxMaterial = new BABYLON.StandardMaterial("skybox", scene)
+  skyboxMaterial.disableLighting = true
+  skyboxMaterial.emissiveColor = new BABYLON.Color3(0.15, 0.35, 0.75)
+  skyboxMaterial.alpha = 0.95
+  skybox.material = skyboxMaterial
+  skybox.backFaceCulling = true
+  skybox.position.y = 5.5
+  skybox.position.z = 5.5
+  skybox.position.x = 5.5
+  skybox.isPickable = false
+
   var gl = new BABYLON.GlowLayer("glow", scene)
   gl.intensity = 0.5
+  gl.addExcludedMesh(skybox)
 
   var options = new BABYLON.SceneOptimizerOptions()
   options.addOptimization(new BABYLON.HardwareScalingOptimization(4, 4))
@@ -266,15 +289,17 @@ const createScene = async (engine) => {
     }),
   )
 
-  let savedWorld = window.localStorage.getItem("world")
+  type World = { type: string }[][][]
+  let savedWorldEntry = window.localStorage.getItem("world")
+  let savedWorld
 
-  if (savedWorld) {
-    savedWorld = JSON.parse(savedWorld)
+  if (savedWorldEntry) {
+    savedWorld = JSON.parse(savedWorldEntry)
   }
 
   const worldSize = savedWorld ? savedWorld.length : config.worldSize
 
-  const world = savedWorld
+  const world: World = savedWorld
     ? savedWorld
     : Array.from({ length: config.worldSize }, (_, y) =>
         Array.from({ length: config.worldSize }, (_, z) =>
@@ -374,7 +399,7 @@ const createScene = async (engine) => {
 
   const input = {
     down: false,
-    isDown: false,
+    up: false,
   }
 
   let right = false
@@ -384,7 +409,7 @@ const createScene = async (engine) => {
   let prevCameraPosition = { x: null, y: null, z: null }
 
   limitLoop(function () {
-    // stats.begin()
+    stats.begin()
 
     const cameraNotMoved =
       scene.activeCamera.position.x === prevCameraPosition.x &&
@@ -436,7 +461,7 @@ const createScene = async (engine) => {
     }
 
     scene.render()
-    // stats.end()
+    stats.end()
   }, targetFPS)
 
   window.addEventListener("contextmenu", () => {
@@ -487,8 +512,9 @@ const main = async () => {
     changeLight(
       scene,
       day
-        ? { top: 4, bottom: 0.5, ambient: 0.2 }
-        : { top: 0.1, bottom: 0.01, ambient: 0.01 },
+        ? // ? { top: 4, bottom: 0.5, ambient: 0.2, sky: "#007bff" }
+          { top: 4, bottom: 0.5, ambient: 0.2, sky: "#00000" }
+        : { top: 0.1, bottom: 0.01, ambient: 0.01, sky: "#000000" },
     )
   })
 
@@ -498,6 +524,7 @@ const main = async () => {
   })
 
   document.getElementById("screenshot").addEventListener("click", () => {
+    // @ts-ignore
     const dataUrl = canvas.toDataURL("image/png")
 
     if (mobile) {
@@ -523,7 +550,9 @@ document.getElementById("toolbox-switch").addEventListener("click", () => {
 if (!window.localStorage.getItem("world")) {
   splash.classList.remove("hidden")
   splash.addEventListener("click", ({ target }) => {
+    // @ts-ignore
     if (target.dataset.type === "size") {
+      // @ts-ignore
       config = configs[target.dataset.value]
     }
 
@@ -534,10 +563,15 @@ if (!window.localStorage.getItem("world")) {
   main()
 }
 
+// @ts-ignore
 toolbox.addEventListener("click", ({ target }) => {
+  // @ts-ignore
   if (target.dataset.type === "item") {
+    // @ts-ignore
     state.activeBlock = target.dataset.id
+    // @ts-ignore
     toolbox.classList.toggle("hidden")
+    // @ts-ignore
     toolboxSwitchImg.src = `/models/ico/${target.dataset.id}.png`
   }
 })
