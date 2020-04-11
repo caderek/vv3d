@@ -1,6 +1,7 @@
 import * as BABYLON from "babylonjs"
 
 const addShadows = (scene, light) => {
+  console.log({ light })
   const shadowGenerator = new BABYLON.ShadowGenerator(1024, light)
 
   shadowGenerator.bias = 0.01
