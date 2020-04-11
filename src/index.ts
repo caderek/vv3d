@@ -90,6 +90,8 @@ const blockTypes = [
   { name: "column-white" },
   { name: "fence" },
   { name: "half-white" },
+  { name: "shelf" },
+  { name: "oven" },
 ]
 
 var limitLoop = function (fn, fps) {
@@ -172,11 +174,15 @@ const createBox = (
   x,
   save = true,
 ) => {
+  const gap = 0.0
+
   world[y][z][x].type = parentMesh.name
+
   const item = parentMesh.createInstance(`item_${y}_${z}_${x}`)
-  item.position.y = config.blockSize * y
-  item.position.z = config.blockSize * z
-  item.position.x = config.blockSize * x
+
+  item.position.y = config.blockSize * y + gap * y
+  item.position.z = config.blockSize * z + gap * z
+  item.position.x = config.blockSize * x + gap * x
   item.isPickable = false
   item.isVisible = true
   item.material.maxSimultaneousLights = 12
