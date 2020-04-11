@@ -177,7 +177,7 @@ const createBox = (
   x,
   save = true,
 ) => {
-  const gap = 0.02
+  const gap = 0.0
 
   world[y][z][x].type = parentMesh.name
 
@@ -527,7 +527,7 @@ const main = async () => {
       day
         ? // ? { top: 4, bottom: 0.5, ambient: 0.2, sky: "#007bff" }
           { top: 4, bottom: 0.5, ambient: 0.2, sky: "#00000" }
-        : { top: 0.1, bottom: 0.01, ambient: 0.01, sky: "#000000" },
+        : { top: 0.1, bottom: 0.1, ambient: 0.01, sky: "#000000" },
     )
   })
 
