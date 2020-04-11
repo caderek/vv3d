@@ -92,6 +92,9 @@ const blockTypes = [
   { name: "half-white" },
   { name: "shelf" },
   { name: "oven" },
+  { name: "table" },
+  { name: "chair" },
+  { name: "cupboard" },
 ]
 
 var limitLoop = function (fn, fps) {
@@ -174,7 +177,7 @@ const createBox = (
   x,
   save = true,
 ) => {
-  const gap = 0.0
+  const gap = 0.02
 
   world[y][z][x].type = parentMesh.name
 
