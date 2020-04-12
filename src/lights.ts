@@ -45,6 +45,7 @@ class Lights {
     const glow = new BABYLON.GlowLayer("glow", this.scene)
     glow.intensity = 0.5
 
+    // ! include rather than exclude? Performance?
     excluded.forEach((mesh) => {
       glow.addExcludedMesh(mesh)
     })

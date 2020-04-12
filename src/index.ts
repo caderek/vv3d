@@ -14,6 +14,9 @@ import optimize from "./optimize"
 import createVoxel from "./createVoxel"
 import downloadImage from "./helpers/downloadImage"
 import { saveWorld } from "./save"
+import AmbientOcclusion from "./ambient-occlusion"
+import createDefaultWorld from "./world/createDefaultWorld"
+import createRandomWorld from "./world/createRandomWorld"
 
 const mobile = isMobile()
 const targetFPS = 20
@@ -90,18 +93,8 @@ const createScene = async (engine) => {
 
   const world: World = savedWorld
     ? savedWorld
-    : Array.from({ length: config.worldSize }, (_, y) =>
-        Array.from({ length: config.worldSize }, (_, z) =>
-          Array.from({ length: config.worldSize }, (_, x) => ({
-            type:
-              y < config.mapSize.y &&
-              z < config.mapSize.z &&
-              x < config.mapSize.x
-                ? "stone-green"
-                : null,
-          })),
-        ),
-      )
+    : // : createDefaultWorld(config.worldSize, 2)
+      createRandomWorld()
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
@@ -292,6 +285,9 @@ const main = async () => {
   scene.activeCamera.beta -= 0.15 * Math.PI
   scene.activeCamera.inertia = 0
   scene.activeCamera.checkCollisions = true
+
+  const camera = scene.cameras[scene.cameras.length - 1]
+  // const ambientOcclusion = new AmbientOcclusion(scene, camera)
 
   window.addEventListener("resize", function () {
     engine.resize()
