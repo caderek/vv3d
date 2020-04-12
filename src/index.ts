@@ -290,7 +290,8 @@ const main = async () => {
   scene.createDefaultCamera(true, true, true)
   scene.activeCamera.alpha += 0.25 * Math.PI
   scene.activeCamera.beta -= 0.15 * Math.PI
-  scene.activeCamera.inertia = 0.1
+  scene.activeCamera.inertia = 0
+  scene.activeCamera.checkCollisions = true
 
   window.addEventListener("resize", function () {
     engine.resize()
