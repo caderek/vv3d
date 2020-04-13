@@ -5,7 +5,7 @@ const randomInt = (min, max) => {
 }
 
 const createRandomWorld = () => {
-  const size = randomInt(12, 20)
+  const size = randomInt(3, 15)
   console.log(size)
 
   let world = []

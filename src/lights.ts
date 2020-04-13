@@ -4,34 +4,36 @@ class Lights {
   top: any
   bottom: any
   ambient: any
-  private skybox: any
+  skybox: any
   private glow: any
   private scene: any
+  private worldSize: number
 
   constructor(scene) {
     this.scene = scene
     this.createLights()
-    this.createSkybox()
-    this.createGlow([this.skybox])
   }
 
-  private createSkybox() {
+  createSkybox(worldSize) {
     const skybox = BABYLON.Mesh.CreateBox(
       "skyBox",
-      16,
+      worldSize + 4,
       this.scene,
       false,
       BABYLON.Mesh.BACKSIDE,
     )
-    var skyboxMaterial = new BABYLON.StandardMaterial("skybox", this.scene)
+
+    const skyboxMaterial = new BABYLON.StandardMaterial("skybox", this.scene)
+
     skyboxMaterial.disableLighting = true
     skyboxMaterial.emissiveColor = new BABYLON.Color3(0.15, 0.35, 0.75)
     skyboxMaterial.alpha = 0.95
+
     skybox.material = skyboxMaterial
     skybox.backFaceCulling = true
-    skybox.position.y = 5.5
-    skybox.position.z = 5.5
-    skybox.position.x = 5.5
+    skybox.position.y = worldSize / 2 - 0.5
+    skybox.position.z = worldSize / 2 - 0.5
+    skybox.position.x = worldSize / 2 - 0.5
     skybox.isPickable = false
 
     this.skybox = skybox
@@ -41,7 +43,7 @@ class Lights {
     this.skybox.material.alpha = alpha
   }
 
-  private createGlow(excluded: any[]) {
+  createGlow(excluded: any[]) {
     const glow = new BABYLON.GlowLayer("glow", this.scene)
     glow.intensity = 0.5
 

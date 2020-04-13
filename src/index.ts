@@ -56,6 +56,10 @@ const createScene = async (engine) => {
   const scene = new BABYLON.Scene(engine)
   scene.blockMaterialDirtyMechanism = true
 
+  addBackground(scene)
+  const lights = new Lights(scene)
+  const shadowGenerator = addShadows(scene, lights.top)
+
   for (const blockType of blockTypes) {
     await new Promise((resolve, reject) => {
       BABYLON.SceneLoader.Append(
@@ -68,12 +72,6 @@ const createScene = async (engine) => {
       )
     })
   }
-
-  addBackground(scene)
-
-  const lights = new Lights(scene)
-  console.log({ lights })
-  const shadowGenerator = addShadows(scene, lights.top)
 
   const baseBlocks = Object.fromEntries(
     blockTypes.map(({ name }) => {
@@ -89,12 +87,12 @@ const createScene = async (engine) => {
     savedWorld = JSON.parse(savedWorldEntry)
   }
 
-  const worldSize = savedWorld ? savedWorld.length : config.worldSize
-
   const world: World = savedWorld
     ? savedWorld
     : // : createDefaultWorld(config.worldSize, 2)
       createRandomWorld()
+
+  const worldSize = world.length
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
@@ -123,6 +121,9 @@ const createScene = async (engine) => {
     baseBlocks[key].isVisible = false
   }
 
+  console.log("skybox size:", worldSize)
+  lights.createSkybox(worldSize)
+  lights.createGlow([lights.skybox])
   optimize(scene)
 
   const action1 = () => {
