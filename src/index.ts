@@ -300,8 +300,20 @@ const main = async () => {
     day = !day
     lights.change(
       day
-        ? { top: 4, bottom: 0.5, ambient: 0.2, skyAlpha: 0.95 }
-        : { top: 0.1, bottom: 0.1, ambient: 0.01, skyAlpha: 0.1 },
+        ? {
+            top: 4,
+            bottom: 0.5,
+            ambient: 0.2,
+            skyAlpha: 0.95,
+            color: "#000000",
+          }
+        : {
+            top: 0.1,
+            bottom: 0.1,
+            ambient: 0.01,
+            skyAlpha: 0.1,
+            color: "#9fbfff",
+          },
     )
   })
 
@@ -335,17 +347,18 @@ document.getElementById("toolbox-switch").addEventListener("click", () => {
 })
 
 if (!window.localStorage.getItem("world")) {
-  splash.classList.remove("hidden")
-  splash.addEventListener("click", ({ target }) => {
-    // @ts-ignore
-    if (target.dataset.type === "size") {
-      // @ts-ignore
-      config = configs[target.dataset.value]
-    }
+  main()
+  // splash.classList.remove("hidden")
+  // splash.addEventListener("click", ({ target }) => {
+  //   // @ts-ignore
+  //   if (target.dataset.type === "size") {
+  //     // @ts-ignore
+  //     config = configs[target.dataset.value]
+  //   }
 
-    main()
-    splash.classList.toggle("hidden")
-  })
+  //   main()
+  //   splash.classList.toggle("hidden")
+  // })
 } else {
   main()
 }

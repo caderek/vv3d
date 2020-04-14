@@ -85,8 +85,9 @@ class Lights {
     this.ambient = ambient
   }
 
-  change({ top, bottom, ambient, skyAlpha }) {
+  change({ top, bottom, ambient, skyAlpha, color }) {
     this.top.intensity = top
+    this.top.diffuse = BABYLON.Color3.FromHexString(color)
     this.bottom.intensity = bottom
     this.ambient.intensity = ambient
     this.changeSkyboxAlpha(skyAlpha)

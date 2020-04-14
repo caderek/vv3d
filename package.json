@@ -18,10 +18,12 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "@trinkets/noise": "^0.0.4",
     "babylonjs": "^4.1.0",
     "babylonjs-loaders": "^4.1.0",
     "is-mobile": "^2.2.1",
     "pepjs": "^0.5.2",
+    "simplex-noise": "^2.4.0",
     "stats.js": "^0.17.0"
   }
 }
