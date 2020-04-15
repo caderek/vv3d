@@ -58,6 +58,13 @@ const createVoxel = (
   if (save) {
     saveWorld(world)
   }
+
+  item.physicsImpostor = new BABYLON.PhysicsImpostor(
+    box,
+    BABYLON.PhysicsImpostor.BoxImpostor,
+    { mass: 0, restitution: 0.9 },
+    scene,
+  )
 }
 
 export default createVoxel

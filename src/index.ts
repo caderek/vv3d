@@ -17,6 +17,7 @@ import { saveWorld } from "./save"
 import AmbientOcclusion from "./ambient-occlusion"
 import createDefaultWorld from "./world/createDefaultWorld"
 import createRandomWorld from "./world/createRandomWorld"
+import cannon from "cannon"
 
 const mobile = isMobile()
 const targetFPS = 20
@@ -72,6 +73,31 @@ const createScene = async (engine) => {
       )
     })
   }
+
+  const hero = BABYLON.MeshBuilder.CreateBox(
+    `hero`,
+    {
+      width: 1,
+      height: 1,
+      depth: 1,
+    },
+    scene,
+  )
+
+  hero.position.y = 15
+  hero.position.z = 6
+  hero.position.x = 6
+
+  var gravityVector = new BABYLON.Vector3(0, -9.81 * 10, 0)
+  var physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon)
+  scene.enablePhysics(gravityVector, physicsPlugin)
+
+  hero.physicsImpostor = new BABYLON.PhysicsImpostor(
+    hero,
+    BABYLON.PhysicsImpostor.BoxImpostor,
+    { mass: 1, restitution: 0.9 },
+    scene,
+  )
 
   const baseBlocks = Object.fromEntries(
     blockTypes.map(({ name }) => {
