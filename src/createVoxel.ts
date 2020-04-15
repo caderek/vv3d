@@ -1,5 +1,6 @@
 import * as BABYLON from "babylonjs"
 import { saveWorld } from "./save"
+import { blocksValues } from "./blocks"
 
 const createVoxel = (
   scene,
@@ -13,7 +14,7 @@ const createVoxel = (
 ) => {
   const gap = 0.0
 
-  world[y][z][x].type = parentMesh.name
+  world[y][z][x] = blocksValues.find(({ name }) => name === parentMesh.id).id
 
   const item = parentMesh.createInstance(`item_${y}_${z}_${x}`)
 
@@ -59,12 +60,12 @@ const createVoxel = (
     saveWorld(world)
   }
 
-  item.physicsImpostor = new BABYLON.PhysicsImpostor(
-    box,
-    BABYLON.PhysicsImpostor.BoxImpostor,
-    { mass: 0, restitution: 0.9 },
-    scene,
-  )
+  // item.physicsImpostor = new BABYLON.PhysicsImpostor(
+  //   box,
+  //   BABYLON.PhysicsImpostor.BoxImpostor,
+  //   { mass: 0, restitution: 0.9 },
+  //   scene,
+  // )
 }
 
 export default createVoxel

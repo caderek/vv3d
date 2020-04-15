@@ -61,7 +61,7 @@ class Lights {
       new BABYLON.Vector3(50, -50, 50),
       this.scene,
     )
-    top.diffuse = new BABYLON.Color3(1, 1, 0.8)
+    top.diffuse = new BABYLON.Color3(1, 1, 1)
     top.intensity = 4
     top.autoUpdateExtends = false
     top.autoCalcShadowZBounds = true

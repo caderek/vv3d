@@ -6,7 +6,7 @@ import { addBackground } from "./background"
 import Lights from "./lights"
 import { addShadows } from "./shadows"
 import * as isMobile from "is-mobile"
-import blockTypes from "./blocks"
+import blocksInfo, { blocksValues } from "./blocks"
 import configs from "./configs"
 import stats from "./stats"
 import gameLoop from "./game-loop"
@@ -36,7 +36,7 @@ const state = {
   activeBlock: "stone-green",
 }
 
-const blockNames = blockTypes.map(({ name }) => name)
+const blockNames = blocksValues.map(({ name }) => name)
 
 const incrementByFace = {
   0: { z: 1, y: 0, x: 0 },
@@ -61,11 +61,11 @@ const createScene = async (engine) => {
   const lights = new Lights(scene)
   const shadowGenerator = addShadows(scene, lights.top)
 
-  for (const blockType of blockTypes) {
+  for (const block of blocksValues) {
     await new Promise((resolve, reject) => {
       BABYLON.SceneLoader.Append(
         "models/",
-        `${blockType.name}.glb`,
+        `${block.name}.glb`,
         scene,
         resolve,
         null,
@@ -74,38 +74,38 @@ const createScene = async (engine) => {
     })
   }
 
-  const hero = BABYLON.MeshBuilder.CreateBox(
-    `hero`,
-    {
-      width: 1,
-      height: 1,
-      depth: 1,
-    },
-    scene,
-  )
+  // const hero = BABYLON.MeshBuilder.CreateBox(
+  //   `hero`,
+  //   {
+  //     width: 1,
+  //     height: 1,
+  //     depth: 1,
+  //   },
+  //   scene,
+  // )
 
-  hero.position.y = 15
-  hero.position.z = 6
-  hero.position.x = 6
+  // hero.position.y = 15
+  // hero.position.z = 6
+  // hero.position.x = 6
 
-  var gravityVector = new BABYLON.Vector3(0, -9.81 * 10, 0)
-  var physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon)
-  scene.enablePhysics(gravityVector, physicsPlugin)
+  // var gravityVector = new BABYLON.Vector3(0, -9.81 * 10, 0)
+  // var physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon)
+  // scene.enablePhysics(gravityVector, physicsPlugin)
 
-  hero.physicsImpostor = new BABYLON.PhysicsImpostor(
-    hero,
-    BABYLON.PhysicsImpostor.BoxImpostor,
-    { mass: 1, restitution: 0.9 },
-    scene,
-  )
+  // hero.physicsImpostor = new BABYLON.PhysicsImpostor(
+  //   hero,
+  //   BABYLON.PhysicsImpostor.BoxImpostor,
+  //   { mass: 1, restitution: 0.9 },
+  //   scene,
+  // )
 
   const baseBlocks = Object.fromEntries(
-    blockTypes.map(({ name }) => {
+    blocksValues.map(({ name }) => {
       return [name, scene.meshes.find((mesh) => mesh.name === name)]
     }),
   )
 
-  type World = { type: string }[][][]
+  type World = string[][][]
   let savedWorldEntry = window.localStorage.getItem("world")
   let savedWorld
 
@@ -127,11 +127,11 @@ const createScene = async (engine) => {
   for (let y = 0; y < worldSize; y++) {
     for (let z = 0; z < worldSize; z++) {
       for (let x = 0; x < worldSize; x++) {
-        if (world[y][z][x].type) {
+        if (world[y][z][x] !== null) {
           createVoxel(
             scene,
             world,
-            baseBlocks[world[y][z][x].type],
+            baseBlocks[blocksInfo[world[y][z][x]].name],
             shadowGenerator,
             y,
             z,
@@ -168,7 +168,7 @@ const createScene = async (engine) => {
         light.dispose()
       }
       const [y, z, x] = pickedMesh.id.split("_")
-      world[y][z][x].type = null
+      world[y][z][x] = null
       saveWorld(world)
     }
   }
@@ -331,7 +331,7 @@ const main = async () => {
             bottom: 0.5,
             ambient: 0.2,
             skyAlpha: 0.95,
-            color: "#000000",
+            color: "#FFFFFF",
           }
         : {
             top: 0.1,
@@ -411,7 +411,7 @@ const renderToolboxItem = (name) => `
   ></div>
 `
 
-const toolboxItems = blockTypes
+const toolboxItems = blocksValues
   .map(({ name }) => renderToolboxItem(name))
   .join("\n")
 
