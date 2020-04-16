@@ -155,7 +155,6 @@ const createScene = async (engine) => {
   }
 
   const hero = new Hero(scene)
-  // hero.bounce()
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
@@ -229,6 +228,7 @@ const createScene = async (engine) => {
 
   gameLoop(function () {
     stats.begin()
+    hero.bounce()
 
     const cameraNotMoved =
       scene.activeCamera.position.x === prevCameraPosition.x &&
