@@ -149,7 +149,6 @@ const createScene = async (engine) => {
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
-  optimize(scene)
 
   const action1 = () => {
     const { hit, pickedMesh } = scene.pick(
@@ -188,11 +187,11 @@ const createScene = async (engine) => {
 
       if (
         y >= 0 &&
-        y < config.worldSize &&
+        y < world.length &&
         z >= 0 &&
-        z < config.worldSize &&
+        z < world.length &&
         x >= 0 &&
-        x < config.worldSize
+        x < world.length
       ) {
         createVoxel(
           scene,
