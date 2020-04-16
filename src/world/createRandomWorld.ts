@@ -151,9 +151,14 @@ const createNatureWorld = (rng) => {
           )
 
           world[y][z].push(availableBlocks[index])
-        } else if (y === height && !isEmpty && hasGrass) {
+        } else if (
+          y === height &&
+          !isEmpty &&
+          hasGrass &&
+          (y >= horizon || !hasWater)
+        ) {
           world[y][z].push(grass)
-        } else if (y < horizon && hasWater) {
+        } else if (y < (hasGrass ? horizon : horizon - 1) && hasWater) {
           world[y][z].push(liquid)
         } else {
           world[y][z].push(null)
