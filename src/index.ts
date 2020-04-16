@@ -56,10 +56,6 @@ const createScene = async (engine) => {
   const scene = new BABYLON.Scene(engine)
   scene.blockMaterialDirtyMechanism = true
 
-  addBackground(scene)
-  const lights = new Lights(scene)
-  const shadowGenerator = addShadows(scene, lights.top)
-
   for (const block of blocksValues) {
     await new Promise((resolve, reject) => {
       BABYLON.SceneLoader.Append(
@@ -73,6 +69,24 @@ const createScene = async (engine) => {
     })
   }
 
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
+      `hero.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
+
+  const hero = scene.getMeshByName("hero")
+  hero.setParent(null)
+
+  addBackground(scene)
+  const lights = new Lights(scene)
+  const shadowGenerator = addShadows(scene, lights.top)
+
   // const hero = BABYLON.MeshBuilder.CreateBox(
   //   `hero`,
   //   {
@@ -82,10 +96,6 @@ const createScene = async (engine) => {
   //   },
   //   scene,
   // )
-
-  // hero.position.y = 15
-  // hero.position.z = 6
-  // hero.position.x = 6
 
   // var gravityVector = new BABYLON.Vector3(0, -9.81 * 10, 0)
   // var physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon)
@@ -145,6 +155,10 @@ const createScene = async (engine) => {
   for (const key in baseBlocks) {
     baseBlocks[key].isVisible = false
   }
+
+  hero.position.y = worldSize
+  hero.position.z = 2
+  hero.position.x = 2
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
@@ -314,7 +328,7 @@ const main = async () => {
   console.log("pinch:", scene.activeCamera.pinchPrecision)
   scene.activeCamera.pinchPrecision = 20
 
-  const camera = scene.cameras[scene.cameras.length - 1]
+  // const camera = scene.cameras[scene.cameras.length - 1]
   // const ambientOcclusion = new AmbientOcclusion(scene, camera)
 
   window.addEventListener("resize", function () {
