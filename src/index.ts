@@ -310,7 +310,7 @@ const main = async () => {
   scene.activeCamera.inertia = 0
   scene.activeCamera.checkCollisions = true
   scene.activeCamera.panningInertia = 0
-  scene.activeCamera.panningSensibility = 50
+  scene.activeCamera.panningSensibility = 100
 
   const camera = scene.cameras[scene.cameras.length - 1]
   // const ambientOcclusion = new AmbientOcclusion(scene, camera)
