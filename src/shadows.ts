@@ -9,7 +9,6 @@ const addShadows = (scene, light) => {
 
   // !Exclude invisible meshes and sky box
   scene.meshes.forEach((mesh) => {
-    console.log("ok")
     mesh.receiveShadows = true
   })
 

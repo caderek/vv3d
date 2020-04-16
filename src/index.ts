@@ -156,7 +156,7 @@ const createScene = async (engine) => {
     baseBlocks[key].isVisible = false
   }
 
-  hero.position.y = worldSize
+  hero.position.y = worldSize + 0.3
   hero.position.z = 2
   hero.position.x = 2
 
