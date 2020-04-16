@@ -60,7 +60,7 @@ const createNatureWorld = (rng) => {
   const size = randomInt(rng, 3, 10) * 2
   const availableChunks = []
 
-  for (let i = 1; i <= size / 2; i++) {
+  for (let i = 1; i <= size / 3; i++) {
     if (size % i === 0) {
       availableChunks.push(i)
     }
@@ -169,7 +169,7 @@ const createRandomWorld = () => {
   const rng = seedrandom(Math.random())
   const rand = rng()
   const generator =
-    rand < 0.05
+    rand < 0.01
       ? createResourceWorld
       : rand > 0.99
       ? createDumpWorld
