@@ -17,6 +17,7 @@ import AmbientOcclusion from "./ambient-occlusion"
 import createDefaultWorld from "./world/createDefaultWorld"
 import createRandomWorld from "./world/createRandomWorld"
 import cannon from "cannon"
+import Hero from "./hero"
 
 const mobile = isMobile()
 const targetFPS = 20
@@ -68,6 +69,17 @@ const createScene = async (engine) => {
       )
     })
   }
+
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
+      `hero.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
 
   addBackground(scene)
   const lights = new Lights(scene)
@@ -142,23 +154,8 @@ const createScene = async (engine) => {
     baseBlocks[key].isVisible = false
   }
 
-  await new Promise((resolve, reject) => {
-    BABYLON.SceneLoader.Append(
-      "models/",
-      `hero.glb`,
-      scene,
-      resolve,
-      null,
-      reject,
-    )
-  })
-
-  const hero = scene.getMeshByName("hero")
-  hero.setParent(null)
-  hero.position.y = worldSize + 0.3
-  hero.position.z = 2
-  hero.position.x = 2
-  scene.getMeshByName("hero_glow.R").material.disableLighting = true
+  const hero = new Hero(scene)
+  // hero.bounce()
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
@@ -230,20 +227,8 @@ const createScene = async (engine) => {
   let cycle = false
   let prevCameraPosition = { x: null, y: null, z: null }
 
-  let amp = 0
-  let change = 0.05
-
   gameLoop(function () {
     stats.begin()
-
-    amp += change
-    if (amp > 0.8) {
-      change = -0.05
-    } else if (amp < -0.8) {
-      change = 0.05
-    }
-    hero.position.y += change
-    hero.rotate(BABYLON.Axis.Y, Math.PI / 24, BABYLON.Space.LOCAL)
 
     const cameraNotMoved =
       scene.activeCamera.position.x === prevCameraPosition.x &&
