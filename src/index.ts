@@ -147,7 +147,6 @@ const createScene = async (engine) => {
     baseBlocks[key].isVisible = false
   }
 
-  console.log("skybox size:", worldSize)
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
   optimize(scene)

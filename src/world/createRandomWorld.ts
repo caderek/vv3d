@@ -58,6 +58,8 @@ const createDumpWorld = (rng) => {
 
 const createNatureWorld = (rng) => {
   const size = randomInt(rng, 3, 10) * 2
+  console.log({ size })
+
   const availableChunks = []
 
   for (let i = 1; i <= size / 3; i++) {
@@ -68,10 +70,8 @@ const createNatureWorld = (rng) => {
 
   const chunkSize =
     availableChunks[randomInt(rng, 0, availableChunks.length - 1)]
-  console.log({ availableChunks })
   console.log({ chunkSize })
 
-  console.log({ size })
   const hasWater = rng() > 0.5
   const hasGrass = rng() > 0.5 && hasWater
   const hasCaves = rng() > 0.5
@@ -105,8 +105,8 @@ const createNatureWorld = (rng) => {
 
   const simplex = new SimplexNoise(rng)
 
-  const strength = randomInt(rng, 0, 5)
-  console.log({ strength })
+  const amplitude = randomInt(rng, 0, 5)
+  console.log({ amplitude })
 
   const horizon = randomInt(rng, 3, Math.floor(0.6 * size))
   console.log({ horizon })
@@ -123,7 +123,7 @@ const createNatureWorld = (rng) => {
       b = x === 0 ? 0 : x % chunkSize === 0 ? b + 1 : b
 
       const factor = simplex.noise2D(a, b)
-      const delta = randomToInt(factor, 0, strength)
+      const delta = randomToInt(factor, 0, amplitude)
       const baseHeight = Math.round(horizon + delta)
       const height = baseHeight > size ? size : baseHeight < 1 ? 1 : baseHeight
       heights[z].push(height)
