@@ -1,18 +1,17 @@
 import { blocksValues } from "../blocks"
 import * as SimplexNoise from "simplex-noise"
-
-console.log(SimplexNoise)
+import seedrandom from "seedrandom"
 
 const randomToInt = (num, min, max) => {
   return Math.floor(num * (max - min + 1)) + min
 }
 
-const randomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min
+const randomInt = (rng, min, max) => {
+  return Math.floor(rng() * (max - min + 1)) + min
 }
 
-const createResourceWorld = () => {
-  const size = randomInt(3, 15)
+const createResourceWorld = (rng) => {
+  const size = randomInt(rng, 5, 15)
   const availableBlocks = blocksValues.filter(({ groups }) =>
     groups.includes("resource"),
   )
@@ -25,8 +24,8 @@ const createResourceWorld = () => {
       world[y].push([])
 
       for (let x = 0; x < size; x++) {
-        const randomIndex = randomInt(0, availableBlocks.length - 1)
-        world[y][z].push({ type: availableBlocks[randomIndex].name })
+        const randomIndex = randomInt(rng, 0, availableBlocks.length - 1)
+        world[y][z].push(availableBlocks[randomIndex].id)
       }
     }
   }
@@ -34,8 +33,8 @@ const createResourceWorld = () => {
   return world
 }
 
-const createDumpWorld = () => {
-  const size = randomInt(3, 15)
+const createDumpWorld = (rng) => {
+  const size = randomInt(rng, 3, 15)
   const availableBlocks = blocksValues.filter(({ groups }) =>
     groups.includes("processed"),
   )
@@ -48,8 +47,8 @@ const createDumpWorld = () => {
       world[y].push([])
 
       for (let x = 0; x < size; x++) {
-        const randomIndex = randomInt(0, availableBlocks.length - 1)
-        world[y][z].push({ type: availableBlocks[randomIndex].name })
+        const randomIndex = randomInt(rng, 0, availableBlocks.length - 1)
+        world[y][z].push(availableBlocks[randomIndex].id)
       }
     }
   }
@@ -57,42 +56,25 @@ const createDumpWorld = () => {
   return world
 }
 
-const createCavedWorld = () => {
-  const size = 12 //randomInt(3, 15)
+const createNatureWorld = (rng) => {
+  const size = randomInt(rng, 3, 10) * 2
+  const availableChunks = []
 
-  const simplex = new SimplexNoise("seed")
-
-  const strength = randomInt(0, 5)
-  console.log({ strength })
-
-  let world = []
-  for (let y = 0; y < size; y++) {
-    world.push([])
-
-    for (let z = 0; z < size; z++) {
-      world[y].push([])
-
-      for (let x = 0; x < size; x++) {
-        const isEmpty = simplex.noise3D(y, z, x) > 0
-
-        if (!isEmpty) {
-          world[y][z].push({ type: "stone-darkgray" })
-        } else {
-          world[y][z].push({ type: null })
-        }
-      }
+  for (let i = 1; i <= size / 2; i++) {
+    if (size % i === 0) {
+      availableChunks.push(i)
     }
   }
 
-  return world
-}
+  const chunkSize =
+    availableChunks[randomInt(rng, 0, availableChunks.length - 1)]
+  console.log({ availableChunks })
+  console.log({ chunkSize })
 
-const createNatureWorld = () => {
-  const size = randomInt(3, 10) * 2
   console.log({ size })
-  const hasWater = Math.random() > 0.5
-  const hasGrass = Math.random() > 0.5 && hasWater
-  const hasCaves = Math.random() > 0.5
+  const hasWater = rng() > 0.5
+  const hasGrass = rng() > 0.5 && hasWater
+  const hasCaves = rng() > 0.5
 
   const resourceBlocks = blocksValues
     .filter(({ groups }) => groups.includes("resource"))
@@ -107,34 +89,44 @@ const createNatureWorld = () => {
     .filter(({ groups }) => groups.includes("water"))
     .map((item) => item.id)
 
-  const liquid = liquidBlocks[randomInt(0, liquidBlocks.length - 1)]
-  const grass = bioBlocks[randomInt(0, bioBlocks.length - 1)]
+  const liquid = liquidBlocks[randomInt(rng, 0, liquidBlocks.length - 1)]
+  const grass = bioBlocks[randomInt(rng, 0, bioBlocks.length - 1)]
 
   const availableBlocks = []
 
-  const variety = randomInt(1, 10)
+  const variety = randomInt(rng, 1, 10)
   console.log({ variety })
 
   for (let i = 0; i < variety; i++) {
     const threshold = i == 0 ? 0.01 : 0.1
-    const group = Math.random() > threshold ? resourceBlocks : crystalBlocks
-    availableBlocks.push(group[randomInt(0, group.length - 1)])
+    const group = rng() > threshold ? resourceBlocks : crystalBlocks
+    availableBlocks.push(group[randomInt(rng, 0, group.length - 1)])
   }
 
-  const simplex = new SimplexNoise(Math.random())
+  const simplex = new SimplexNoise(rng)
 
-  const strength = randomInt(0, 5)
+  const strength = randomInt(rng, 0, 5)
   console.log({ strength })
 
+  const horizon = randomInt(rng, 3, Math.floor(0.6 * size))
+  console.log({ horizon })
+
   const heights = []
+  let a
+  let b
 
   for (let z = 0; z < size; z++) {
     heights.push([])
+    a = z === 0 ? 0 : z % chunkSize === 0 ? a + 1 : a
 
     for (let x = 0; x < size; x++) {
-      const factor = simplex.noise2D(z, x)
+      b = x === 0 ? 0 : x % chunkSize === 0 ? b + 1 : b
+
+      const factor = simplex.noise2D(a, b)
       const delta = randomToInt(factor, 0, strength)
-      heights[z].push(Math.round(size / 2 + delta))
+      const baseHeight = Math.round(horizon + delta)
+      const height = baseHeight > size ? size : baseHeight < 1 ? 1 : baseHeight
+      heights[z].push(height)
     }
   }
 
@@ -161,7 +153,7 @@ const createNatureWorld = () => {
           world[y][z].push(availableBlocks[index])
         } else if (y === height && !isEmpty && hasGrass) {
           world[y][z].push(grass)
-        } else if (y < size / 2 && hasWater) {
+        } else if (y < horizon && hasWater) {
           world[y][z].push(liquid)
         } else {
           world[y][z].push(null)
@@ -174,7 +166,16 @@ const createNatureWorld = () => {
 }
 
 const createRandomWorld = () => {
-  return createNatureWorld()
+  const rng = seedrandom(Math.random())
+  const rand = rng()
+  const generator =
+    rand < 0.05
+      ? createResourceWorld
+      : rand > 0.99
+      ? createDumpWorld
+      : createNatureWorld
+
+  return generator(rng)
 }
 
 export default createRandomWorld

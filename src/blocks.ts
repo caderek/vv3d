@@ -4,7 +4,7 @@ const blocks = {
   3: { id: 3, name: "stone-darkgray", groups: ["resource", "stone"] },
   4: { id: 4, name: "stone-black", groups: ["resource", "stone"] },
   5: { id: 5, name: "stone-red", groups: ["resource"] },
-  6: { id: 6, name: "stone-lightred", groups: ["bio"] },
+  6: { id: 6, name: "stone-lightred", groups: ["resource"] },
   7: { id: 7, name: "stone-darkred", groups: ["resource"] },
   8: { id: 8, name: "stone-green", groups: ["bio"] },
   9: { id: 9, name: "stone-lightgreen", groups: ["bio"] },
