@@ -7,7 +7,6 @@ import Lights from "./lights"
 import { addShadows } from "./shadows"
 import * as isMobile from "is-mobile"
 import blocksInfo, { blocksValues } from "./blocks"
-import configs from "./configs"
 import stats from "./stats"
 import gameLoop from "./game-loop"
 import createVoxel from "./createVoxel"
@@ -18,22 +17,20 @@ import createDefaultWorld from "./world/createDefaultWorld"
 import createRandomWorld from "./world/createRandomWorld"
 import cannon from "cannon"
 import Hero from "./hero"
+import loadModels from "./load-models"
 
 const mobile = isMobile()
 const targetFPS = 20
 
-let config = {
-  worldSize: 20,
-  mapSize: {
-    x: 20,
-    y: 2,
-    z: 20,
-  },
-  blockSize: 1,
+enum Modes {
+  build,
+  hero,
+  wires,
 }
 
 const state = {
   activeBlock: "stone-green",
+  mode: Modes.build,
 }
 
 const blockNames = blocksValues.map(({ name }) => name)
@@ -56,32 +53,13 @@ const incrementByFace = {
 const createScene = async (engine) => {
   const scene = new BABYLON.Scene(engine)
   scene.blockMaterialDirtyMechanism = true
+  scene.useGeometryIdsMap = true
+  scene.useClonedMeshMap = true
 
-  for (const block of blocksValues) {
-    await new Promise((resolve, reject) => {
-      BABYLON.SceneLoader.Append(
-        "models/",
-        `${block.name}.glb`,
-        scene,
-        resolve,
-        null,
-        reject,
-      )
-    })
-  }
-
-  await new Promise((resolve, reject) => {
-    BABYLON.SceneLoader.Append(
-      "models/",
-      `hero.glb`,
-      scene,
-      resolve,
-      null,
-      reject,
-    )
-  })
+  const modelsMeta = await loadModels(scene)
 
   addBackground(scene)
+
   const lights = new Lights(scene)
   const shadowGenerator = addShadows(scene, lights.top)
 
@@ -155,7 +133,7 @@ const createScene = async (engine) => {
   }
 
   const hero = new Hero(scene)
-  hero.bounce()
+  // hero.bounce()
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
@@ -169,15 +147,28 @@ const createScene = async (engine) => {
     )
 
     if (hit === true) {
-      pickedMesh.dispose()
-      scene.getMeshByName(`item_${pickedMesh.id}`).dispose()
-      const light = scene.getLightByID(`light_${pickedMesh.id}`)
-      if (light) {
-        light.dispose()
+      if (modelsMeta.has(pickedMesh)) {
+        const meta = modelsMeta.get(pickedMesh)
+        state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
+        console.log({ mode: state.mode })
+      } else if (state.mode === Modes.build) {
+        pickedMesh.dispose()
+        scene.getMeshByName(`item_${pickedMesh.id}`).dispose()
+        const light = scene.getLightByID(`light_${pickedMesh.id}`)
+        if (light) {
+          light.dispose()
+        }
+        const [y, z, x] = pickedMesh.id.split("_")
+        world[y][z][x] = null
+        saveWorld(world)
+      } else {
+        const [y, z, x] = pickedMesh.id.split("_").map(Number)
+        console.log({ y, z, x })
+
+        hero.mesh.position.y = y + 0.5
+        hero.mesh.position.z = z
+        hero.mesh.position.x = x
       }
-      const [y, z, x] = pickedMesh.id.split("_")
-      world[y][z][x] = null
-      saveWorld(world)
     }
   }
 
@@ -229,7 +220,8 @@ const createScene = async (engine) => {
 
   gameLoop(function () {
     stats.begin()
-    hero.mesh.position.x += 0.01
+
+    hero.mesh.rotate(BABYLON.Axis.Y, Math.PI / 36, BABYLON.Space.LOCAL)
 
     const cameraNotMoved =
       scene.activeCamera.position.x === prevCameraPosition.x &&

@@ -24,6 +24,8 @@ const createVoxel = (
   item.isPickable = false
   item.isVisible = true
   item.material.maxSimultaneousLights = 12
+  item.cullingStrategy =
+    BABYLON.AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY
 
   if (!parentMesh.name.includes("glow")) {
     shadowGenerator.addShadowCaster(item)
