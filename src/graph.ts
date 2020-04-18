@@ -36,7 +36,7 @@ class WorldGraph {
     }
 
     //@ts-ignore
-    this.pathFinder = path.aStar(graph)
+    this.pathFinder = path.nba(graph)
   }
 
   find(from, to) {
@@ -44,6 +44,7 @@ class WorldGraph {
       .find(from, to)
       .map((node) => node.data)
       .reverse()
+      .slice(1)
 
     return path
   }

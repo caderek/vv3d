@@ -30,7 +30,7 @@ enum Modes {
 
 const state = {
   activeBlock: "stone-green",
-  mode: Modes.build,
+  mode: Modes.hero,
 }
 
 const blockNames = blocksValues.map(({ name }) => name)
@@ -112,8 +112,8 @@ const createScene = async (engine) => {
     baseBlocks[key].isVisible = false
   }
 
-  const hero = new Hero(scene)
-  // hero.bounce()
+  const hero = new Hero(scene, world, worldGraph)
+  hero.bounce()
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
@@ -140,13 +140,6 @@ const createScene = async (engine) => {
         const [y, z, x] = pickedMesh.id.split("_")
         world[y][z][x] = null
         saveWorld(world)
-      } else {
-        const [y, z, x] = pickedMesh.id.split("_").map(Number)
-        console.log({ y, z, x })
-
-        hero.mesh.position.y = y + 0.5
-        hero.mesh.position.z = z
-        hero.mesh.position.x = x
       }
     }
   }
@@ -187,6 +180,8 @@ const createScene = async (engine) => {
             x,
           )
         }
+      } else {
+        hero.move(pickedMesh.id)
       }
     }
   }
@@ -206,6 +201,7 @@ const createScene = async (engine) => {
     stats.begin()
 
     hero.mesh.rotate(BABYLON.Axis.Y, Math.PI / 36, BABYLON.Space.LOCAL)
+    hero.render()
 
     const cameraNotMoved =
       scene.activeCamera.position.x === prevCameraPosition.x &&
@@ -223,12 +219,12 @@ const createScene = async (engine) => {
           return
         }
 
-        if (right) {
+        if (left) {
           action2()
-          right = false
-        } else if (left) {
-          action1()
           left = false
+        } else if (right) {
+          action1()
+          right = false
         }
       }
     } else {
@@ -337,9 +333,13 @@ const main = async () => {
     location.reload()
   })
 
-  document.getElementById("mode-switch").addEventListener("click", () => {
-    state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
-  })
+  document
+    .getElementById("mode-switch")
+    .addEventListener("click", ({ target }) => {
+      state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
+      // @ts-ignore
+      target.innerText = state.mode === Modes.build ? "HERO" : "BUILD"
+    })
 
   document.getElementById("screenshot").addEventListener("click", () => {
     // @ts-ignore
