@@ -2,7 +2,6 @@ import "pepjs"
 import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
 import { addBackground } from "./background"
-// import { addLights, changeLights } from "./lights"
 import Lights from "./lights"
 import { addShadows } from "./shadows"
 import * as isMobile from "is-mobile"
@@ -15,9 +14,10 @@ import { saveWorld } from "./save"
 import AmbientOcclusion from "./ambient-occlusion"
 import createDefaultWorld from "./world/createDefaultWorld"
 import createRandomWorld from "./world/createRandomWorld"
-import cannon from "cannon"
 import Hero from "./hero"
 import loadModels from "./load-models"
+import graph from "./graph"
+import WorldGraph from "./graph"
 
 const mobile = isMobile()
 const targetFPS = 20
@@ -63,27 +63,6 @@ const createScene = async (engine) => {
   const lights = new Lights(scene)
   const shadowGenerator = addShadows(scene, lights.top)
 
-  // const hero = BABYLON.MeshBuilder.CreateBox(
-  //   `hero`,
-  //   {
-  //     width: 1,
-  //     height: 1,
-  //     depth: 1,
-  //   },
-  //   scene,
-  // )
-
-  // var gravityVector = new BABYLON.Vector3(0, -9.81 * 10, 0)
-  // var physicsPlugin = new BABYLON.CannonJSPlugin(true, 10, cannon)
-  // scene.enablePhysics(gravityVector, physicsPlugin)
-
-  // hero.physicsImpostor = new BABYLON.PhysicsImpostor(
-  //   hero,
-  //   BABYLON.PhysicsImpostor.BoxImpostor,
-  //   { mass: 1, restitution: 0.9 },
-  //   scene,
-  // )
-
   const baseBlocks = Object.fromEntries(
     blocksValues.map(({ name }) => {
       return [name, scene.meshes.find((mesh) => mesh.name === name)]
@@ -104,6 +83,7 @@ const createScene = async (engine) => {
       createRandomWorld()
 
   const worldSize = world.length
+  const worldGraph = new WorldGraph(world)
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
@@ -149,8 +129,7 @@ const createScene = async (engine) => {
     if (hit === true) {
       if (modelsMeta.has(pickedMesh)) {
         const meta = modelsMeta.get(pickedMesh)
-        state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
-        console.log({ mode: state.mode })
+        console.log(meta)
       } else if (state.mode === Modes.build) {
         pickedMesh.dispose()
         scene.getMeshByName(`item_${pickedMesh.id}`).dispose()
@@ -181,28 +160,33 @@ const createScene = async (engine) => {
     )
 
     if (hit === true) {
-      const inc = incrementByFace[faceId]
-      const y = pickedMesh.position.y + inc.y
-      const z = pickedMesh.position.z + inc.z
-      const x = pickedMesh.position.x + inc.x
+      if (modelsMeta.has(pickedMesh)) {
+        const meta = modelsMeta.get(pickedMesh)
+        console.log(meta)
+      } else if (state.mode === Modes.build) {
+        const inc = incrementByFace[faceId]
+        const y = pickedMesh.position.y + inc.y
+        const z = pickedMesh.position.z + inc.z
+        const x = pickedMesh.position.x + inc.x
 
-      if (
-        y >= 0 &&
-        y < world.length &&
-        z >= 0 &&
-        z < world.length &&
-        x >= 0 &&
-        x < world.length
-      ) {
-        createVoxel(
-          scene,
-          world,
-          baseBlocks[state.activeBlock],
-          shadowGenerator,
-          y,
-          z,
-          x,
-        )
+        if (
+          y >= 0 &&
+          y < world.length &&
+          z >= 0 &&
+          z < world.length &&
+          x >= 0 &&
+          x < world.length
+        ) {
+          createVoxel(
+            scene,
+            world,
+            baseBlocks[state.activeBlock],
+            shadowGenerator,
+            y,
+            z,
+            x,
+          )
+        }
       }
     }
   }
@@ -351,6 +335,10 @@ const main = async () => {
   document.getElementById("reset").addEventListener("click", () => {
     window.localStorage.removeItem("world")
     location.reload()
+  })
+
+  document.getElementById("mode-switch").addEventListener("click", () => {
+    state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
   })
 
   document.getElementById("screenshot").addEventListener("click", () => {
