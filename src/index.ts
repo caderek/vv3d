@@ -77,16 +77,14 @@ const createScene = async (engine, canvas) => {
     savedWorld = JSON.parse(savedWorldEntry)
   }
 
-  const world: World = savedWorld
-    ? savedWorld
-    : // : createDefaultWorld(config.worldSize, 2)
-      createRandomWorld()
+  const world: World = savedWorld ? savedWorld : createRandomWorld()
 
   const worldSize = world.length
   const worldGraph = new WorldGraph(world)
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
+    baseBlocks[key].material.freeze()
   }
 
   for (let y = 0; y < worldSize; y++) {
@@ -114,6 +112,8 @@ const createScene = async (engine, canvas) => {
 
   const hero = new Hero(scene, world, worldGraph)
   hero.bounce()
+
+  console.log(scene)
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])

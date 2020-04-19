@@ -1,5 +1,4 @@
 import * as BABYLON from "babylonjs"
-import WorldGraph from "./graph"
 
 class Hero {
   public mesh: any
@@ -28,6 +27,7 @@ class Hero {
     this.velocityY = 0
     this.velocityZ = 0
     this.velocityX = 0
+    // item.material.maxSimultaneousLights = 12
 
     scene.getMeshByName("hero-glow.R").material.disableLighting = true
   }
@@ -54,10 +54,6 @@ class Hero {
     )
 
     console.log("Distance:", this.remainingPath.length)
-
-    // this.mesh.position.y = y
-    // this.mesh.position.z = z
-    // this.mesh.position.x = x
   }
 
   render() {
