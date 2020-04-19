@@ -1,5 +1,5 @@
 import createGraph from "ngraph.graph"
-import path from "ngraph.path"
+import Path from "ngraph.path"
 
 const perpendicularWeight = 1
 const diagonalWeight2d = Math.sqrt(2)
@@ -14,7 +14,34 @@ const increments = [
   { z: 0, y: -1, x: 0 },
 ]
 
-const elo = []
+const allNeighbors = [
+  ...increments,
+
+  { z: 1, y: 1, x: 1 },
+  { z: -1, y: 1, x: -1 },
+  { z: -1, y: 1, x: 1 },
+  { z: 1, y: 1, x: -1 },
+
+  { z: 1, y: -1, x: 1 },
+  { z: -1, y: -1, x: -1 },
+  { z: -1, y: -1, x: 1 },
+  { z: 1, y: -1, x: -1 },
+
+  { z: 1, y: 0, x: 1 },
+  { z: -1, y: 0, x: -1 },
+  { z: -1, y: 0, x: 1 },
+  { z: 1, y: 0, x: -1 },
+
+  { z: 0, y: 1, x: 1 },
+  { z: 0, y: -1, x: -1 },
+  { z: 0, y: 1, x: -1 },
+  { z: 0, y: -1, x: 1 },
+
+  { z: 1, y: 1, x: 0 },
+  { z: -1, y: -1, x: 0 },
+  { z: -1, y: 1, x: 0 },
+  { z: 1, y: -1, x: 0 },
+]
 
 const diagonals2d = [
   {
@@ -165,75 +192,29 @@ const diagonals3d = [
 class WorldGraph {
   private pathFinder: any
   private world: any
+  private graph: any
 
   constructor(world) {
     this.world = world
+    this.graph = createGraph()
 
-    const graph = createGraph()
     const size = world.length
 
     for (let y = 0; y < size; y++) {
       for (let z = 0; z < size; z++) {
         for (let x = 0; x < size; x++) {
-          if (world[y][z][x] === null) {
-            const base = { x, y, z }
-
-            graph.addNode(`${y}_${z}_${x}`, { y, z, x })
-
-            increments.forEach((inc) => {
-              const { isEmpty, zz, yy, xx } = this.checkTarget(base, inc)
-
-              if (isEmpty) {
-                graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
-                  weight: perpendicularWeight,
-                })
-              }
-            })
-
-            diagonals2d.forEach(({ inc, neighbors }) => {
-              const { isEmpty, zz, yy, xx } = this.checkTarget(base, inc)
-              const areNeighborsEmpty = neighbors
-                .map((inc) => this.checkTarget(base, inc).isEmpty)
-                .every((isEmpty) => isEmpty)
-
-              if (isEmpty && areNeighborsEmpty) {
-                graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
-                  weight: diagonalWeight2d,
-                })
-              }
-            })
-
-            diagonals3d.forEach(({ inc, neighbors }) => {
-              const { isEmpty, zz, yy, xx } = this.checkTarget(base, inc)
-              const areNeighborsEmpty = neighbors
-                .map((inc) => {
-                  if (base.x === 1 && base.y === 1 && base.z === 1) {
-                    console.log({
-                      base,
-                      inc,
-                      isEmpty: this.checkTarget(base, inc).isEmpty,
-                    })
-                  }
-                  return this.checkTarget(base, inc).isEmpty
-                })
-                .every((isEmpty) => isEmpty)
-
-              if (isEmpty && areNeighborsEmpty) {
-                graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
-                  weight: diagonalWeight3d,
-                })
-              }
-            })
-          }
+          this.addPaths(y, z, x)
         }
       }
     }
 
-    this.pathFinder = path.nba(graph, {
+    this.pathFinder = Path.nba(this.graph, {
       distance(fromNode, toNode, link) {
         return link.data.weight
       },
     })
+
+    console.log(this.graph)
   }
 
   private checkTarget(base, inc) {
@@ -244,8 +225,130 @@ class WorldGraph {
     return { isEmpty: this.world?.[yy]?.[zz]?.[xx] === null, yy, zz, xx }
   }
 
+  private addPaths(y, z, x) {
+    if (this.world?.[y]?.[z]?.[x] === null) {
+      const base = { x, y, z }
+
+      this.graph.addNode(`${y}_${z}_${x}`, { y, z, x })
+
+      increments.forEach((inc) => {
+        const { isEmpty, zz, yy, xx } = this.checkTarget(base, inc)
+
+        if (isEmpty) {
+          this.graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
+            weight: perpendicularWeight,
+          })
+          // this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
+          //   weight: perpendicularWeight,
+          // })
+        }
+      })
+
+      diagonals2d.forEach(({ inc, neighbors }) => {
+        const { isEmpty, zz, yy, xx } = this.checkTarget(base, inc)
+        const areNeighborsEmpty = neighbors
+          .map((inc) => this.checkTarget(base, inc).isEmpty)
+          .every((isEmpty) => isEmpty)
+
+        if (isEmpty && areNeighborsEmpty) {
+          this.graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
+            weight: diagonalWeight2d,
+          })
+          // this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
+          //   weight: diagonalWeight2d,
+          // })
+        }
+      })
+
+      diagonals3d.forEach(({ inc, neighbors }) => {
+        const { isEmpty, zz, yy, xx } = this.checkTarget(base, inc)
+        const areNeighborsEmpty = neighbors
+          .map((inc) => {
+            return this.checkTarget(base, inc).isEmpty
+          })
+          .every((isEmpty) => isEmpty)
+
+        if (isEmpty && areNeighborsEmpty) {
+          this.graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
+            weight: diagonalWeight3d,
+          })
+          // this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
+          //   weight: diagonalWeight3d,
+          // })
+        }
+      })
+    }
+  }
+
+  private removePaths(y, z, x) {
+    if (this.world?.[y]?.[z]?.[x] === null) {
+      const base = { x, y, z }
+
+      increments.forEach((inc) => {
+        const { isEmpty, zz, yy, xx } = this.checkTarget(base, inc)
+
+        if (!isEmpty) {
+          const link = this.graph.getLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`)
+          const rev = this.graph.getLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`)
+
+          this.graph.removeLink(link)
+          this.graph.removeLink(rev)
+        }
+      })
+
+      diagonals2d.forEach(({ inc, neighbors }) => {
+        const { isEmpty, zz, yy, xx } = this.checkTarget(base, inc)
+        const areNeighborsEmpty = neighbors
+          .map((inc) => this.checkTarget(base, inc).isEmpty)
+          .every((isEmpty) => isEmpty)
+
+        if (!isEmpty || !areNeighborsEmpty) {
+          const link = this.graph.getLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`)
+          const rev = this.graph.getLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`)
+
+          this.graph.removeLink(link)
+          this.graph.removeLink(rev)
+        }
+      })
+
+      diagonals3d.forEach(({ inc, neighbors }) => {
+        const { isEmpty, zz, yy, xx } = this.checkTarget(base, inc)
+        const areNeighborsEmpty = neighbors
+          .map((inc) => {
+            return this.checkTarget(base, inc).isEmpty
+          })
+          .every((isEmpty) => isEmpty)
+
+        if (!isEmpty || !areNeighborsEmpty) {
+          const link = this.graph.getLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`)
+          const rev = this.graph.getLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`)
+
+          this.graph.removeLink(link)
+          this.graph.removeLink(rev)
+        }
+      })
+    }
+  }
+
+  add(y, z, x) {
+    this.addPaths(y, z, x)
+  }
+
+  remove(y, z, x) {
+    this.graph.removeNode(`${y}_${z}_${x}`)
+    allNeighbors.forEach((inc) => {
+      this.removePaths(y + inc.y, z + inc.z, x + inc.x)
+    })
+  }
+
   find(from, to) {
-    const path = this.pathFinder
+    const pathFinder = Path.nba(this.graph, {
+      distance(fromNode, toNode, link) {
+        return link.data.weight
+      },
+    })
+
+    const path = pathFinder
       .find(from, to)
       .map((node) => node.data)
       .reverse()

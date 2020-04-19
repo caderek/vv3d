@@ -137,8 +137,9 @@ const createScene = async (engine, canvas) => {
         if (light) {
           light.dispose()
         }
-        const [y, z, x] = pickedMesh.id.split("_")
+        const [y, z, x] = pickedMesh.id.split("_").map(Number)
         world[y][z][x] = null
+        worldGraph.add(y, z, x)
         saveWorld(world)
       }
     }
@@ -180,6 +181,8 @@ const createScene = async (engine, canvas) => {
             x,
           )
         }
+
+        worldGraph.remove(y, z, x)
       } else {
         hero.move(pickedMesh.id)
       }
@@ -329,7 +332,7 @@ const main = async () => {
     )
   })
 
-  document.getElementById("reset").addEventListener("click", () => {
+  document.getElementById("next").addEventListener("click", () => {
     window.localStorage.removeItem("world")
     location.reload()
   })
