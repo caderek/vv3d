@@ -84,7 +84,6 @@ const createScene = async (engine, canvas) => {
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
-    baseBlocks[key].material.freeze()
   }
 
   for (let y = 0; y < worldSize; y++) {
@@ -115,8 +114,8 @@ const createScene = async (engine, canvas) => {
 
   console.log(scene)
 
-  // lights.createSkybox(worldSize)
-  lights.createGlow([])
+  lights.createSkybox(worldSize)
+  lights.createGlow([lights.skybox])
   // lights.createGlow([])
 
   const action1 = () => {
@@ -140,7 +139,7 @@ const createScene = async (engine, canvas) => {
         }
         const [y, z, x] = pickedMesh.id.split("_").map(Number)
         world[y][z][x] = null
-        worldGraph.add(y, z, x)
+        // worldGraph.add(y, z, x)
         saveWorld(world)
       }
     }
@@ -183,7 +182,7 @@ const createScene = async (engine, canvas) => {
           )
         }
 
-        worldGraph.remove(y, z, x)
+        // worldGraph.remove(y, z, x)
       } else {
         hero.move(pickedMesh.id)
       }
@@ -344,6 +343,7 @@ const main = async () => {
       state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
       // @ts-ignore
       target.innerText = state.mode === Modes.build ? "HERO" : "BUILD"
+      lights.toggleSkybox()
     })
 
   document.getElementById("screenshot").addEventListener("click", () => {

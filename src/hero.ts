@@ -28,6 +28,8 @@ class Hero {
     this.velocityZ = 0
     this.velocityX = 0
     // item.material.maxSimultaneousLights = 12
+    console.log("Hero:")
+    console.log(scene.getMeshByName("hero"))
 
     scene.getMeshByName("hero-glow.R").material.disableLighting = true
   }

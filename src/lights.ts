@@ -17,7 +17,7 @@ class Lights {
   createSkybox(worldSize) {
     const skybox = BABYLON.Mesh.CreateBox(
       "skyBox",
-      worldSize + 4,
+      worldSize,
       this.scene,
       false,
       BABYLON.Mesh.BACKSIDE,
@@ -35,8 +35,13 @@ class Lights {
     skybox.position.z = worldSize / 2 - 0.5
     skybox.position.x = worldSize / 2 - 0.5
     skybox.isPickable = false
+    skybox.isVisible = false
 
     this.skybox = skybox
+  }
+
+  toggleSkybox() {
+    this.skybox.isVisible = !this.skybox.isVisible
   }
 
   private changeSkyboxAlpha(alpha) {
@@ -48,9 +53,9 @@ class Lights {
     glow.intensity = 0.5
 
     // ! include rather than exclude? Performance?
-    // excluded.forEach((mesh) => {
-    //   glow.addExcludedMesh(mesh)
-    // })
+    excluded.forEach((mesh) => {
+      glow.addExcludedMesh(mesh)
+    })
 
     this.glow = glow
   }
