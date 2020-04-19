@@ -48,9 +48,9 @@ class Lights {
     glow.intensity = 0.5
 
     // ! include rather than exclude? Performance?
-    excluded.forEach((mesh) => {
-      glow.addExcludedMesh(mesh)
-    })
+    // excluded.forEach((mesh) => {
+    //   glow.addExcludedMesh(mesh)
+    // })
 
     this.glow = glow
   }

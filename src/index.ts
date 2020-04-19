@@ -115,8 +115,9 @@ const createScene = async (engine, canvas) => {
 
   console.log(scene)
 
-  lights.createSkybox(worldSize)
-  lights.createGlow([lights.skybox])
+  // lights.createSkybox(worldSize)
+  lights.createGlow([])
+  // lights.createGlow([])
 
   const action1 = () => {
     const { hit, pickedMesh } = scene.pick(
@@ -300,7 +301,6 @@ const main = async () => {
   scene.activeCamera.panningInertia = 0
   scene.activeCamera.panningSensibility = 100
   scene.activeCamera.pinchPrecision = 20
-  console.log("pp", scene.activeCamera.pinchToPanMaxDistance)
   scene.activeCamera.pinchToPanMaxDistance = 40
 
   // const camera = scene.cameras[scene.cameras.length - 1]
