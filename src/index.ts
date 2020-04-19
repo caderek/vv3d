@@ -299,8 +299,9 @@ const main = async () => {
   scene.activeCamera.checkCollisions = true
   scene.activeCamera.panningInertia = 0
   scene.activeCamera.panningSensibility = 100
-  console.log("pinch:", scene.activeCamera.pinchPrecision)
   scene.activeCamera.pinchPrecision = 20
+  console.log("pp", scene.activeCamera.pinchToPanMaxDistance)
+  scene.activeCamera.pinchToPanMaxDistance = 40
 
   // const camera = scene.cameras[scene.cameras.length - 1]
   // const ambientOcclusion = new AmbientOcclusion(scene, camera)
