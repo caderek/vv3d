@@ -1,18 +1,34 @@
 import * as BABYLON from "babylonjs"
 
-const addShadows = (scene, light) => {
-  const shadowGenerator = new BABYLON.ShadowGenerator(1024, light)
+class Shadows {
+  shadowGenerator: any
+  private scene: any
+  private visible: boolean
 
-  shadowGenerator.bias = 0.01
-  shadowGenerator.usePercentageCloserFiltering = true
-  shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_MEDIUM
+  constructor(scene, light) {
+    this.scene = scene
+    this.visible = true
 
-  // !Exclude invisible meshes and sky box
-  scene.meshes.forEach((mesh) => {
-    mesh.receiveShadows = true
-  })
+    const shadowGenerator = new BABYLON.ShadowGenerator(1024, light)
 
-  return shadowGenerator
+    shadowGenerator.bias = 0.01
+    shadowGenerator.usePercentageCloserFiltering = true
+    shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_MEDIUM
+
+    // !Exclude invisible meshes and sky box
+    this.scene.meshes.forEach((mesh) => {
+      mesh.receiveShadows = true
+    })
+
+    this.shadowGenerator = shadowGenerator
+  }
+
+  toggle() {
+    this.visible = !this.visible
+    this.scene.meshes.forEach((mesh) => {
+      mesh.receiveShadows = this.visible
+    })
+  }
 }
 
-export { addShadows }
+export default Shadows

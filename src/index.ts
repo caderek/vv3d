@@ -3,7 +3,7 @@ import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
 import { addBackground } from "./background"
 import Lights from "./lights"
-import { addShadows } from "./shadows"
+import Shadows from "./shadows"
 import * as isMobile from "is-mobile"
 import blocksInfo, { blocksValues } from "./blocks"
 import stats from "./stats"
@@ -61,7 +61,7 @@ const createScene = async (engine, canvas) => {
   addBackground(scene)
 
   const lights = new Lights(scene)
-  const shadowGenerator = addShadows(scene, lights.top)
+  const shadows = new Shadows(scene, lights.top)
 
   const baseBlocks = Object.fromEntries(
     blocksValues.map(({ name }) => {
@@ -94,7 +94,7 @@ const createScene = async (engine, canvas) => {
             scene,
             world,
             baseBlocks[blocksInfo[world[y][z][x]].name],
-            shadowGenerator,
+            shadows.shadowGenerator,
             y,
             z,
             x,
@@ -175,7 +175,7 @@ const createScene = async (engine, canvas) => {
             scene,
             world,
             baseBlocks[state.activeBlock],
-            shadowGenerator,
+            shadows.shadowGenerator,
             y,
             z,
             x,
@@ -279,7 +279,7 @@ const createScene = async (engine, canvas) => {
     }
   })
 
-  return { scene, world, lights }
+  return { scene, world, lights, shadows }
 }
 
 const main = async () => {
@@ -290,7 +290,7 @@ const main = async () => {
     stencil: true,
   })
 
-  const { scene, world, lights } = await createScene(engine, canvas)
+  const { scene, world, lights, shadows } = await createScene(engine, canvas)
 
   scene.createDefaultCamera(true, true, true)
   scene.activeCamera.alpha += 0.25 * Math.PI
@@ -344,6 +344,7 @@ const main = async () => {
       // @ts-ignore
       target.innerText = state.mode === Modes.build ? "HERO" : "BUILD"
       lights.toggleSkybox()
+      // shadows.toggle()
     })
 
   document.getElementById("screenshot").addEventListener("click", () => {
