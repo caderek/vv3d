@@ -345,6 +345,7 @@ const main = async () => {
       target.innerText = state.mode === Modes.build ? "HERO" : "BUILD"
       lights.toggleSkybox()
       // shadows.toggle()
+      document.getElementById("toolbox-switch").classList.toggle("hidden")
     })
 
   document.getElementById("screenshot").addEventListener("click", () => {
