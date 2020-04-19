@@ -200,7 +200,6 @@ const createScene = async (engine, canvas) => {
   gameLoop(function () {
     stats.begin()
 
-    // hero.mesh.rotate(BABYLON.Axis.Y, Math.PI / 36, BABYLON.Space.LOCAL)
     hero.render()
 
     const cameraNotMoved =

@@ -79,6 +79,8 @@ class Hero {
       this.mesh.position.x = this.position.x / 10
 
       this.remainingSteps -= 1
+    } else {
+      this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 48, BABYLON.Space.LOCAL)
     }
   }
 }
