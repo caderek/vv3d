@@ -50,7 +50,7 @@ const incrementByFace = {
   11: { z: 0, y: -1, x: 0 },
 }
 
-const createScene = async (engine) => {
+const createScene = async (engine, canvas) => {
   const scene = new BABYLON.Scene(engine)
   scene.blockMaterialDirtyMechanism = true
   scene.useGeometryIdsMap = true
@@ -200,7 +200,7 @@ const createScene = async (engine) => {
   gameLoop(function () {
     stats.begin()
 
-    hero.mesh.rotate(BABYLON.Axis.Y, Math.PI / 36, BABYLON.Space.LOCAL)
+    // hero.mesh.rotate(BABYLON.Axis.Y, Math.PI / 36, BABYLON.Space.LOCAL)
     hero.render()
 
     const cameraNotMoved =
@@ -216,6 +216,8 @@ const createScene = async (engine) => {
         input.up = false
 
         if (!cameraNotMoved) {
+          left = false
+          right = false
           return
         }
 
@@ -256,11 +258,11 @@ const createScene = async (engine) => {
     stats.end()
   }, targetFPS)
 
-  window.addEventListener("contextmenu", () => {
+  canvas.addEventListener("contextmenu", () => {
     right = true
   })
 
-  window.addEventListener("click", (e) => {
+  canvas.addEventListener("click", ({ target }) => {
     left = true
   })
 
@@ -286,7 +288,7 @@ const main = async () => {
     stencil: true,
   })
 
-  const { scene, world, lights } = await createScene(engine)
+  const { scene, world, lights } = await createScene(engine, canvas)
 
   scene.createDefaultCamera(true, true, true)
   scene.activeCamera.alpha += 0.25 * Math.PI
