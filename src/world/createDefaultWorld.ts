@@ -9,7 +9,7 @@ const createDefaultWorld = (size, floorHeight) => {
       world[y].push([])
 
       for (let x = 0; x < size; x++) {
-        world[y][z].push({ type: y < floorHeight ? "stone-green" : null })
+        world[y][z].push(y < floorHeight ? 10 : null)
       }
     }
   }

@@ -77,7 +77,8 @@ const createScene = async (engine, canvas) => {
     savedWorld = JSON.parse(savedWorldEntry)
   }
 
-  const world: World = savedWorld ? savedWorld : createRandomWorld()
+  // const world: World = savedWorld ? savedWorld : createRandomWorld()
+  const world: World = savedWorld ? savedWorld : createDefaultWorld(10, 2)
 
   const worldSize = world.length
   const worldGraph = new WorldGraph(world)
@@ -139,7 +140,7 @@ const createScene = async (engine, canvas) => {
         }
         const [y, z, x] = pickedMesh.id.split("_").map(Number)
         world[y][z][x] = null
-        // worldGraph.add(y, z, x)
+        worldGraph.add(y, z, x)
         saveWorld(world)
       }
     }
@@ -182,7 +183,7 @@ const createScene = async (engine, canvas) => {
           )
         }
 
-        // worldGraph.remove(y, z, x)
+        worldGraph.remove(y, z, x)
       } else {
         hero.move(pickedMesh.id)
       }
