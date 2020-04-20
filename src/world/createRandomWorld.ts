@@ -57,7 +57,7 @@ const createDumpWorld = (rng) => {
 }
 
 const createNatureWorld = (rng) => {
-  const size = randomInt(rng, 3, 10) * 2
+  const size = randomInt(rng, 4, 10) * 2
   console.log({ size })
 
   const availableChunks = []

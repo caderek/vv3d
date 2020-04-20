@@ -36,6 +36,17 @@ const loadModels = async (scene) => {
       modelsMeta.set(mesh, { root: heroRoot, rootName: "hero" })
     })
 
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
+      `ship.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
+
   return modelsMeta
 }
 

@@ -15,6 +15,7 @@ import AmbientOcclusion from "./ambient-occlusion"
 import createDefaultWorld from "./world/createDefaultWorld"
 import createRandomWorld from "./world/createRandomWorld"
 import Hero from "./hero"
+import Ship from "./ship"
 import loadModels from "./load-models"
 import graph from "./graph"
 import WorldGraph from "./graph"
@@ -77,8 +78,8 @@ const createScene = async (engine, canvas) => {
     savedWorld = JSON.parse(savedWorldEntry)
   }
 
-  // const world: World = savedWorld ? savedWorld : createRandomWorld()
-  const world: World = savedWorld ? savedWorld : createDefaultWorld(10, 2)
+  const world: World = savedWorld ? savedWorld : createRandomWorld()
+  // const world: World = savedWorld ? savedWorld : createDefaultWorld(10, 2)
 
   const worldSize = world.length
   const worldGraph = new WorldGraph(world)
@@ -113,11 +114,12 @@ const createScene = async (engine, canvas) => {
   const hero = new Hero(scene, world, worldGraph)
   hero.bounce()
 
+  const ship = new Ship(scene, world, worldGraph)
+
   console.log(scene)
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
-  // lights.createGlow([])
 
   const action1 = () => {
     const { hit, pickedMesh } = scene.pick(
@@ -205,6 +207,7 @@ const createScene = async (engine, canvas) => {
     stats.begin()
 
     hero.render()
+    ship.render()
 
     const cameraNotMoved =
       scene.activeCamera.position.x === prevCameraPosition.x &&
