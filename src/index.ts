@@ -61,15 +61,15 @@ const createScene = async (engine, canvas) => {
 
   addBackground(scene)
 
-  scene.createDefaultCamera(true, true, true)
-  scene.activeCamera.alpha += 0.25 * Math.PI
-  scene.activeCamera.beta -= 0.15 * Math.PI
-  scene.activeCamera.inertia = 0
-  scene.activeCamera.checkCollisions = true
-  scene.activeCamera.panningInertia = 0
-  scene.activeCamera.panningSensibility = 100
-  scene.activeCamera.pinchPrecision = 20
-  scene.activeCamera.pinchToPanMaxDistance = 40
+  // scene.createDefaultCamera(true, true, true)
+  // scene.activeCamera.alpha += 0.25 * Math.PI
+  // scene.activeCamera.beta -= 0.15 * Math.PI
+  // scene.activeCamera.inertia = 0
+  // scene.activeCamera.checkCollisions = true
+  // scene.activeCamera.panningInertia = 0
+  // scene.activeCamera.panningSensibility = 100
+  // scene.activeCamera.pinchPrecision = 20
+  // scene.activeCamera.pinchToPanMaxDistance = 40
 
   const lights = new Lights(scene)
   const shadows = new Shadows(scene, lights.top)
@@ -93,6 +93,26 @@ const createScene = async (engine, canvas) => {
 
   const worldSize = world.length
   const worldGraph = new WorldGraph(world)
+
+  console.log({ worldSize })
+
+  const camera = new BABYLON.ArcRotateCamera(
+    "Camera",
+    Math.PI / 4,
+    Math.PI / 3,
+    worldSize * 3,
+    new BABYLON.Vector3(worldSize / 2, worldSize / 2, worldSize / 2),
+    scene,
+  )
+
+  camera.inertia = 0
+  camera.checkCollisions = true
+  camera.panningInertia = 0
+  camera.panningSensibility = 100
+  camera.pinchPrecision = 20
+  camera.pinchToPanMaxDistance = 40
+
+  camera.attachControl(canvas, true)
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
