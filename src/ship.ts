@@ -20,6 +20,10 @@ class Ship {
     this.mesh.position.y = this.world.length - 1 - 0.5
     this.mesh.position.z = 0
     this.mesh.position.x = this.world.length - 1 - 0.5
+    // console.log(scene.activeCamera.position.z)
+    // this.mesh.position.y = scene.activeCamera.position.y
+    // this.mesh.position.z = scene.activeCamera.position.z
+    // this.mesh.position.x = scene.activeCamera.position.x
     this.position = { y: (this.world.length - 1) * 10, z: 0, x: 0 }
     this.mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)
     this.remainingPath = []
@@ -27,6 +31,12 @@ class Ship {
     this.velocityY = 0
     this.velocityZ = 0
     this.velocityX = 0
+
+    scene.meshes
+      .filter((mesh) => mesh.name.includes("ship-glow"))
+      .forEach((mesh) => {
+        mesh.material.disableLighting = true
+      })
   }
 
   render() {

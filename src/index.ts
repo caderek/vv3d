@@ -61,6 +61,16 @@ const createScene = async (engine, canvas) => {
 
   addBackground(scene)
 
+  scene.createDefaultCamera(true, true, true)
+  scene.activeCamera.alpha += 0.25 * Math.PI
+  scene.activeCamera.beta -= 0.15 * Math.PI
+  scene.activeCamera.inertia = 0
+  scene.activeCamera.checkCollisions = true
+  scene.activeCamera.panningInertia = 0
+  scene.activeCamera.panningSensibility = 100
+  scene.activeCamera.pinchPrecision = 20
+  scene.activeCamera.pinchToPanMaxDistance = 40
+
   const lights = new Lights(scene)
   const shadows = new Shadows(scene, lights.top)
 
@@ -295,16 +305,6 @@ const main = async () => {
   })
 
   const { scene, world, lights, shadows } = await createScene(engine, canvas)
-
-  scene.createDefaultCamera(true, true, true)
-  scene.activeCamera.alpha += 0.25 * Math.PI
-  scene.activeCamera.beta -= 0.15 * Math.PI
-  scene.activeCamera.inertia = 0
-  scene.activeCamera.checkCollisions = true
-  scene.activeCamera.panningInertia = 0
-  scene.activeCamera.panningSensibility = 100
-  scene.activeCamera.pinchPrecision = 20
-  scene.activeCamera.pinchToPanMaxDistance = 40
 
   // const camera = scene.cameras[scene.cameras.length - 1]
   // const ambientOcclusion = new AmbientOcclusion(scene, camera)
