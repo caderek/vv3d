@@ -387,6 +387,11 @@ const main = async () => {
 
   const { scene, world, lights, shadows } = await createScene(engine, canvas)
 
+  var music = new BABYLON.Sound("Music", "music/nocturne.ogg", scene, null, {
+    loop: true,
+    autoplay: true,
+  })
+
   // const camera = scene.cameras[scene.cameras.length - 1]
   // const ambientOcclusion = new AmbientOcclusion(scene, camera)
 
