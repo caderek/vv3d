@@ -73,6 +73,11 @@ const createScene = async (engine, canvas) => {
     new BABYLON.Sound("nocturne", "music/nocturne.mp3", scene),
     new BABYLON.Sound("moonlight_sonata", "music/moonlight_sonata.mp3", scene),
     new BABYLON.Sound("chinese_dance", "music/chinese_dance.mp3", scene),
+    new BABYLON.Sound(
+      "piano_sonata_no_5_in_g_major",
+      "music/piano_sonata_no_5_in_g_major.mp3",
+      scene,
+    ),
   ]
 
   const lights = new Lights(scene)
