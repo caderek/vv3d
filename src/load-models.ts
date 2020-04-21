@@ -47,6 +47,18 @@ const loadModels = async (scene) => {
     )
   })
 
+  const shipRoot = scene.getMeshByName("ship").parent
+
+  scene.meshes
+    .filter((mesh) => mesh.name.includes("ship"))
+    .forEach((mesh) => {
+      modelsMeta.set(mesh, {
+        root: shipRoot,
+        rootName: "ship",
+        name: mesh.name.slice(5),
+      })
+    })
+
   return modelsMeta
 }
 

@@ -20,6 +20,10 @@ import loadModels from "./load-models"
 import graph from "./graph"
 import WorldGraph from "./graph"
 
+const toolbox = document.getElementById("toolbox")
+const splash = document.getElementById("splash")
+const toolboxSwitchImg = document.getElementById("active-item")
+
 const mobile = isMobile()
 const targetFPS = 20
 
@@ -32,6 +36,7 @@ enum Modes {
 const state = {
   activeBlock: "stone-green",
   mode: Modes.hero,
+  day: true,
 }
 
 const blockNames = blocksValues.map(({ name }) => name)
@@ -101,7 +106,7 @@ const createScene = async (engine, canvas) => {
     Math.PI / 4,
     Math.PI / 3,
     worldSize * 3,
-    new BABYLON.Vector3(worldSize / 2, worldSize / 2, worldSize / 2),
+    new BABYLON.Vector3(worldSize / 2, 0, worldSize / 2),
     scene,
   )
 
@@ -190,6 +195,62 @@ const createScene = async (engine, canvas) => {
       if (modelsMeta.has(pickedMesh)) {
         const meta = modelsMeta.get(pickedMesh)
         console.log(meta)
+        if (meta.rootName === "ship") {
+          const buttons = {
+            "button-pink": () => {
+              toolbox.classList.toggle("hidden")
+            },
+            "button-green": () => {
+              const dataUrl = canvas.toDataURL("image/png")
+
+              if (mobile) {
+                const image = new Image()
+                image.src = dataUrl
+
+                const win = window.open("")
+                win.document.write(image.outerHTML)
+              } else {
+                downloadImage(dataUrl, "my-world.png")
+              }
+            },
+            "button-orange": () => {},
+            "button-red": () => {},
+            "button-purple": () => {
+              console.log("lights switch")
+              state.day = !state.day
+              lights.change(
+                state.day
+                  ? {
+                      top: 4,
+                      bottom: 0.5,
+                      ambient: 0.2,
+                      skyAlpha: 0.95,
+                      color: "#FFFFFF",
+                    }
+                  : {
+                      top: 0.1,
+                      bottom: 0.1,
+                      ambient: 0.01,
+                      skyAlpha: 0.1,
+                      color: "#9fbfff",
+                    },
+              )
+            },
+            "button-blue": () => {
+              window.localStorage.removeItem("world")
+              location.reload()
+            },
+            "button-yellow": () => {
+              state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
+              // @ts-ignore
+              lights.toggleSkybox()
+            },
+          }
+
+          if (buttons[meta.name]) {
+            buttons[meta.name]()
+          }
+        }
       } else if (state.mode === Modes.build) {
         const inc = incrementByFace[faceId]
         const y = pickedMesh.position.y + inc.y
@@ -332,69 +393,7 @@ const main = async () => {
   window.addEventListener("resize", function () {
     engine.resize()
   })
-
-  let day = true
-
-  document.getElementById("light-switch").addEventListener("click", () => {
-    day = !day
-    lights.change(
-      day
-        ? {
-            top: 4,
-            bottom: 0.5,
-            ambient: 0.2,
-            skyAlpha: 0.95,
-            color: "#FFFFFF",
-          }
-        : {
-            top: 0.1,
-            bottom: 0.1,
-            ambient: 0.01,
-            skyAlpha: 0.1,
-            color: "#9fbfff",
-          },
-    )
-  })
-
-  document.getElementById("next").addEventListener("click", () => {
-    window.localStorage.removeItem("world")
-    location.reload()
-  })
-
-  document
-    .getElementById("mode-switch")
-    .addEventListener("click", ({ target }) => {
-      state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
-      // @ts-ignore
-      target.innerText = state.mode === Modes.build ? "HERO" : "BUILD"
-      lights.toggleSkybox()
-      // shadows.toggle()
-      document.getElementById("toolbox-switch").classList.toggle("hidden")
-    })
-
-  document.getElementById("screenshot").addEventListener("click", () => {
-    // @ts-ignore
-    const dataUrl = canvas.toDataURL("image/png")
-
-    if (mobile) {
-      const image = new Image()
-      image.src = dataUrl
-
-      const win = window.open("")
-      win.document.write(image.outerHTML)
-    } else {
-      downloadImage(dataUrl, "my-world.png")
-    }
-  })
 }
-
-const toolbox = document.getElementById("toolbox")
-const splash = document.getElementById("splash")
-const toolboxSwitchImg = document.getElementById("active-item")
-
-document.getElementById("toolbox-switch").addEventListener("click", () => {
-  toolbox.classList.toggle("hidden")
-})
 
 if (!window.localStorage.getItem("world")) {
   main()
