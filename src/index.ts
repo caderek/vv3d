@@ -411,6 +411,10 @@ const main = async () => {
     stencil: true,
   })
 
+  BABYLON.Engine.audioEngine.useCustomUnlockedButton = true
+
+  console.log({ engine })
+
   const { scene, world, lights, shadows } = await createScene(engine, canvas)
 
   // const camera = scene.cameras[scene.cameras.length - 1]
@@ -419,6 +423,14 @@ const main = async () => {
   window.addEventListener("resize", function () {
     engine.resize()
   })
+
+  window.addEventListener(
+    "click",
+    () => {
+      BABYLON.Engine.audioEngine.unlock()
+    },
+    { once: true },
+  )
 }
 
 if (!window.localStorage.getItem("world")) {
