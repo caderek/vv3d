@@ -37,6 +37,7 @@ const state = {
   activeBlock: "stone-green",
   mode: Modes.hero,
   day: true,
+  music: false,
 }
 
 const blockNames = blocksValues.map(({ name }) => name)
@@ -68,7 +69,7 @@ const createScene = async (engine, canvas) => {
 
   const music = new BABYLON.Sound("Music", "music/nocturne.mp3", scene, null, {
     loop: true,
-    autoplay: false,
+    // autoplay: true,
   })
 
   // scene.createDefaultCamera(true, true, true)
@@ -240,6 +241,14 @@ const createScene = async (engine, canvas) => {
                       color: "#9fbfff",
                     },
               )
+
+              state.music = !state.music
+
+              if (state.music) {
+                music.play()
+              } else {
+                music.stop()
+              }
             },
             "button-blue": () => {
               window.localStorage.removeItem("world")
@@ -249,7 +258,6 @@ const createScene = async (engine, canvas) => {
               state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
               // @ts-ignore
               lights.toggleSkybox()
-              music.play()
             },
           }
 
