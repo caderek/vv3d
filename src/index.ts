@@ -387,7 +387,7 @@ const main = async () => {
 
   const { scene, world, lights, shadows } = await createScene(engine, canvas)
 
-  var music = new BABYLON.Sound("Music", "music/nocturne.ogg", scene, null, {
+  var music = new BABYLON.Sound("Music", "music/nocturne.mp3", scene, null, {
     loop: true,
     autoplay: true,
   })
