@@ -19,6 +19,7 @@ import Ship from "./ship"
 import loadModels from "./load-models"
 import graph from "./graph"
 import WorldGraph from "./graph"
+import { randomInt } from "./helpers/random"
 
 const toolbox = document.getElementById("toolbox")
 const splash = document.getElementById("splash")
@@ -67,10 +68,15 @@ const createScene = async (engine, canvas) => {
 
   addBackground(scene)
 
-  const music = new BABYLON.Sound("Music", "music/nocturne.mp3", scene, null, {
-    loop: true,
-    // autoplay: true,
-  })
+  const songs = [
+    new BABYLON.Sound("nocturne", "music/nocturne.mp3", scene, null),
+    new BABYLON.Sound(
+      "moonlight_sonata",
+      "music/moonlight_sonata.mp3",
+      scene,
+      null,
+    ),
+  ]
 
   // scene.createDefaultCamera(true, true, true)
   // scene.activeCamera.alpha += 0.25 * Math.PI
@@ -244,10 +250,12 @@ const createScene = async (engine, canvas) => {
 
               state.music = !state.music
 
+              const music = songs[randomInt(Math.random, 0, songs.length - 1)]
+
               if (state.music) {
                 music.play()
               } else {
-                music.stop()
+                songs.forEach((song) => song.stop())
               }
             },
             "button-blue": () => {
