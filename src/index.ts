@@ -39,6 +39,7 @@ const state = {
   mode: Modes.hero,
   day: true,
   music: false,
+  track: 0,
 }
 
 const blockNames = blocksValues.map(({ name }) => name)
@@ -69,29 +70,10 @@ const createScene = async (engine, canvas) => {
   addBackground(scene)
 
   const songs = [
-    // new BABYLON.Sound("nocturne", "music/nocturne.mp3", scene, function () {
-    //   // Sound has been downloaded & decoded
-    //   console.log("loaded nocturne!")
-    // }),
-    new BABYLON.Sound("moonlight_sonata", "music/moonlight_sonata.ogg", scene),
-    // new BABYLON.Sound("for_elise", "music/for_elise.m4a", scene, function (
-    //   ...args
-    // ) {
-    //   // Sound has been downloaded & decoded
-    //   console.log("loaded for elise!")
-    //   console.log(args)
-    // }),
+    new BABYLON.Sound("nocturne", "music/nocturne.mp3", scene),
+    new BABYLON.Sound("moonlight_sonata", "music/moonlight_sonata.mp3", scene),
+    new BABYLON.Sound("chinese_dance", "music/chinese_dance.mp3", scene),
   ]
-
-  // scene.createDefaultCamera(true, true, true)
-  // scene.activeCamera.alpha += 0.25 * Math.PI
-  // scene.activeCamera.beta -= 0.15 * Math.PI
-  // scene.activeCamera.inertia = 0
-  // scene.activeCamera.checkCollisions = true
-  // scene.activeCamera.panningInertia = 0
-  // scene.activeCamera.panningSensibility = 100
-  // scene.activeCamera.pinchPrecision = 20
-  // scene.activeCamera.pinchToPanMaxDistance = 40
 
   const lights = new Lights(scene)
   const shadows = new Shadows(scene, lights.top)
@@ -264,9 +246,11 @@ const createScene = async (engine, canvas) => {
               const music = songs[randomInt(Math.random, 0, songs.length - 1)]
 
               if (state.music) {
-                music.play()
+                const song = songs[state.track]
+                song.play()
               } else {
                 songs.forEach((song) => song.stop())
+                state.track = (state.track + 1) % songs.length
               }
             },
             "button-blue": () => {
