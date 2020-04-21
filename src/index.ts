@@ -66,6 +66,11 @@ const createScene = async (engine, canvas) => {
 
   addBackground(scene)
 
+  const music = new BABYLON.Sound("Music", "music/nocturne.mp3", scene, null, {
+    loop: true,
+    autoplay: false,
+  })
+
   // scene.createDefaultCamera(true, true, true)
   // scene.activeCamera.alpha += 0.25 * Math.PI
   // scene.activeCamera.beta -= 0.15 * Math.PI
@@ -244,6 +249,7 @@ const createScene = async (engine, canvas) => {
               state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
               // @ts-ignore
               lights.toggleSkybox()
+              music.play()
             },
           }
 
@@ -386,11 +392,6 @@ const main = async () => {
   })
 
   const { scene, world, lights, shadows } = await createScene(engine, canvas)
-
-  var music = new BABYLON.Sound("Music", "music/nocturne.mp3", scene, null, {
-    loop: true,
-    autoplay: true,
-  })
 
   // const camera = scene.cameras[scene.cameras.length - 1]
   // const ambientOcclusion = new AmbientOcclusion(scene, camera)
