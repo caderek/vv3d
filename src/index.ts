@@ -72,10 +72,11 @@ const createScene = async (engine, canvas) => {
     new BABYLON.Sound("nocturne", "music/nocturne.mp3", scene, null),
     new BABYLON.Sound(
       "moonlight_sonata",
-      "music/moonlight_sonata.mp3",
+      "music/moonlight_sonata.ogg",
       scene,
       null,
     ),
+    new BABYLON.Sound("for_elise", "music/for_elise.ogg", scene, null),
   ]
 
   // scene.createDefaultCamera(true, true, true)
@@ -167,6 +168,12 @@ const createScene = async (engine, canvas) => {
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
+
+  // var lines = BABYLON.MeshBuilder.CreateLines(
+  //   "lines",
+  //   { points: myArray, updatable: true },
+  //   scene,
+  // )
 
   const action1 = () => {
     const { hit, pickedMesh } = scene.pick(
