@@ -69,14 +69,18 @@ const createScene = async (engine, canvas) => {
   addBackground(scene)
 
   const songs = [
-    new BABYLON.Sound("nocturne", "music/nocturne.mp3", scene, null),
-    new BABYLON.Sound(
-      "moonlight_sonata",
-      "music/moonlight_sonata.ogg",
-      scene,
-      null,
-    ),
-    new BABYLON.Sound("for_elise", "music/for_elise.ogg", scene, null),
+    // new BABYLON.Sound("nocturne", "music/nocturne.mp3", scene, function () {
+    //   // Sound has been downloaded & decoded
+    //   console.log("loaded nocturne!")
+    // }),
+    new BABYLON.Sound("moonlight_sonata", "music/moonlight_sonata.ogg", scene),
+    // new BABYLON.Sound("for_elise", "music/for_elise.m4a", scene, function (
+    //   ...args
+    // ) {
+    //   // Sound has been downloaded & decoded
+    //   console.log("loaded for elise!")
+    //   console.log(args)
+    // }),
   ]
 
   // scene.createDefaultCamera(true, true, true)
