@@ -68,6 +68,10 @@ const createScene = async (engine, canvas) => {
   const modelsMeta = await loadModels(scene)
 
   addBackground(scene)
+  const sounds = {
+    go: new BABYLON.Sound("go", "sound/go.wav", scene),
+    denied: new BABYLON.Sound("denied", "sound/denied.wav", scene),
+  }
 
   const songs = [
     new BABYLON.Sound("nocturne", "music/nocturne.mp3", scene),
@@ -150,7 +154,7 @@ const createScene = async (engine, canvas) => {
     baseBlocks[key].isVisible = false
   }
 
-  const hero = new Hero(scene, world, worldGraph)
+  const hero = new Hero(scene, world, worldGraph, sounds)
   hero.bounce()
 
   const ship = new Ship(scene, world, worldGraph)

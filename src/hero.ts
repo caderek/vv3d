@@ -4,6 +4,7 @@ class Hero {
   public mesh: any
   private scene: any
   private world: any
+  private sounds: any
   private graph: any
   private position: any
   private remainingPath: any
@@ -12,9 +13,10 @@ class Hero {
   private velocityZ: number
   private velocityX: number
 
-  constructor(scene, world, worldGraph) {
+  constructor(scene, world, worldGraph, sounds) {
     this.scene = scene
     this.world = world
+    this.sounds = sounds
     this.graph = worldGraph
     this.mesh = scene.getMeshByName("hero").parent
     this.mesh.position.y = this.world.length - 1 - 0.5
@@ -47,8 +49,11 @@ class Hero {
     const [y, z, x] = coords
     if (this.world[y][z][x] !== null) {
       console.log("No!")
+      this.sounds.denied.play()
       return
     }
+
+    this.sounds.go.play()
 
     this.remainingPath = this.graph.find(
       `${this.position.y / 10}_${this.position.z / 10}_${this.position.x / 10}`,
