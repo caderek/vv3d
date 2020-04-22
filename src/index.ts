@@ -20,6 +20,7 @@ import loadModels from "./load-models"
 import graph from "./graph"
 import WorldGraph from "./graph"
 import { randomInt } from "./helpers/random"
+import Camera from "./camera"
 
 const toolbox = document.getElementById("toolbox")
 const splash = document.getElementById("splash")
@@ -36,7 +37,7 @@ enum Modes {
 
 const state = {
   activeBlock: "stone-green",
-  mode: Modes.hero,
+  mode: Modes.build,
   day: true,
   music: false,
   track: 0,
@@ -69,12 +70,12 @@ const createScene = async (engine, canvas) => {
 
   addBackground(scene)
   const sounds = {
-    go: new BABYLON.Sound("go", "sound/go.wav", scene),
-    denied: new BABYLON.Sound("denied", "sound/denied.wav", scene),
-    button: new BABYLON.Sound("button", "sound/button.wav", scene),
-    ship: new BABYLON.Sound("ship", "sound/ship.wav", scene),
-    gather: new BABYLON.Sound("gather", "sound/gather.wav", scene),
-    build: new BABYLON.Sound("build", "sound/build.wav", scene),
+    go: new BABYLON.Sound("go", "sound/go.mp3", scene),
+    denied: new BABYLON.Sound("denied", "sound/denied.mp3", scene),
+    button: new BABYLON.Sound("button", "sound/button.mp3", scene),
+    ship: new BABYLON.Sound("ship", "sound/ship.mp3", scene),
+    gather: new BABYLON.Sound("gather", "sound/gather.mp3", scene),
+    build: new BABYLON.Sound("build", "sound/build.mp3", scene),
   }
 
   const songs = [
@@ -113,23 +114,8 @@ const createScene = async (engine, canvas) => {
 
   console.log({ worldSize })
 
-  const camera = new BABYLON.ArcRotateCamera(
-    "Camera",
-    (Math.PI / 4) * 7,
-    Math.PI / 3,
-    worldSize * 3,
-    new BABYLON.Vector3(worldSize / 2, 0, worldSize / 2),
-    scene,
-  )
-
-  camera.inertia = 0
-  camera.checkCollisions = true
-  camera.panningInertia = 0
-  camera.panningSensibility = 100
-  camera.pinchPrecision = 20
-  camera.pinchToPanMaxDistance = 40
-
-  camera.attachControl(canvas, true)
+  const hero = new Hero(scene, world, worldGraph, sounds)
+  const camera = new Camera(scene, canvas, world, hero)
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
@@ -158,12 +144,7 @@ const createScene = async (engine, canvas) => {
     baseBlocks[key].isVisible = false
   }
 
-  const hero = new Hero(scene, world, worldGraph, sounds)
-  hero.bounce()
-
-  const ship = new Ship(scene, world, worldGraph)
-
-  console.log(scene)
+  const ship = new Ship(scene, world, worldGraph, camera)
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])

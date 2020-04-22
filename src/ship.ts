@@ -6,6 +6,7 @@ class Ship {
   private scene: any
   private world: any
   private graph: any
+  private camera: any
   private position: any
   private remainingPath: any
   private remainingSteps: number
@@ -13,10 +14,11 @@ class Ship {
   private velocityZ: number
   private velocityX: number
 
-  constructor(scene, world, worldGraph) {
+  constructor(scene, world, worldGraph, camera) {
     this.scene = scene
     this.world = world
     this.graph = worldGraph
+    this.camera = camera
     this.mesh = scene.getMeshByName("ship").parent
     this.mesh.parent = null
     this.mesh.position.y = this.world.length / 2 - 1
@@ -42,6 +44,8 @@ class Ship {
       .forEach((mesh) => {
         mesh.material.maxSimultaneousLights = 12
       })
+
+    this.toggle()
   }
 
   toggle() {
@@ -53,12 +57,14 @@ class Ship {
       this.mesh.position.z = 0.49
       this.mesh.position.x = 0
       this.mesh.rotate(BABYLON.Axis.Y, -(Math.PI / 2), BABYLON.Space.LOCAL)
+      this.camera.goToOrbit()
     } else {
       this.mesh.parent = null
       this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.LOCAL)
       this.mesh.position.y = this.world.length / 2 - 1
       this.mesh.position.z = -2
       this.mesh.position.x = this.world.length / 2
+      this.camera.goToHero()
     }
   }
 

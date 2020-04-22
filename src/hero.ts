@@ -40,6 +40,8 @@ class Hero {
       })
 
     scene.getMeshByName("hero-glow.R").material.disableLighting = true
+
+    this.toggle()
   }
 
   bounce() {
