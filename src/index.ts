@@ -71,6 +71,8 @@ const createScene = async (engine, canvas) => {
   const sounds = {
     go: new BABYLON.Sound("go", "sound/go.wav", scene),
     denied: new BABYLON.Sound("denied", "sound/denied.wav", scene),
+    button: new BABYLON.Sound("button", "sound/button.wav", scene),
+    ship: new BABYLON.Sound("ship", "sound/ship.wav", scene),
   }
 
   const songs = [
@@ -215,6 +217,7 @@ const createScene = async (engine, canvas) => {
             lights.toggleSkybox()
             ship.toggle()
             hero.toggle()
+            sounds.ship.play()
             return
           }
 
@@ -281,6 +284,7 @@ const createScene = async (engine, canvas) => {
           }
 
           if (buttons[meta.name]) {
+            sounds.button.play()
             buttons[meta.name]()
           }
         }
