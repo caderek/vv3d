@@ -296,7 +296,6 @@ const createScene = async (engine, canvas) => {
           }
         }
       } else if (state.mode === Modes.build) {
-        sounds.build.play()
         const inc = incrementByFace[faceId]
         const y = pickedMesh.position.y + inc.y
         const z = pickedMesh.position.z + inc.z
@@ -310,6 +309,7 @@ const createScene = async (engine, canvas) => {
           x >= 0 &&
           x < world.length
         ) {
+          sounds.build.play()
           createVoxel(
             scene,
             world,
@@ -319,6 +319,8 @@ const createScene = async (engine, canvas) => {
             z,
             x,
           )
+        } else {
+          sounds.denied.play()
         }
 
         worldGraph.remove(y, z, x)

@@ -59,12 +59,16 @@ class Hero {
       return
     }
 
-    this.sounds.go.play()
-
     this.remainingPath = this.graph.find(
       `${this.position.y / 10}_${this.position.z / 10}_${this.position.x / 10}`,
       `${y}_${z}_${x}`,
     )
+
+    if (this.remainingPath.length !== 0) {
+      this.sounds.go.play()
+    } else {
+      this.sounds.denied.play()
+    }
 
     console.log("Distance:", this.remainingPath.length)
   }
