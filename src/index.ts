@@ -149,12 +149,6 @@ const createScene = async (engine, canvas) => {
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
 
-  // var lines = BABYLON.MeshBuilder.CreateLines(
-  //   "lines",
-  //   { points: myArray, updatable: true },
-  //   scene,
-  // )
-
   const action1 = () => {
     const { hit, pickedMesh } = scene.pick(
       scene.pointerX,
@@ -176,6 +170,7 @@ const createScene = async (engine, canvas) => {
           light.dispose()
         }
         const [y, z, x] = pickedMesh.id.split("_").map(Number)
+        ship.shoot(y, z, x, "right")
         world[y][z][x] = null
         worldGraph.add(y, z, x)
         saveWorld(world)
@@ -291,6 +286,7 @@ const createScene = async (engine, canvas) => {
           x < world.length
         ) {
           sounds.build.play()
+          ship.shoot(y, z, x, "left")
           createVoxel(
             scene,
             world,

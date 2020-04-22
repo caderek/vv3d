@@ -4,7 +4,7 @@ class Camera {
   private scene: any
   private world: any
   private worldSize: number
-  private camera: any
+  camera: any
   private hero: any
 
   constructor(scene, canvas, world, hero) {

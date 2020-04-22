@@ -13,6 +13,10 @@ class Ship {
   private velocityY: number
   private velocityZ: number
   private velocityX: number
+  private ray: any
+  private rayCounter: number
+  private rayColorLeft: any
+  private rayColorRight: any
 
   constructor(scene, world, worldGraph, camera) {
     this.scene = scene
@@ -45,6 +49,7 @@ class Ship {
         mesh.material.maxSimultaneousLights = 12
       })
 
+    this.createRay()
     this.toggle()
   }
 
@@ -82,7 +87,61 @@ class Ship {
     animations.forEach((animation) => animation.stop())
   }
 
+  shoot(y: number, z: number, x: number, side: "left" | "right") {
+    BABYLON.MeshBuilder.CreateTube("ray-glow", {
+      path: [
+        new BABYLON.Vector3(x, y, z),
+        new BABYLON.Vector3(
+          this.mesh.absolutePosition.x,
+          this.mesh.absolutePosition.y,
+          this.mesh.absolutePosition.z,
+        ),
+      ],
+      instance: this.ray,
+    })
+
+    this.ray.material.emissiveColor =
+      side === "left" ? this.rayColorLeft : this.rayColorRight
+    this.ray.isVisible = true
+    this.rayCounter = 2
+  }
+
+  private createRay() {
+    const ray = BABYLON.MeshBuilder.CreateTube(
+      "ray-glow",
+      {
+        path: [
+          new BABYLON.Vector3(0, 0, 0),
+          new BABYLON.Vector3(
+            this.mesh.absolutePosition.x,
+            this.mesh.absolutePosition.y,
+            this.mesh.absolutePosition.z,
+          ),
+        ],
+        radius: 0.03,
+        updatable: true,
+      },
+      this.scene,
+    )
+
+    ray.material = new BABYLON.StandardMaterial()
+    ray.material.disableLighting = true
+    ray.isVisible = false
+    ray.isPickable = false
+
+    this.ray = ray
+    this.rayCounter = 0
+    this.rayColorLeft = BABYLON.Color3.FromHexString("#008DE7")
+    this.rayColorRight = BABYLON.Color3.FromHexString("#E70075")
+  }
+
   render() {
+    if (this.rayCounter === 0 && this.ray.isVisible) {
+      this.ray.isVisible = false
+    } else if (this.rayCounter !== 0) {
+      this.rayCounter--
+    }
+
     if (!this.orbiting) {
     }
   }
