@@ -73,6 +73,8 @@ const createScene = async (engine, canvas) => {
     denied: new BABYLON.Sound("denied", "sound/denied.wav", scene),
     button: new BABYLON.Sound("button", "sound/button.wav", scene),
     ship: new BABYLON.Sound("ship", "sound/ship.wav", scene),
+    gather: new BABYLON.Sound("gather", "sound/gather.wav", scene),
+    build: new BABYLON.Sound("build", "sound/build.wav", scene),
   }
 
   const songs = [
@@ -185,6 +187,7 @@ const createScene = async (engine, canvas) => {
         const meta = modelsMeta.get(pickedMesh)
         console.log(meta)
       } else if (state.mode === Modes.build) {
+        sounds.gather.play()
         pickedMesh.dispose()
         scene.getMeshByName(`item_${pickedMesh.id}`).dispose()
         const light = scene.getLightByID(`light_${pickedMesh.id}`)
@@ -238,8 +241,22 @@ const createScene = async (engine, canvas) => {
                 downloadImage(dataUrl, "my-world.png")
               }
             },
-            "button-orange": () => {},
-            "button-red": () => {},
+            "button-orange": () => {
+              state.music = !state.music
+
+              if (state.music) {
+                const song = songs[state.track]
+                song.play()
+              } else {
+                songs[state.track].pause()
+              }
+            },
+            "button-red": () => {
+              state.track = (state.track + 1) % songs.length
+              songs.forEach((song) => song.stop())
+              songs[state.track].play()
+              state.music = true
+            },
             "button-purple": () => {
               console.log("lights switch")
               state.day = !state.day
@@ -260,16 +277,6 @@ const createScene = async (engine, canvas) => {
                       color: "#9fbfff",
                     },
               )
-
-              state.music = !state.music
-
-              if (state.music) {
-                const song = songs[state.track]
-                song.play()
-              } else {
-                songs.forEach((song) => song.stop())
-                state.track = (state.track + 1) % songs.length
-              }
             },
             "button-blue": () => {
               window.localStorage.removeItem("world")
@@ -289,6 +296,7 @@ const createScene = async (engine, canvas) => {
           }
         }
       } else if (state.mode === Modes.build) {
+        sounds.build.play()
         const inc = incrementByFace[faceId]
         const y = pickedMesh.position.y + inc.y
         const z = pickedMesh.position.z + inc.z

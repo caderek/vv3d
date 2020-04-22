@@ -48,11 +48,8 @@ class Ship {
     this.orbiting = !this.orbiting
 
     if (this.orbiting) {
-      console.log("go to orbit!")
-      console.log("ship!!!")
-      console.log(this.mesh)
       this.mesh.parent = this.scene.activeCamera
-      this.mesh.position.y = -0.7
+      this.mesh.position.y = -0.79
       this.mesh.position.z = 0.49
       this.mesh.position.x = 0
       this.mesh.rotate(BABYLON.Axis.Y, -(Math.PI / 2), BABYLON.Space.LOCAL)
@@ -65,11 +62,22 @@ class Ship {
     }
   }
 
-  bounce() {}
+  bounce() {
+    const animations = this.scene.animationGroups.filter((animation) =>
+      animation.name.includes("ship"),
+    )
+    animations.forEach((animation) => animation.play(true))
+  }
+
+  stop() {
+    const animations = this.scene.animationGroups.filter((animation) =>
+      animation.name.includes("ship"),
+    )
+    animations.forEach((animation) => animation.stop())
+  }
 
   render() {
     if (!this.orbiting) {
-      // this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 48, BABYLON.Space.LOCAL)
     }
   }
 }
