@@ -111,7 +111,7 @@ const createScene = async (engine, canvas) => {
 
   const camera = new BABYLON.ArcRotateCamera(
     "Camera",
-    Math.PI / 4,
+    (Math.PI / 4) * 7,
     Math.PI / 3,
     worldSize * 3,
     new BABYLON.Vector3(worldSize / 2, 0, worldSize / 2),
@@ -210,6 +210,14 @@ const createScene = async (engine, canvas) => {
         const meta = modelsMeta.get(pickedMesh)
         console.log(meta)
         if (meta.rootName === "ship") {
+          if (!ship.orbiting) {
+            state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
+            lights.toggleSkybox()
+            ship.toggle()
+            hero.toggle()
+            return
+          }
+
           const buttons = {
             "button-pink": () => {
               toolbox.classList.toggle("hidden")
@@ -252,8 +260,6 @@ const createScene = async (engine, canvas) => {
 
               state.music = !state.music
 
-              const music = songs[randomInt(Math.random, 0, songs.length - 1)]
-
               if (state.music) {
                 const song = songs[state.track]
                 song.play()
@@ -268,8 +274,9 @@ const createScene = async (engine, canvas) => {
             },
             "button-yellow": () => {
               state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
-              // @ts-ignore
               lights.toggleSkybox()
+              ship.toggle()
+              hero.toggle()
             },
           }
 
@@ -416,9 +423,6 @@ const main = async () => {
   console.log({ engine })
 
   const { scene, world, lights, shadows } = await createScene(engine, canvas)
-
-  // const camera = scene.cameras[scene.cameras.length - 1]
-  // const ambientOcclusion = new AmbientOcclusion(scene, camera)
 
   window.addEventListener("resize", function () {
     engine.resize()
