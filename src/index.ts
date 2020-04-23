@@ -99,6 +99,7 @@ const createScene = async (engine, canvas) => {
 
   const hero = new Hero(scene, world, worldGraph, sounds)
   const camera = new Camera(scene, canvas, world, hero)
+  const ship = new Ship(scene, world, worldGraph, camera)
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
@@ -126,8 +127,6 @@ const createScene = async (engine, canvas) => {
   for (const key in baseBlocks) {
     baseBlocks[key].isVisible = false
   }
-
-  const ship = new Ship(scene, world, worldGraph, camera)
 
   lights.createSkybox(worldSize)
   lights.createGlow([lights.skybox])
@@ -161,19 +160,16 @@ const createScene = async (engine, canvas) => {
 
   const controls = handleControls(scene, action1, action2, canvas, mobile)
 
-  gameLoop(function () {
-    stats.begin()
+  const renderFrame = () => {
+    controls()
 
     hero.render()
     ship.render()
 
-    controls()
-
     scene.render()
-    stats.end()
-  }, targetFPS)
+  }
 
-  return { scene, world, lights, shadows }
+  return renderFrame
 }
 
 const main = async () => {
@@ -186,9 +182,13 @@ const main = async () => {
 
   BABYLON.Engine.audioEngine.useCustomUnlockedButton = true
 
-  console.log({ engine })
+  const renderFrame = await createScene(engine, canvas)
 
-  const { scene, world, lights, shadows } = await createScene(engine, canvas)
+  gameLoop(() => {
+    stats.begin()
+    renderFrame()
+    stats.end()
+  }, targetFPS)
 
   window.addEventListener("resize", function () {
     engine.resize()
@@ -203,22 +203,9 @@ const main = async () => {
   )
 }
 
-if (!window.localStorage.getItem("world")) {
-  main()
-  // splash.classList.remove("hidden")
-  // splash.addEventListener("click", ({ target }) => {
-  //   // @ts-ignore
-  //   if (target.dataset.type === "size") {
-  //     // @ts-ignore
-  //     config = configs[target.dataset.value]
-  //   }
+main()
 
-  //   main()
-  //   splash.classList.toggle("hidden")
-  // })
-} else {
-  main()
-}
+// !TODO TEMP TOOLBOX
 
 // @ts-ignore
 toolbox.addEventListener("click", ({ target }) => {
