@@ -1,5 +1,5 @@
 import * as BABYLON from "babylonjs"
-import { blocksValues } from "./blocks"
+import { blocksValues } from "../blocks"
 
 const loadModels = async (scene) => {
   const modelsMeta = new WeakMap()
