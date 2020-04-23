@@ -195,12 +195,15 @@ class WorldGraph {
   private graph: any
 
   constructor(world) {
-    this.world = world
+    const topLayer = Array.from({ length: world.length }, () =>
+      Array.from({ length: world.length }, () => null),
+    )
+    this.world = [...world, topLayer]
     this.graph = createGraph()
 
     const size = world.length
 
-    for (let y = 0; y < size; y++) {
+    for (let y = 0; y < size + 1; y++) {
       for (let z = 0; z < size; z++) {
         for (let x = 0; x < size; x++) {
           this.addPaths(y, z, x)
@@ -213,8 +216,6 @@ class WorldGraph {
         return link.data.weight
       },
     })
-
-    console.log(this.graph)
   }
 
   private checkTarget(base, inc) {
@@ -238,9 +239,9 @@ class WorldGraph {
           this.graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
             weight: perpendicularWeight,
           })
-          // this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
-          //   weight: perpendicularWeight,
-          // })
+          this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
+            weight: perpendicularWeight,
+          })
         }
       })
 
@@ -254,9 +255,9 @@ class WorldGraph {
           this.graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
             weight: diagonalWeight2d,
           })
-          // this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
-          //   weight: diagonalWeight2d,
-          // })
+          this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
+            weight: diagonalWeight2d,
+          })
         }
       })
 
@@ -272,9 +273,9 @@ class WorldGraph {
           this.graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
             weight: diagonalWeight3d,
           })
-          // this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
-          //   weight: diagonalWeight3d,
-          // })
+          this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
+            weight: diagonalWeight3d,
+          })
         }
       })
     }
@@ -289,10 +290,8 @@ class WorldGraph {
 
         if (!isEmpty) {
           const link = this.graph.getLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`)
-          const rev = this.graph.getLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`)
 
           this.graph.removeLink(link)
-          this.graph.removeLink(rev)
         }
       })
 
@@ -304,10 +303,8 @@ class WorldGraph {
 
         if (!isEmpty || !areNeighborsEmpty) {
           const link = this.graph.getLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`)
-          const rev = this.graph.getLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`)
 
           this.graph.removeLink(link)
-          this.graph.removeLink(rev)
         }
       })
 
@@ -321,10 +318,8 @@ class WorldGraph {
 
         if (!isEmpty || !areNeighborsEmpty) {
           const link = this.graph.getLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`)
-          const rev = this.graph.getLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`)
 
           this.graph.removeLink(link)
-          this.graph.removeLink(rev)
         }
       })
     }
@@ -335,6 +330,7 @@ class WorldGraph {
   }
 
   remove(y, z, x) {
+    console.log("removed node:", `${y}_${z}_${x}`)
     this.graph.removeNode(`${y}_${z}_${x}`)
     allNeighbors.forEach((inc) => {
       this.removePaths(y + inc.y, z + inc.z, x + inc.x)
@@ -342,6 +338,16 @@ class WorldGraph {
   }
 
   find(from, to) {
+    if (!this.graph.hasNode(from)) {
+      console.log("No node:", from)
+      return []
+    }
+
+    if (!this.graph.hasNode(to)) {
+      console.log("No node:", to)
+      return []
+    }
+
     const pathFinder = Path.nba(this.graph, {
       distance(fromNode, toNode, link) {
         return link.data.weight

@@ -16,8 +16,11 @@ class Hero {
   private light: any
 
   constructor(scene, world, worldGraph, sounds) {
+    const topLayer = Array.from({ length: world.length }, () =>
+      Array.from({ length: world.length }, () => null),
+    )
+    this.world = [...world, topLayer]
     this.scene = scene
-    this.world = world
     this.sounds = sounds
     this.graph = worldGraph
     this.mesh = scene.getMeshByName("hero").parent
@@ -56,7 +59,7 @@ class Hero {
     const coords = destination.split("_").map(Number)
     coords[0] += 1
     const [y, z, x] = coords
-    if (this.world[y][z][x] !== null) {
+    if (this.world?.[y]?.[z]?.[x] !== null) {
       console.log("No!")
       this.sounds.denied.play()
       return
