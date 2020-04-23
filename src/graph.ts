@@ -239,9 +239,6 @@ class WorldGraph {
           this.graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
             weight: perpendicularWeight,
           })
-          this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
-            weight: perpendicularWeight,
-          })
         }
       })
 
@@ -253,9 +250,6 @@ class WorldGraph {
 
         if (isEmpty && areNeighborsEmpty) {
           this.graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
-            weight: diagonalWeight2d,
-          })
-          this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
             weight: diagonalWeight2d,
           })
         }
@@ -271,9 +265,6 @@ class WorldGraph {
 
         if (isEmpty && areNeighborsEmpty) {
           this.graph.addLink(`${y}_${z}_${x}`, `${yy}_${zz}_${xx}`, {
-            weight: diagonalWeight3d,
-          })
-          this.graph.addLink(`${yy}_${zz}_${xx}`, `${y}_${z}_${x}`, {
             weight: diagonalWeight3d,
           })
         }
@@ -339,12 +330,11 @@ class WorldGraph {
 
   find(from, to) {
     if (!this.graph.hasNode(from)) {
-      console.log("No node:", from)
-      return []
+      const [y, z, x] = from.split("_")
+      from = `${Math.round(y)}_${Math.round(z)}_${Math.round(x)}`
     }
 
     if (!this.graph.hasNode(to)) {
-      console.log("No node:", to)
       return []
     }
 

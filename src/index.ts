@@ -68,6 +68,8 @@ const createScene = async (engine, canvas) => {
 
   const modelsMeta = await loadModels(scene)
 
+  console.log(scene)
+
   addBackground(scene)
   const sounds = {
     go: new BABYLON.Sound("go", "sound/go.mp3", scene),
