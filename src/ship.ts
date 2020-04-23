@@ -17,6 +17,8 @@ class Ship {
   private rayCounter: number
   private rayColorLeft: any
   private rayColorRight: any
+  private laserLeft: any
+  private laserRight: any
 
   constructor(scene, world, worldGraph, camera) {
     this.scene = scene
@@ -48,6 +50,9 @@ class Ship {
       .forEach((mesh) => {
         mesh.material.maxSimultaneousLights = 12
       })
+
+    this.laserLeft = scene.getMeshByName("ship-laser.L")
+    this.laserRight = scene.getMeshByName("ship-laser.R")
 
     this.createRay()
     this.toggle()
@@ -88,13 +93,15 @@ class Ship {
   }
 
   shoot(y: number, z: number, x: number, side: "left" | "right") {
+    const laser = side === "left" ? this.laserLeft : this.laserRight
+
     BABYLON.MeshBuilder.CreateTube("ray-glow", {
       path: [
         new BABYLON.Vector3(x, y, z),
         new BABYLON.Vector3(
-          this.mesh.absolutePosition.x,
-          this.mesh.absolutePosition.y,
-          this.mesh.absolutePosition.z,
+          laser.absolutePosition.x,
+          laser.absolutePosition.y,
+          laser.absolutePosition.z,
         ),
       ],
       instance: this.ray,

@@ -171,7 +171,9 @@ const createNatureWorld = (rng) => {
 }
 
 const createRandomWorld = () => {
-  const rng = seedrandom(Math.random())
+  const seed = Math.random()
+  console.log({ seed })
+  const rng = seedrandom(seed)
   const rand = rng()
   const generator =
     rand < 0.01
