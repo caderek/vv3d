@@ -1,4 +1,3 @@
-import { isMobile } from "is-mobile"
 import * as BABYLON from "babylonjs"
 
 class Hero {
@@ -14,6 +13,7 @@ class Hero {
   private velocityZ: number
   private velocityX: number
   private visible: boolean
+  private light: any
 
   constructor(scene, world, worldGraph, sounds) {
     this.scene = scene
@@ -32,6 +32,7 @@ class Hero {
     this.velocityZ = 0
     this.velocityX = 0
     this.visible = true
+    this.light = scene.getLightByID("Point")
 
     scene.meshes
       .filter((mesh) => mesh.name.includes("hero"))
@@ -77,13 +78,14 @@ class Hero {
 
   toggle() {
     this.visible = !this.visible
-    console.log("Hero visible:", this.visible)
     this.mesh.isVisible = this.visible
     this.scene.meshes
       .filter((mesh) => mesh.name.includes("hero"))
       .forEach((mesh) => {
         mesh.isVisible = this.visible
       })
+
+    this.light.intensity = this.visible ? 1 : 0
   }
 
   render() {
