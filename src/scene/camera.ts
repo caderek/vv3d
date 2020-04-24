@@ -2,17 +2,16 @@ import * as BABYLON from "babylonjs"
 
 class Camera {
   private scene: any
-  private world: any
+  private map: any
   private worldSize: number
   camera: any
   private hero: any
 
   constructor(scene, canvas, world, hero) {
     this.scene = scene
-    this.world = world
+    this.map = world.map
     this.hero = hero
-
-    this.worldSize = world.length
+    this.worldSize = world.size
 
     const camera = new BABYLON.ArcRotateCamera(
       "Camera",

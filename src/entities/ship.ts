@@ -4,7 +4,7 @@ class Ship {
   public mesh: any
   public orbiting: boolean
   private scene: any
-  private world: any
+  private map: any
   private graph: any
   private camera: any
   private position: any
@@ -20,17 +20,17 @@ class Ship {
   private laserLeft: any
   private laserRight: any
 
-  constructor(scene, world, worldGraph, camera) {
+  constructor(scene, world, camera) {
     this.scene = scene
-    this.world = world
-    this.graph = worldGraph
+    this.map = world.map
+    this.graph = world.graph
     this.camera = camera
     this.mesh = scene.getMeshByName("ship").parent
     this.mesh.parent = null
-    this.mesh.position.y = this.world.length / 2 - 1
+    this.mesh.position.y = this.map.length / 2 - 1
     this.mesh.position.z = -2
-    this.mesh.position.x = this.world.length / 2
-    this.position = { y: (this.world.length - 1) * 10, z: 0, x: 0 }
+    this.mesh.position.x = this.map.length / 2
+    this.position = { y: (this.map.length - 1) * 10, z: 0, x: 0 }
     this.mesh.rotate(BABYLON.Axis.Y, (Math.PI / 2) * 3, BABYLON.Space.LOCAL)
     this.remainingPath = []
     this.remainingSteps = 0
@@ -71,9 +71,9 @@ class Ship {
     } else {
       this.mesh.parent = null
       this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.LOCAL)
-      this.mesh.position.y = this.world.length / 2 - 1
+      this.mesh.position.y = this.map.length / 2 - 1
       this.mesh.position.z = -2
-      this.mesh.position.x = this.world.length / 2
+      this.mesh.position.x = this.map.length / 2
       this.camera.goToHero()
     }
   }

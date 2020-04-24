@@ -3,7 +3,7 @@ import * as BABYLON from "babylonjs"
 class Hero {
   public mesh: any
   private scene: any
-  private world: any
+  private map: any
   private sounds: any
   private graph: any
   private position: any
@@ -15,19 +15,19 @@ class Hero {
   private visible: boolean
   private light: any
 
-  constructor(scene, world, worldGraph, sounds) {
+  constructor(scene, world, sounds) {
     const topLayer = Array.from({ length: world.length }, () =>
       Array.from({ length: world.length }, () => null),
     )
-    this.world = [...world, topLayer]
+    this.map = [...world.map, topLayer]
     this.scene = scene
     this.sounds = sounds
-    this.graph = worldGraph
+    this.graph = world.graph
     this.mesh = scene.getMeshByName("hero").parent
-    this.mesh.position.y = this.world.length - 1 - 0.5
+    this.mesh.position.y = this.map.length - 1 - 0.5
     this.mesh.position.z = 0
     this.mesh.position.x = 0
-    this.position = { y: (this.world.length - 1) * 10, z: 0, x: 0 }
+    this.position = { y: (this.map.length - 1) * 10, z: 0, x: 0 }
     this.mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)
     this.remainingPath = []
     this.remainingSteps = 0
@@ -59,7 +59,7 @@ class Hero {
     const coords = destination.split("_").map(Number)
     coords[0] += 1
     const [y, z, x] = coords
-    if (this.world?.[y]?.[z]?.[x] !== null) {
+    if (this.map?.[y]?.[z]?.[x] !== null) {
       console.log("No!")
       this.sounds.denied.play()
       return

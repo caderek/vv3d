@@ -32,8 +32,10 @@ const createVoxel = (
     shadowGenerator.addShadowCaster(item)
   }
 
+  let light
+
   if (parentMesh.name.includes("glow-white")) {
-    const light = new BABYLON.PointLight(
+    light = new BABYLON.PointLight(
       `light_${y}_${z}_${x}`,
       new BABYLON.Vector3(x, y, z),
       scene,
@@ -69,6 +71,8 @@ const createVoxel = (
   //   { mass: 0, restitution: 0.9 },
   //   scene,
   // )
+
+  return { item, box, light }
 }
 
 export default createVoxel

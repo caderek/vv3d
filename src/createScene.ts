@@ -17,6 +17,54 @@ import createSecondaryAction from "./actions/action-secondary"
 import handleControls from "./actions/handle-controls"
 import { Modes } from "./types/enums"
 
+const createWorld = (savedWorld, baseBlocks, scene, shadows) => {
+  const worldMap = savedWorld ? savedWorld : createRandomWorld()
+  const worldSize = worldMap.length
+  const worldGraph = new WorldGraph(worldMap)
+
+  console.log({ worldSize })
+
+  for (const key in baseBlocks) {
+    baseBlocks[key].setParent(null)
+    baseBlocks[key].isVisible = false
+  }
+
+  const worldItems = []
+
+  for (let y = 0; y < worldSize; y++) {
+    for (let z = 0; z < worldSize; z++) {
+      for (let x = 0; x < worldSize; x++) {
+        if (worldMap[y][z][x] !== null) {
+          const { item, box, light } = createVoxel(
+            scene,
+            worldMap,
+            baseBlocks[blocksInfo[worldMap[y][z][x]].name],
+            shadows.shadowGenerator,
+            y,
+            z,
+            x,
+            false,
+          )
+
+          worldItems.push(item)
+          worldItems.push(box)
+
+          if (light) {
+            worldItems.push(light)
+          }
+        }
+      }
+    }
+  }
+
+  return {
+    map: worldMap,
+    graph: worldGraph,
+    size: worldSize,
+    items: worldItems,
+  }
+}
+
 const createScene = async (engine, canvas, mobile) => {
   const state = {
     activeBlock: "stone-green",
@@ -65,7 +113,6 @@ const createScene = async (engine, canvas, mobile) => {
     }),
   )
 
-  type World = string[][][]
   let savedWorldEntry = window.localStorage.getItem("world")
   let savedWorld
 
@@ -73,53 +120,25 @@ const createScene = async (engine, canvas, mobile) => {
     savedWorld = JSON.parse(savedWorldEntry)
   }
 
-  const world: World = savedWorld ? savedWorld : createRandomWorld()
-  // const world: World = savedWorld ? savedWorld : createDefaultWorld(10, 2)
+  let world = createWorld(savedWorld, baseBlocks, scene, shadows)
 
-  const worldSize = world.length
-  const worldGraph = new WorldGraph(world)
-
-  console.log({ worldSize })
-
-  const hero = new Hero(scene, world, worldGraph, sounds)
+  const hero = new Hero(scene, world, sounds)
   const camera = new Camera(scene, canvas, world, hero)
-  const ship = new Ship(scene, world, worldGraph, camera)
+  const ship = new Ship(scene, world, camera)
 
-  for (const key in baseBlocks) {
-    baseBlocks[key].setParent(null)
-  }
-
-  for (let y = 0; y < worldSize; y++) {
-    for (let z = 0; z < worldSize; z++) {
-      for (let x = 0; x < worldSize; x++) {
-        if (world[y][z][x] !== null) {
-          createVoxel(
-            scene,
-            world,
-            baseBlocks[blocksInfo[world[y][z][x]].name],
-            shadows.shadowGenerator,
-            y,
-            z,
-            x,
-            false,
-          )
-        }
-      }
-    }
-  }
-
-  for (const key in baseBlocks) {
-    baseBlocks[key].isVisible = false
-  }
-
-  lights.createSkybox(worldSize)
+  lights.createSkybox(world.size)
   lights.createGlow([lights.skybox])
+
+  const next = () => {
+    world.items.forEach((item) => item.dispose())
+    world = createWorld(null, baseBlocks, scene, shadows)
+  }
 
   const action1 = createPrimaryAction({
     scene,
     state,
-    world,
-    worldGraph,
+    world: world.map,
+    worldGraph: world.graph,
     modelsMeta,
     sounds,
     ship,
@@ -129,8 +148,8 @@ const createScene = async (engine, canvas, mobile) => {
     scene,
     canvas,
     state,
-    world,
-    worldGraph,
+    world: world.map,
+    worldGraph: world.graph,
     modelsMeta,
     sounds,
     songs,
@@ -140,6 +159,7 @@ const createScene = async (engine, canvas, mobile) => {
     mobile,
     baseBlocks,
     shadows,
+    next,
   })
 
   const controls = handleControls(scene, action1, action2, canvas, mobile)
@@ -153,7 +173,7 @@ const createScene = async (engine, canvas, mobile) => {
     scene.render()
   }
 
-  return renderFrame
+  return { renderFrame, scene }
 }
 
 export default createScene

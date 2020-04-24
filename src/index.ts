@@ -23,7 +23,7 @@ const main = async () => {
 
   BABYLON.Engine.audioEngine.useCustomUnlockedButton = true
 
-  const renderFrame = await createScene(engine, canvas, mobile)
+  const { renderFrame, scene } = await createScene(engine, canvas, mobile)
 
   gameLoop(() => {
     stats.begin()

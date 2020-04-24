@@ -38,6 +38,7 @@ const createSecondaryAction = ({
   mobile,
   baseBlocks,
   shadows,
+  next,
 }) => () => {
   const { hit, pickedMesh, faceId } = scene.pick(
     scene.pointerX,
@@ -115,8 +116,9 @@ const createSecondaryAction = ({
             )
           },
           "button-blue": () => {
-            window.localStorage.removeItem("world")
-            location.reload()
+            // window.localStorage.removeItem("world")
+            // location.reload()
+            next()
           },
           "button-yellow": () => {
             state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
