@@ -36,9 +36,10 @@ const createWorld = (savedWorld, baseBlocks, scene, shadows, lights) => {
     for (let z = 0; z < worldSize; z++) {
       for (let x = 0; x < worldSize; x++) {
         if (worldMap[y][z][x] !== null) {
-          const { item, box, light } = createVoxel(
+          createVoxel(
             scene,
             worldMap,
+            worldItems,
             baseBlocks[blocksInfo[worldMap[y][z][x]].name],
             shadows.shadowGenerator,
             y,
@@ -46,13 +47,6 @@ const createWorld = (savedWorld, baseBlocks, scene, shadows, lights) => {
             x,
             false,
           )
-
-          worldItems.push(item)
-          worldItems.push(box)
-
-          if (light) {
-            worldItems.push(light)
-          }
         }
       }
     }
@@ -149,8 +143,7 @@ const createScene = async (engine, canvas, mobile) => {
     scene,
     canvas,
     state,
-    world: world.map,
-    worldGraph: world.graph,
+    world,
     modelsMeta,
     sounds,
     songs,

@@ -28,7 +28,6 @@ const createSecondaryAction = ({
   canvas,
   state,
   world,
-  worldGraph,
   modelsMeta,
   sounds,
   songs,
@@ -125,6 +124,7 @@ const createSecondaryAction = ({
             lights.toggleSkybox()
             ship.toggle()
             hero.toggle()
+            world.graph.create()
           },
         }
 
@@ -141,17 +141,18 @@ const createSecondaryAction = ({
 
       if (
         y >= 0 &&
-        y < world.length &&
+        y < world.map.length &&
         z >= 0 &&
-        z < world.length &&
+        z < world.map.length &&
         x >= 0 &&
-        x < world.length
+        x < world.map.length
       ) {
         sounds.build.play()
         ship.shoot(y, z, x, "left")
         createVoxel(
           scene,
-          world,
+          world.map,
+          world.items,
           baseBlocks[state.activeBlock],
           shadows.shadowGenerator,
           y,
@@ -162,7 +163,7 @@ const createSecondaryAction = ({
         sounds.denied.play()
       }
 
-      worldGraph.remove(y, z, x)
+      // worldGraph.remove(y, z, x)
     } else {
       hero.move(pickedMesh.id)
     }

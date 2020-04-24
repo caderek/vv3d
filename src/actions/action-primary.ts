@@ -35,7 +35,7 @@ const createPrimaryAction = ({
       const [y, z, x] = pickedMesh.id.split("_").map(Number)
       ship.shoot(y, z, x, "right")
       world[y][z][x] = null
-      worldGraph.add(y, z, x)
+      // worldGraph.add(y, z, x)
       saveWorld(world)
     }
   }

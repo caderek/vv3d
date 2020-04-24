@@ -4,7 +4,8 @@ import { blocksValues } from "./blocks"
 
 const createVoxel = (
   scene,
-  world,
+  worldMap,
+  worldItems,
   parentMesh,
   shadowGenerator,
   y,
@@ -14,7 +15,7 @@ const createVoxel = (
 ) => {
   const gap = 0.0
 
-  world[y][z][x] = blocksValues.find(({ name }) => name === parentMesh.id).id
+  worldMap[y][z][x] = blocksValues.find(({ name }) => name === parentMesh.id).id
 
   const item = parentMesh.createInstance(`item_${y}_${z}_${x}`)
 
@@ -62,17 +63,15 @@ const createVoxel = (
   box.isVisible = false
 
   if (save) {
-    saveWorld(world)
+    saveWorld(worldMap)
   }
 
-  // item.physicsImpostor = new BABYLON.PhysicsImpostor(
-  //   box,
-  //   BABYLON.PhysicsImpostor.BoxImpostor,
-  //   { mass: 0, restitution: 0.9 },
-  //   scene,
-  // )
+  worldItems.push(item)
+  worldItems.push(box)
 
-  return { item, box, light }
+  if (light) {
+    worldItems.push(light)
+  }
 }
 
 export default createVoxel

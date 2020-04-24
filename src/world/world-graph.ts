@@ -199,9 +199,22 @@ class WorldGraph {
       Array.from({ length: world.length }, () => null),
     )
     this.world = [...world, topLayer]
+
+    console.time("creating graph")
+    this.create()
+    console.timeEnd("creating graph")
+
+    this.pathFinder = Path.nba(this.graph, {
+      distance(fromNode, toNode, link) {
+        return link.data.weight
+      },
+    })
+  }
+
+  create() {
     this.graph = createGraph()
 
-    const size = world.length
+    const size = this.world.length
 
     for (let y = 0; y < size + 1; y++) {
       for (let z = 0; z < size; z++) {
@@ -210,12 +223,6 @@ class WorldGraph {
         }
       }
     }
-
-    this.pathFinder = Path.nba(this.graph, {
-      distance(fromNode, toNode, link) {
-        return link.data.weight
-      },
-    })
   }
 
   private checkTarget(base, inc) {

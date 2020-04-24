@@ -58,7 +58,6 @@ const createDumpWorld = (rng) => {
 
 const createNatureWorld = (rng) => {
   const size = randomInt(rng, 4, 10) * 2
-  console.log({ size })
 
   const availableChunks = []
 
@@ -70,7 +69,6 @@ const createNatureWorld = (rng) => {
 
   const chunkSize =
     availableChunks[randomInt(rng, 0, availableChunks.length - 1)]
-  console.log({ chunkSize })
 
   const hasWater = rng() > 0.5
   const hasGrass = rng() > 0.5 && hasWater
@@ -95,7 +93,6 @@ const createNatureWorld = (rng) => {
   const availableBlocks = []
 
   const variety = randomInt(rng, 1, 10)
-  console.log({ variety })
 
   for (let i = 0; i < variety; i++) {
     const threshold = i == 0 ? 0.01 : 0.1
@@ -106,10 +103,8 @@ const createNatureWorld = (rng) => {
   const simplex = new SimplexNoise(rng)
 
   const amplitude = randomInt(rng, 0, 5)
-  console.log({ amplitude })
 
   const horizon = randomInt(rng, 3, Math.floor(0.6 * size))
-  console.log({ horizon })
 
   const heights = []
   let a
@@ -172,7 +167,6 @@ const createNatureWorld = (rng) => {
 
 const createRandomWorld = () => {
   const seed = Math.random()
-  console.log({ seed })
   const rng = seedrandom(seed)
   const rand = rng()
   const generator =
