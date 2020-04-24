@@ -194,15 +194,8 @@ class WorldGraph {
   private world: any
   private graph: any
 
-  constructor(world) {
-    const topLayer = Array.from({ length: world.length }, () =>
-      Array.from({ length: world.length }, () => null),
-    )
-    this.world = [...world, topLayer]
-
-    console.time("creating graph")
-    this.create()
-    console.timeEnd("creating graph")
+  constructor(worldMap) {
+    this.create(worldMap)
 
     this.pathFinder = Path.nba(this.graph, {
       distance(fromNode, toNode, link) {
@@ -211,7 +204,11 @@ class WorldGraph {
     })
   }
 
-  create() {
+  create(worldMap) {
+    const topLayer = Array.from({ length: worldMap.length }, () =>
+      Array.from({ length: worldMap.length }, () => null),
+    )
+    this.world = [...worldMap, topLayer]
     this.graph = createGraph()
 
     const size = this.world.length

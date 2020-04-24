@@ -17,13 +17,12 @@ import createSecondaryAction from "./actions/action-secondary"
 import handleControls from "./actions/handle-controls"
 import { Modes } from "./types/enums"
 import { saveWorld } from "./save"
+import * as GUI from "babylonjs-gui"
 
 const createWorld = (savedWorld, baseBlocks, scene, shadows, lights) => {
   const worldMap = savedWorld ? savedWorld : createRandomWorld()
   const worldSize = worldMap.length
   const worldGraph = new WorldGraph(worldMap)
-
-  console.log({ worldSize })
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
@@ -71,6 +70,8 @@ const createScene = async (engine, canvas, mobile) => {
     music: false,
     track: 0,
   }
+
+  console.log(BABYLON)
 
   const scene = new BABYLON.Scene(engine)
   scene.blockMaterialDirtyMechanism = true

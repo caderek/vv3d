@@ -355,6 +355,13 @@ babylonjs-gltf2interface@4.1.0:
   resolved "https://registry.yarnpkg.com/babylonjs-gltf2interface/-/babylonjs-gltf2interface-4.1.0.tgz#95ec994e352ac5cb74869e238218a1b4df18e2f4"
   integrity sha512-H2obg+4t8bcmLyzGiOQqmUaTQqTu+6mJUlsMWZvmRBf0k2fQVeTdAkH7aDy6HVIz/THvpIx4ntG1Lsyquvmc5Q==
 
+babylonjs-gui@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/babylonjs-gui/-/babylonjs-gui-4.1.0.tgz#dd3c40f58a2c7002d7f81c4392e366eefd6407ec"
+  integrity sha512-nlsmPFuva336GEUdz1n3kNZKFR+GVbTVo+kr6X5SKmiAvo+BrGJeFv1RK0p6uO/ceM4kiQdGaMSCZlB5sy5TZg==
+  dependencies:
+    babylonjs "4.1.0"
+
 babylonjs-loaders@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/babylonjs-loaders/-/babylonjs-loaders-4.1.0.tgz#b056423b98c1e3a3962491ec72dce5e0b8852295"

@@ -124,7 +124,7 @@ const createSecondaryAction = ({
             lights.toggleSkybox()
             ship.toggle()
             hero.toggle()
-            world.graph.create()
+            world.graph.create(world)
           },
         }
 

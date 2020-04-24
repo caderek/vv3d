@@ -20,6 +20,7 @@
   "dependencies": {
     "@trinkets/noise": "^0.0.4",
     "babylonjs": "^4.1.0",
+    "babylonjs-gui": "^4.1.0",
     "babylonjs-loaders": "^4.1.0",
     "cannon": "^0.6.2",
     "is-mobile": "^2.2.1",
