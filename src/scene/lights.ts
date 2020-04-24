@@ -12,6 +12,7 @@ class Lights {
   constructor(scene) {
     this.scene = scene
     this.createLights()
+    this.createGlow()
   }
 
   createSkybox(worldSize) {
@@ -38,6 +39,7 @@ class Lights {
     skybox.isVisible = false
 
     this.skybox = skybox
+    this.glow.addExcludedMesh(skybox)
   }
 
   toggleSkybox() {
@@ -48,14 +50,9 @@ class Lights {
     this.skybox.material.alpha = alpha
   }
 
-  createGlow(excluded: any[]) {
+  createGlow() {
     const glow = new BABYLON.GlowLayer("glow", this.scene)
     glow.intensity = 0.5
-
-    // ! include rather than exclude? Performance?
-    excluded.forEach((mesh) => {
-      glow.addExcludedMesh(mesh)
-    })
 
     this.glow = glow
   }

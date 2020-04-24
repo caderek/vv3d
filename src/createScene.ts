@@ -18,7 +18,7 @@ import handleControls from "./actions/handle-controls"
 import { Modes } from "./types/enums"
 import { saveWorld } from "./save"
 
-const createWorld = (savedWorld, baseBlocks, scene, shadows) => {
+const createWorld = (savedWorld, baseBlocks, scene, shadows, lights) => {
   const worldMap = savedWorld ? savedWorld : createRandomWorld()
   const worldSize = worldMap.length
   const worldGraph = new WorldGraph(worldMap)
@@ -58,6 +58,7 @@ const createWorld = (savedWorld, baseBlocks, scene, shadows) => {
     }
   }
 
+  lights.createSkybox(worldSize)
   saveWorld(worldMap)
 
   return {
@@ -123,18 +124,15 @@ const createScene = async (engine, canvas, mobile) => {
     savedWorld = JSON.parse(savedWorldEntry)
   }
 
-  let world = createWorld(savedWorld, baseBlocks, scene, shadows)
+  let world = createWorld(savedWorld, baseBlocks, scene, shadows, lights)
 
   const hero = new Hero(scene, world, sounds)
   const camera = new Camera(scene, canvas, world, hero)
   const ship = new Ship(scene, world, camera)
 
-  lights.createSkybox(world.size)
-  lights.createGlow([lights.skybox])
-
   const next = () => {
     world.items.forEach((item) => item.dispose())
-    world = createWorld(null, baseBlocks, scene, shadows)
+    world = createWorld(null, baseBlocks, scene, shadows, lights)
   }
 
   const action1 = createPrimaryAction({
