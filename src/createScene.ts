@@ -16,6 +16,7 @@ import createPrimaryAction from "./actions/action-primary"
 import createSecondaryAction from "./actions/action-secondary"
 import handleControls from "./actions/handle-controls"
 import { Modes } from "./types/enums"
+import { saveWorld } from "./save"
 
 const createWorld = (savedWorld, baseBlocks, scene, shadows) => {
   const worldMap = savedWorld ? savedWorld : createRandomWorld()
@@ -56,6 +57,8 @@ const createWorld = (savedWorld, baseBlocks, scene, shadows) => {
       }
     }
   }
+
+  saveWorld(worldMap)
 
   return {
     map: worldMap,
