@@ -17,6 +17,12 @@ const loadModels = async (scene) => {
     })
   }
 
+  scene.meshes
+    .filter((mesh) => mesh.name.includes("water"))
+    .forEach((mesh) => {
+      // !TODO Add opacity
+    })
+
   await new Promise((resolve, reject) => {
     BABYLON.SceneLoader.Append(
       "models/",

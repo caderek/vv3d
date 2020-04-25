@@ -18,7 +18,7 @@ class Lights {
   createSkybox(worldSize) {
     const skybox = BABYLON.Mesh.CreateBox(
       "skyBox",
-      worldSize,
+      worldSize + 6,
       this.scene,
       false,
       BABYLON.Mesh.BACKSIDE,

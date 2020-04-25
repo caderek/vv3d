@@ -5,8 +5,7 @@ class Ship {
   public mesh: any
   public orbiting: boolean
   private scene: any
-  private map: any
-  private graph: any
+  private game: any
   private camera: any
   private position: any
   private remainingPath: any
@@ -22,17 +21,16 @@ class Ship {
   private laserRight: any
   private screen: any
 
-  constructor(scene, world, camera, gui) {
+  constructor(scene, game, camera, gui) {
     this.scene = scene
-    this.map = world.map
-    this.graph = world.graph
+    this.game = game
     this.camera = camera
     this.mesh = scene.getMeshByName("ship").parent
     this.mesh.parent = null
-    this.mesh.position.y = this.map.length / 2 - 1
+    this.mesh.position.y = this.game.world.map.length / 2 - 1
     this.mesh.position.z = -2
-    this.mesh.position.x = this.map.length / 2
-    this.position = { y: (this.map.length - 1) * 10, z: 0, x: 0 }
+    this.mesh.position.x = this.game.world.map.length / 2
+    this.position = { y: (this.game.world.map.length - 1) * 10, z: 0, x: 0 }
     this.mesh.rotate(BABYLON.Axis.Y, (Math.PI / 2) * 3, BABYLON.Space.LOCAL)
     this.remainingPath = []
     this.remainingSteps = 0
@@ -93,9 +91,9 @@ class Ship {
     } else {
       this.mesh.parent = null
       this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.LOCAL)
-      this.mesh.position.y = this.map.length / 2 - 1
+      this.mesh.position.y = this.game.world.map.length / 2 - 1
       this.mesh.position.z = -2
-      this.mesh.position.x = this.map.length / 2
+      this.mesh.position.x = this.game.world.map.length / 2
       this.camera.goToHero()
       this.screen.isVisible = false
     }
@@ -120,7 +118,7 @@ class Ship {
 
     BABYLON.MeshBuilder.CreateTube("ray-glow", {
       path: [
-        new BABYLON.Vector3(x, y, z),
+        new BABYLON.Vector3(x, y - 0.5, z),
         new BABYLON.Vector3(
           laser.absolutePosition.x,
           laser.absolutePosition.y,

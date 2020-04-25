@@ -1,17 +1,13 @@
 import * as BABYLON from "babylonjs"
 
 class Camera {
+  public camera: any
   private scene: any
-  private map: any
-  private worldSize: number
-  camera: any
-  private hero: any
+  private game: any
 
-  constructor(scene, canvas, world, hero) {
+  constructor(scene, canvas, game) {
     this.scene = scene
-    this.map = world.map
-    this.hero = hero
-    this.worldSize = world.size
+    this.game = game
 
     const camera = new BABYLON.ArcRotateCamera(
       "Camera",
@@ -37,16 +33,16 @@ class Camera {
   goToOrbit() {
     this.camera.setTarget(
       new BABYLON.Vector3(
-        this.worldSize / 2,
-        this.worldSize / 3,
-        this.worldSize / 2,
+        this.game.world.size / 2,
+        this.game.world.size / 3,
+        this.game.world.size / 2,
       ),
     )
     this.camera.setPosition(
       new BABYLON.Vector3(
-        this.worldSize * 2,
-        this.worldSize * 1.5,
-        -this.worldSize,
+        this.game.world.size * 2,
+        this.game.world.size * 1.5,
+        -this.game.world.size,
       ),
     )
   }
@@ -54,17 +50,17 @@ class Camera {
   goToHero() {
     this.camera.setTarget(
       new BABYLON.Vector3(
-        this.worldSize / 2,
-        this.worldSize / 3,
-        this.worldSize / 2,
+        this.game.world.size / 2,
+        this.game.world.size / 3,
+        this.game.world.size / 2,
       ),
     )
 
     this.camera.setPosition(
       new BABYLON.Vector3(
-        this.worldSize * 2,
-        this.worldSize * 1.5,
-        -this.worldSize,
+        this.game.world.size * 2,
+        this.game.world.size * 1.5,
+        -this.game.world.size,
       ),
     )
   }

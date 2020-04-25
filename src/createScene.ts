@@ -132,9 +132,9 @@ const createScene = async (engine, canvas, mobile) => {
   const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
   gui.idealHeight = 1080
 
-  const hero = new Hero(scene, game.world, sounds)
-  const camera = new Camera(scene, canvas, game.world, hero)
-  const ship = new Ship(scene, game.world, camera, gui)
+  const hero = new Hero(scene, game, sounds)
+  const camera = new Camera(scene, canvas, game)
+  const ship = new Ship(scene, game, camera, gui)
 
   const next = () => {
     game.world.items.forEach((item) => item.dispose())
