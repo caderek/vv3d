@@ -54,6 +54,8 @@ const createWorld = (savedWorld, baseBlocks, scene, shadows, lights) => {
   lights.createSkybox(worldSize)
   saveWorld(worldMap)
 
+  console.log("Meshes count:", scene.meshes.length)
+
   return {
     map: worldMap,
     graph: worldGraph,
@@ -107,6 +109,9 @@ const createScene = async (engine, canvas, mobile) => {
 
   const lights = new Lights(scene)
   const shadows = new Shadows(scene, lights.top)
+
+  console.log("SHADOWS!")
+  console.log({ shadows })
 
   const baseBlocks = Object.fromEntries(
     blocksValues.map(({ name }) => {
@@ -172,6 +177,18 @@ const createScene = async (engine, canvas, mobile) => {
 
     scene.render()
   }
+
+  // @ts-ignore
+  document.getElementById("toolbox").addEventListener("click", ({ target }) => {
+    // @ts-ignore
+    if (target.dataset.type === "item") {
+      sounds.button.play()
+      // @ts-ignore
+      state.activeBlock = target.dataset.id
+      // @ts-ignore
+      toolbox.classList.toggle("hidden")
+    }
+  })
 
   return { renderFrame, scene }
 }

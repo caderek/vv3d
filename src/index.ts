@@ -10,7 +10,6 @@ import createScene from "./createScene"
 import * as GUI from "babylonjs-gui"
 
 const toolbox = document.getElementById("toolbox")
-const toolboxSwitchImg = document.getElementById("active-item")
 
 const mobile = isMobile()
 const targetFPS = 20
@@ -47,21 +46,6 @@ const main = async () => {
 }
 
 main()
-
-// !TODO TEMP TOOLBOX
-
-// @ts-ignore
-toolbox.addEventListener("click", ({ target }) => {
-  // @ts-ignore
-  if (target.dataset.type === "item") {
-    // @ts-ignore
-    state.activeBlock = target.dataset.id
-    // @ts-ignore
-    toolbox.classList.toggle("hidden")
-    // @ts-ignore
-    toolboxSwitchImg.src = `/models/ico/${target.dataset.id}.png`
-  }
-})
 
 const renderToolboxItem = (name) => `
   <div

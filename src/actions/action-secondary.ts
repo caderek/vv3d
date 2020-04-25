@@ -160,6 +160,8 @@ const createSecondaryAction = ({
           x,
         )
       } else {
+        console.log(world)
+        console.log({ y, z, x })
         sounds.denied.play()
       }
 
