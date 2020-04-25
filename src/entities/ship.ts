@@ -131,7 +131,8 @@ class Ship {
       this.scene,
     )
 
-    ray.material = new BABYLON.StandardMaterial()
+    ray.material = new BABYLON.StandardMaterial("ray", this.scene)
+    // @ts-ignore
     ray.material.disableLighting = true
     ray.isVisible = false
     ray.isPickable = false

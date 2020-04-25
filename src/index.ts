@@ -1,6 +1,7 @@
 import "pepjs"
 import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
+// @ts-ignore
 import * as isMobile from "is-mobile"
 import { blocksValues } from "./blocks"
 import stats from "./helpers/stats"
@@ -15,7 +16,7 @@ const mobile = isMobile()
 const targetFPS = 20
 
 const main = async () => {
-  const canvas = document.getElementById("viewport")
+  const canvas = document.getElementById("viewport") as HTMLCanvasElement
 
   const engine = new BABYLON.Engine(canvas, true, {
     preserveDrawingBuffer: true,

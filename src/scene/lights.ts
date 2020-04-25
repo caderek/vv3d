@@ -31,6 +31,7 @@ class Lights {
     skyboxMaterial.alpha = 0.95
 
     skybox.material = skyboxMaterial
+    //@ts-ignore
     skybox.backFaceCulling = true
     skybox.position.y = worldSize / 2 - 0.5
     skybox.position.z = worldSize / 2 - 0.5

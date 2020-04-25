@@ -1,5 +1,7 @@
 import { blocksValues } from "../blocks"
+// @ts-ignore
 import * as SimplexNoise from "simplex-noise"
+// @ts-ignore
 import seedrandom from "seedrandom"
 
 const randomToInt = (num, min, max) => {

@@ -75,7 +75,9 @@ const createScene = async (engine, canvas, mobile) => {
 
   const scene = new BABYLON.Scene(engine)
   scene.blockMaterialDirtyMechanism = true
+  // @ts-ignore
   scene.useGeometryIdsMap = true
+  // @ts-ignore
   scene.useClonedMeshMap = true
 
   const modelsMeta = await loadModels(scene)

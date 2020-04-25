@@ -1,4 +1,6 @@
+// @ts-ignore
 import createGraph from "ngraph.graph"
+// @ts-ignore
 import Path from "ngraph.path"
 
 const perpendicularWeight = 1
