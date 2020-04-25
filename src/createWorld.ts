@@ -6,7 +6,7 @@ import { saveWorld } from "./save"
 
 const createWorld = (game, savedWorld, baseBlocks, scene, shadows, lights) => {
   game.world.map = savedWorld ? savedWorld : createRandomWorld()
-  game.world.graph = new WorldGraph(game.world.map)
+  game.world.graph = new WorldGraph(game)
 
   game.world.size = game.world.map.length
   console.log("Size:", game.world.size)

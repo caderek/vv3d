@@ -193,11 +193,12 @@ const diagonals3d = [
 
 class WorldGraph {
   private pathFinder: any
-  private world: any
+  private game: any
   private graph: any
 
-  constructor(worldMap) {
-    this.create(worldMap)
+  constructor(game) {
+    this.game = game
+    this.create()
 
     this.pathFinder = Path.nba(this.graph, {
       distance(fromNode, toNode, link) {
@@ -206,16 +207,12 @@ class WorldGraph {
     })
   }
 
-  create(worldMap) {
-    const topLayer = Array.from({ length: worldMap.length }, () =>
-      Array.from({ length: worldMap.length }, () => null),
-    )
-    this.world = [...worldMap, topLayer]
+  create() {
     this.graph = createGraph()
 
-    const size = this.world.length
+    const size = this.game.world.size
 
-    for (let y = 0; y < size + 1; y++) {
+    for (let y = 0; y < size; y++) {
       for (let z = 0; z < size; z++) {
         for (let x = 0; x < size; x++) {
           this.addPaths(y, z, x)
@@ -229,11 +226,16 @@ class WorldGraph {
     const zz = base.z + inc.z
     const xx = base.x + inc.x
 
-    return { isEmpty: this.world?.[yy]?.[zz]?.[xx] === null, yy, zz, xx }
+    return {
+      isEmpty: this.game.world.map?.[yy]?.[zz]?.[xx] === null,
+      yy,
+      zz,
+      xx,
+    }
   }
 
   private addPaths(y, z, x) {
-    if (this.world?.[y]?.[z]?.[x] === null) {
+    if (this.game.world.map?.[y]?.[z]?.[x] === null) {
       const base = { x, y, z }
 
       this.graph.addNode(`${y}_${z}_${x}`, { y, z, x })
@@ -279,7 +281,7 @@ class WorldGraph {
   }
 
   private removePaths(y, z, x) {
-    if (this.world?.[y]?.[z]?.[x] === null) {
+    if (this.game.world.map?.[y]?.[z]?.[x] === null) {
       const base = { x, y, z }
 
       increments.forEach((inc) => {
