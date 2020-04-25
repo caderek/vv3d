@@ -1,4 +1,5 @@
 import * as BABYLON from "babylonjs"
+import * as GUI from "babylonjs-gui"
 
 class Ship {
   public mesh: any
@@ -19,8 +20,9 @@ class Ship {
   private rayColorRight: any
   private laserLeft: any
   private laserRight: any
+  private screen: any
 
-  constructor(scene, world, camera) {
+  constructor(scene, world, camera, gui) {
     this.scene = scene
     this.map = world.map
     this.graph = world.graph
@@ -54,6 +56,25 @@ class Ship {
     this.laserLeft = scene.getMeshByName("ship-laser.L")
     this.laserRight = scene.getMeshByName("ship-laser.R")
 
+    const screenMesh = scene.getMeshByName("ship-screen")
+    const screen = new GUI.Rectangle()
+    screen.width = "400px"
+    screen.height = "100px"
+    screen.thickness = 0
+    // rect1.background = "black"
+    gui.addControl(screen)
+
+    const label = new GUI.TextBlock()
+    label.text = "Welcome to the new planet!"
+    // label.color = "#E70075"
+    label.color = "#008DE7"
+    label.fontFamily = "monospace"
+    screen.addControl(label)
+
+    screen.linkWithMesh(screenMesh)
+
+    this.screen = screen
+
     this.createRay()
     this.toggle()
   }
@@ -68,6 +89,7 @@ class Ship {
       this.mesh.position.x = 0
       this.mesh.rotate(BABYLON.Axis.Y, -(Math.PI / 2), BABYLON.Space.LOCAL)
       this.camera.goToOrbit()
+      this.screen.isVisible = true
     } else {
       this.mesh.parent = null
       this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.LOCAL)
@@ -75,6 +97,7 @@ class Ship {
       this.mesh.position.z = -2
       this.mesh.position.x = this.map.length / 2
       this.camera.goToHero()
+      this.screen.isVisible = false
     }
   }
 

@@ -27,27 +27,6 @@ const main = async () => {
 
   const { renderFrame, scene } = await createScene(engine, canvas, mobile)
 
-  const screen = scene.getMeshByName("ship-screen")
-
-  var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
-  advancedTexture.idealHeight = 1080
-
-  var rect1 = new GUI.Rectangle()
-  rect1.width = "400px"
-  rect1.height = "100px"
-  rect1.thickness = 0
-  // rect1.background = "black"
-  advancedTexture.addControl(rect1)
-
-  var label = new GUI.TextBlock()
-  label.text = "Welcome to the new planet!"
-  // label.color = "#E70075"
-  label.color = "#008DE7"
-  label.fontFamily = "monospace"
-  rect1.addControl(label)
-
-  rect1.linkWithMesh(screen)
-
   gameLoop(() => {
     stats.begin()
     renderFrame()

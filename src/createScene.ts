@@ -123,9 +123,12 @@ const createScene = async (engine, canvas, mobile) => {
 
   let world = createWorld(savedWorld, baseBlocks, scene, shadows, lights)
 
+  const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
+  gui.idealHeight = 1080
+
   const hero = new Hero(scene, world, sounds)
   const camera = new Camera(scene, canvas, world, hero)
-  const ship = new Ship(scene, world, camera)
+  const ship = new Ship(scene, world, camera, gui)
 
   const next = () => {
     world.items.forEach((item) => item.dispose())
