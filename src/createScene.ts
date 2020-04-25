@@ -23,8 +23,6 @@ const createScene = async (engine, canvas, mobile) => {
     track: 0,
   }
 
-  console.log(BABYLON)
-
   const scene = new BABYLON.Scene(engine)
   scene.blockMaterialDirtyMechanism = true
   // @ts-ignore
@@ -34,9 +32,8 @@ const createScene = async (engine, canvas, mobile) => {
 
   const modelsMeta = await loadModels(scene)
 
-  console.log(scene)
-
   addBackground(scene)
+
   const sounds = {
     go: new BABYLON.Sound("go", "sound/go.mp3", scene),
     denied: new BABYLON.Sound("denied", "sound/denied.mp3", scene),
@@ -59,9 +56,6 @@ const createScene = async (engine, canvas, mobile) => {
 
   const lights = new Lights(scene)
   const shadows = new Shadows(scene, lights.top)
-
-  console.log("SHADOWS!")
-  console.log({ shadows })
 
   const baseBlocks = Object.fromEntries(
     blocksValues.map(({ name }) => {
@@ -97,6 +91,7 @@ const createScene = async (engine, canvas, mobile) => {
   const next = () => {
     game.world.items.forEach((item) => item.dispose())
     createWorld(game, null, baseBlocks, scene, shadows, lights)
+    camera.goToOrbit()
   }
 
   const action1 = createPrimaryAction({

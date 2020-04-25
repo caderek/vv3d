@@ -49,7 +49,7 @@ const createSecondaryAction = ({
   if (hit === true) {
     if (modelsMeta.has(pickedMesh)) {
       const meta = modelsMeta.get(pickedMesh)
-      console.log(meta)
+
       if (meta.rootName === "ship") {
         if (!ship.orbiting) {
           state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
@@ -94,7 +94,6 @@ const createSecondaryAction = ({
             state.music = true
           },
           "button-purple": () => {
-            console.log("lights switch")
             state.day = !state.day
             lights.change(
               state.day
@@ -149,6 +148,7 @@ const createSecondaryAction = ({
       ) {
         sounds.build.play()
         ship.shoot(y, z, x, "left")
+
         createVoxel(
           scene,
           game,

@@ -17,11 +17,14 @@ const createNatureWorld = (rng) => {
 
   const availableChunks = []
 
-  for (let i = 1; i <= size / 3; i++) {
+  for (let i = 1; i <= size / 2; i++) {
     if (size % i === 0) {
       availableChunks.push(i)
     }
   }
+
+  availableChunks.slice(1, -1).forEach((size) => availableChunks.push(size))
+  console.log({ availableChunks })
 
   const chunkSize =
     availableChunks[randomInt(rng, 0, availableChunks.length - 1)]
@@ -80,8 +83,6 @@ const createNatureWorld = (rng) => {
       heights[z].push(height)
     }
   }
-
-  console.log({ heights })
 
   let world = []
 

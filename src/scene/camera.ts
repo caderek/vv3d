@@ -39,30 +39,12 @@ class Camera {
       ),
     )
     this.camera.setPosition(
-      new BABYLON.Vector3(
-        this.game.world.size * 2,
-        this.game.world.size * 1.5,
-        -this.game.world.size,
-      ),
+      new BABYLON.Vector3(this.game.world.size + 20, this.game.world.size, -20),
     )
   }
 
   goToHero() {
-    this.camera.setTarget(
-      new BABYLON.Vector3(
-        this.game.world.size / 2,
-        this.game.world.size / 3,
-        this.game.world.size / 2,
-      ),
-    )
-
-    this.camera.setPosition(
-      new BABYLON.Vector3(
-        this.game.world.size * 2,
-        this.game.world.size * 1.5,
-        -this.game.world.size,
-      ),
-    )
+    this.goToOrbit()
   }
 }
 

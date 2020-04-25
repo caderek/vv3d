@@ -9,7 +9,7 @@ const createWorld = (game, savedWorld, baseBlocks, scene, shadows, lights) => {
   game.world.graph = new WorldGraph(game)
 
   game.world.size = game.world.map.length
-  console.log("Size:", game.world.size)
+  console.log("World size:", game.world.size - 2)
   game.world.items = []
 
   for (const key in baseBlocks) {
