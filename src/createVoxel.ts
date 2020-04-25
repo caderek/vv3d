@@ -4,8 +4,7 @@ import { blocksValues } from "./blocks"
 
 const createVoxel = (
   scene,
-  worldMap,
-  worldItems,
+  game,
   parentMesh,
   shadowGenerator,
   y,
@@ -15,7 +14,9 @@ const createVoxel = (
 ) => {
   const gap = 0.0
 
-  worldMap[y][z][x] = blocksValues.find(({ name }) => name === parentMesh.id).id
+  game.world.map[y][z][x] = blocksValues.find(
+    ({ name }) => name === parentMesh.id,
+  ).id
 
   const item = parentMesh.createInstance(`item_${y}_${z}_${x}`)
 
@@ -63,14 +64,14 @@ const createVoxel = (
   box.isVisible = false
 
   if (save) {
-    saveWorld(worldMap)
+    saveWorld(game.world.map)
   }
 
-  worldItems.push(item)
-  worldItems.push(box)
+  game.world.items.push(item)
+  game.world.items.push(box)
 
   if (light) {
-    worldItems.push(light)
+    game.world.items.push(light)
   }
 }
 

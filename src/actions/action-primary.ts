@@ -7,8 +7,7 @@ const blockNames = blocksValues.map(({ name }) => name)
 const createPrimaryAction = ({
   scene,
   state,
-  world,
-  worldGraph,
+  game,
   modelsMeta,
   sounds,
   ship,
@@ -34,9 +33,9 @@ const createPrimaryAction = ({
       }
       const [y, z, x] = pickedMesh.id.split("_").map(Number)
       ship.shoot(y, z, x, "right")
-      world[y][z][x] = null
+      game.world.map[y][z][x] = null
       // worldGraph.add(y, z, x)
-      saveWorld(world)
+      saveWorld(game.world.map)
     }
   }
 }

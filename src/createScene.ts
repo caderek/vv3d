@@ -19,27 +19,26 @@ import { Modes } from "./types/enums"
 import { saveWorld } from "./save"
 import * as GUI from "babylonjs-gui"
 
-const createWorld = (savedWorld, baseBlocks, scene, shadows, lights) => {
-  const worldMap = savedWorld ? savedWorld : createRandomWorld()
-  const worldSize = worldMap.length
-  const worldGraph = new WorldGraph(worldMap)
+const createWorld = (game, savedWorld, baseBlocks, scene, shadows, lights) => {
+  game.world.map = savedWorld ? savedWorld : createRandomWorld()
+  game.world.graph = new WorldGraph(game.world.map)
+
+  game.world.size = game.world.map.length
+  game.world.items = []
 
   for (const key in baseBlocks) {
     baseBlocks[key].setParent(null)
     baseBlocks[key].isVisible = false
   }
 
-  const worldItems = []
-
-  for (let y = 0; y < worldSize; y++) {
-    for (let z = 0; z < worldSize; z++) {
-      for (let x = 0; x < worldSize; x++) {
-        if (worldMap[y][z][x] !== null) {
+  for (let y = 0; y < game.world.size; y++) {
+    for (let z = 0; z < game.world.size; z++) {
+      for (let x = 0; x < game.world.size; x++) {
+        if (game.world.map[y][z][x] !== null) {
           createVoxel(
             scene,
-            worldMap,
-            worldItems,
-            baseBlocks[blocksInfo[worldMap[y][z][x]].name],
+            game,
+            baseBlocks[blocksInfo[game.world.map[y][z][x]].name],
             shadows.shadowGenerator,
             y,
             z,
@@ -51,17 +50,10 @@ const createWorld = (savedWorld, baseBlocks, scene, shadows, lights) => {
     }
   }
 
-  lights.createSkybox(worldSize)
-  saveWorld(worldMap)
+  lights.createSkybox(game.world.size)
+  saveWorld(game.world.map)
 
   console.log("Meshes count:", scene.meshes.length)
-
-  return {
-    map: worldMap,
-    graph: worldGraph,
-    size: worldSize,
-    items: worldItems,
-  }
 }
 
 const createScene = async (engine, canvas, mobile) => {
@@ -126,25 +118,33 @@ const createScene = async (engine, canvas, mobile) => {
     savedWorld = JSON.parse(savedWorldEntry)
   }
 
-  let world = createWorld(savedWorld, baseBlocks, scene, shadows, lights)
+  const game = {
+    world: {
+      map: null,
+      graph: null,
+      size: null,
+      items: null,
+    },
+  }
+
+  createWorld(game, savedWorld, baseBlocks, scene, shadows, lights)
 
   const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
   gui.idealHeight = 1080
 
-  const hero = new Hero(scene, world, sounds)
-  const camera = new Camera(scene, canvas, world, hero)
-  const ship = new Ship(scene, world, camera, gui)
+  const hero = new Hero(scene, game.world, sounds)
+  const camera = new Camera(scene, canvas, game.world, hero)
+  const ship = new Ship(scene, game.world, camera, gui)
 
   const next = () => {
-    world.items.forEach((item) => item.dispose())
-    world = createWorld(null, baseBlocks, scene, shadows, lights)
+    game.world.items.forEach((item) => item.dispose())
+    createWorld(game, null, baseBlocks, scene, shadows, lights)
   }
 
   const action1 = createPrimaryAction({
     scene,
     state,
-    world: world.map,
-    worldGraph: world.graph,
+    game,
     modelsMeta,
     sounds,
     ship,
@@ -154,7 +154,7 @@ const createScene = async (engine, canvas, mobile) => {
     scene,
     canvas,
     state,
-    world,
+    game,
     modelsMeta,
     sounds,
     songs,
