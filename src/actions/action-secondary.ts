@@ -141,11 +141,11 @@ const createSecondaryAction = ({
 
       if (
         y >= 0 &&
-        y < game.world.map.length &&
-        z >= 0 &&
-        z < game.world.map.length &&
-        x >= 0 &&
-        x < game.world.map.length
+        y < game.world.size - 2 &&
+        z > 0 &&
+        z < game.world.size - 1 &&
+        x > 0 &&
+        x < game.world.size - 1
       ) {
         sounds.build.play()
         ship.shoot(y, z, x, "left")
@@ -159,8 +159,6 @@ const createSecondaryAction = ({
           x,
         )
       } else {
-        console.log(game.world)
-        console.log({ y, z, x })
         sounds.denied.play()
       }
 

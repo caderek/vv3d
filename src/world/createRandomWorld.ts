@@ -12,52 +12,6 @@ const randomInt = (rng, min, max) => {
   return Math.floor(rng() * (max - min + 1)) + min
 }
 
-const createResourceWorld = (rng) => {
-  const size = randomInt(rng, 5, 15)
-  const availableBlocks = blocksValues.filter(({ groups }) =>
-    groups.includes("resource"),
-  )
-
-  let world = []
-  for (let y = 0; y < size; y++) {
-    world.push([])
-
-    for (let z = 0; z < size; z++) {
-      world[y].push([])
-
-      for (let x = 0; x < size; x++) {
-        const randomIndex = randomInt(rng, 0, availableBlocks.length - 1)
-        world[y][z].push(availableBlocks[randomIndex].id)
-      }
-    }
-  }
-
-  return world
-}
-
-const createDumpWorld = (rng) => {
-  const size = randomInt(rng, 3, 15)
-  const availableBlocks = blocksValues.filter(({ groups }) =>
-    groups.includes("processed"),
-  )
-
-  let world = []
-  for (let y = 0; y < size; y++) {
-    world.push([])
-
-    for (let z = 0; z < size; z++) {
-      world[y].push([])
-
-      for (let x = 0; x < size; x++) {
-        const randomIndex = randomInt(rng, 0, availableBlocks.length - 1)
-        world[y][z].push(availableBlocks[randomIndex].id)
-      }
-    }
-  }
-
-  return world
-}
-
 const createNatureWorld = (rng) => {
   const size = randomInt(rng, 4, 10) * 2
 
@@ -127,16 +81,32 @@ const createNatureWorld = (rng) => {
     }
   }
 
+  console.log({ heights })
+
   let world = []
 
-  for (let y = 0; y < size; y++) {
+  for (let y = 0; y < size + 2; y++) {
     world.push([])
 
-    for (let z = 0; z < size; z++) {
+    for (let z = 0; z < size + 2; z++) {
       world[y].push([])
 
-      for (let x = 0; x < size; x++) {
-        const height = heights[z][x]
+      for (let x = 0; x < size + 2; x++) {
+        if (
+          x === 0 ||
+          x === size + 1 ||
+          z === 0 ||
+          z === size + 1 ||
+          y >= size
+        ) {
+          world[y][z].push(null)
+          continue
+        }
+
+        // world[y][z].push(10)
+        // continue
+
+        const height = heights[z - 1][x - 1]
         const rand = simplex.noise3D(y, z, x)
         const isEmpty = rand < 0 && hasCaves
 
@@ -171,12 +141,7 @@ const createRandomWorld = () => {
   const seed = Math.random()
   const rng = seedrandom(seed)
   const rand = rng()
-  const generator =
-    rand < 0.01
-      ? createResourceWorld
-      : rand > 0.99
-      ? createDumpWorld
-      : createNatureWorld
+  const generator = createNatureWorld
 
   return generator(rng)
 }

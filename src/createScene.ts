@@ -2,59 +2,17 @@ import * as BABYLON from "babylonjs"
 import { addBackground } from "./scene/background"
 import Lights from "./scene/lights"
 import Shadows from "./scene/shadows"
-import blocksInfo, { blocksValues } from "./blocks"
-import createVoxel from "./createVoxel"
-import AmbientOcclusion from "./scene/ambient-occlusion"
-import createDefaultWorld from "./world/createDefaultWorld"
-import createRandomWorld from "./world/createRandomWorld"
+import { blocksValues } from "./blocks"
 import Hero from "./entities/hero"
 import Ship from "./entities/ship"
 import loadModels from "./loaders/load-models"
-import WorldGraph from "./world/world-graph"
 import Camera from "./scene/camera"
 import createPrimaryAction from "./actions/action-primary"
 import createSecondaryAction from "./actions/action-secondary"
 import handleControls from "./actions/handle-controls"
 import { Modes } from "./types/enums"
-import { saveWorld } from "./save"
 import * as GUI from "babylonjs-gui"
-
-const createWorld = (game, savedWorld, baseBlocks, scene, shadows, lights) => {
-  game.world.map = savedWorld ? savedWorld : createRandomWorld()
-  game.world.graph = new WorldGraph(game.world.map)
-
-  game.world.size = game.world.map.length
-  game.world.items = []
-
-  for (const key in baseBlocks) {
-    baseBlocks[key].setParent(null)
-    baseBlocks[key].isVisible = false
-  }
-
-  for (let y = 0; y < game.world.size; y++) {
-    for (let z = 0; z < game.world.size; z++) {
-      for (let x = 0; x < game.world.size; x++) {
-        if (game.world.map[y][z][x] !== null) {
-          createVoxel(
-            scene,
-            game,
-            baseBlocks[blocksInfo[game.world.map[y][z][x]].name],
-            shadows.shadowGenerator,
-            y,
-            z,
-            x,
-            false,
-          )
-        }
-      }
-    }
-  }
-
-  lights.createSkybox(game.world.size)
-  saveWorld(game.world.map)
-
-  console.log("Meshes count:", scene.meshes.length)
-}
+import createWorld from "./createWorld"
 
 const createScene = async (engine, canvas, mobile) => {
   const state = {
