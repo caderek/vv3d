@@ -13,7 +13,7 @@ const randomInt = (rng, min, max) => {
 }
 
 const createNatureWorld = (rng) => {
-  const size = 24 //randomInt(rng, 4, 6) * 2
+  const size = 16 //randomInt(rng, 4, 6) * 2
 
   const availableChunks = []
 
