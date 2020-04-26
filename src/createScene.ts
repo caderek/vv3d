@@ -68,6 +68,9 @@ const createScene = async (engine, canvas, mobile) => {
 
   if (savedWorldEntry) {
     savedWorld = JSON.parse(savedWorldEntry)
+    if (!savedWorld.map) {
+      savedWorld = null
+    }
   }
 
   const game = {
