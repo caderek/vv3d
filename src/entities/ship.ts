@@ -21,7 +21,7 @@ class Ship {
   private laserRight: any
   private screen: any
 
-  constructor(scene, game, camera, gui) {
+  constructor(scene, game, camera, gui, shadowGenerator) {
     this.scene = scene
     this.game = game
     this.camera = camera
@@ -40,7 +40,10 @@ class Ship {
     this.orbiting = false
 
     scene.meshes
-      .filter((mesh) => mesh.name.includes("ship-glow"))
+      .filter(
+        (mesh) =>
+          mesh.name.includes("ship-glow") || mesh.name.includes("ship-button"),
+      )
       .forEach((mesh) => {
         mesh.material.disableLighting = true
       })
@@ -49,6 +52,7 @@ class Ship {
       .filter((mesh) => mesh.name.includes("ship"))
       .forEach((mesh) => {
         mesh.material.maxSimultaneousLights = 12
+        shadowGenerator.addShadowCaster(mesh)
       })
 
     this.laserLeft = scene.getMeshByName("ship-laser.L")

@@ -86,7 +86,7 @@ const createScene = async (engine, canvas, mobile) => {
 
   const hero = new Hero(scene, game, sounds)
   const camera = new Camera(scene, canvas, game)
-  const ship = new Ship(scene, game, camera, gui)
+  const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
 
   const next = () => {
     game.world.items.forEach((item) => item.dispose())
