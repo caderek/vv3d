@@ -20,6 +20,7 @@ const main = async () => {
   const engine = new BABYLON.Engine(canvas, true, {
     preserveDrawingBuffer: true,
     stencil: true,
+    disableWebGL2Support: true,
   })
 
   BABYLON.Engine.audioEngine.useCustomUnlockedButton = true
