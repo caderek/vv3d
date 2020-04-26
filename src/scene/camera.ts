@@ -33,9 +33,9 @@ class Camera {
   goToOrbit() {
     this.camera.setTarget(
       new BABYLON.Vector3(
-        this.game.world.size / 2,
+        this.game.world.size / 2 - 1,
         this.game.world.size / 3,
-        this.game.world.size / 2,
+        this.game.world.size / 2 - 1,
       ),
     )
     this.camera.setPosition(

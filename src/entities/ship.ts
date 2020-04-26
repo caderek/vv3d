@@ -48,20 +48,6 @@ class Ship {
         mesh.material.disableLighting = true
       })
 
-    scene.meshes
-      .filter(
-        (mesh) =>
-          mesh.name.includes("ship") &&
-          !mesh.name.includes("glow") &&
-          !mesh.name.includes("button") &&
-          !mesh.name.includes("laser"),
-      )
-      .forEach((mesh) => {
-        console.log("mesh.name :>> ", mesh.name)
-        mesh.material.maxSimultaneousLights = 12
-        shadowGenerator.addShadowCaster(mesh)
-      })
-
     this.laserLeft = scene.getMeshByName("ship-laser.L")
     this.laserRight = scene.getMeshByName("ship-laser.R")
 

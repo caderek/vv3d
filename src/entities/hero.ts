@@ -36,7 +36,6 @@ class Hero {
       .filter((mesh) => mesh.name.includes("hero"))
       .forEach((mesh) => {
         mesh.material.maxSimultaneousLights = 12
-        shadowGenerator.addShadowCaster(mesh)
       })
 
     scene.getMeshByName("hero-glow.R").material.disableLighting = true

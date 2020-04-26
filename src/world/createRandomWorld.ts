@@ -24,7 +24,6 @@ const createNatureWorld = (rng) => {
   }
 
   availableChunks.slice(1, -1).forEach((size) => availableChunks.push(size))
-  console.log({ availableChunks })
 
   const chunkSize =
     availableChunks[randomInt(rng, 0, availableChunks.length - 1)]
