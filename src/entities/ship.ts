@@ -59,14 +59,17 @@ class Ship {
     gui.addControl(screen)
 
     const label = new GUI.TextBlock()
-    label.text = "Welcome to the new planet!"
+    label.text = `Planet ${game.world.data.name}`
     label.color = "#008DE7"
     label.fontFamily = "monospace"
     screen.addControl(label)
 
     screen.linkWithMesh(screenMesh)
 
-    this.screen = screen
+    this.screen = {
+      screen,
+      label,
+    }
 
     this.createRay()
     this.toggle()
@@ -82,7 +85,7 @@ class Ship {
       this.mesh.position.x = 0
       this.mesh.rotate(BABYLON.Axis.Y, -(Math.PI / 2), BABYLON.Space.LOCAL)
       this.camera.goToOrbit()
-      this.screen.isVisible = true
+      this.screen.screen.isVisible = true
     } else {
       this.mesh.parent = null
       this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.LOCAL)
@@ -90,7 +93,7 @@ class Ship {
       this.mesh.position.z = -2
       this.mesh.position.x = this.game.world.map.length / 2
       this.camera.goToHero()
-      this.screen.isVisible = false
+      this.screen.screen.isVisible = false
     }
   }
 
@@ -127,6 +130,10 @@ class Ship {
       side === "left" ? this.rayColorLeft : this.rayColorRight
     this.ray.isVisible = true
     this.rayCounter = 2
+  }
+
+  refreshScreen() {
+    this.screen.label.text = `Planet ${this.game.world.data.name}`
   }
 
   private createRay() {

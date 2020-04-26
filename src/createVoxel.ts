@@ -64,7 +64,7 @@ const createVoxel = (
   box.isVisible = false
 
   if (save) {
-    saveWorld(game.world.map)
+    saveWorld(game)
   }
 
   game.world.items.push(item)

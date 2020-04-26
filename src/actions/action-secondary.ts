@@ -105,9 +105,9 @@ const createSecondaryAction = ({
                     color: "#FFFFFF",
                   }
                 : {
-                    top: 0.1,
-                    bottom: 0.1,
-                    ambient: 0.01,
+                    top: 0.002,
+                    bottom: 0.002,
+                    ambient: 0.001,
                     skyAlpha: 0.1,
                     color: "#9fbfff",
                   },

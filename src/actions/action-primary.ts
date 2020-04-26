@@ -35,7 +35,7 @@ const createPrimaryAction = ({
       ship.shoot(y, z, x, "right")
       game.world.map[y][z][x] = null
       // worldGraph.add(y, z, x)
-      saveWorld(game.world.map)
+      saveWorld(game)
     }
   }
 }

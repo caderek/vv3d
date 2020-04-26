@@ -12,6 +12,26 @@ const randomInt = (rng, min, max) => {
   return Math.floor(rng() * (max - min + 1)) + min
 }
 
+const randomName = () => {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  const lettersLength = randomInt(Math.random, 3, 5)
+  const numbersLength = randomInt(Math.random, 2, 5)
+
+  let name = ""
+
+  for (let i = 0; i < lettersLength; i++) {
+    name += alphabet[randomInt(Math.random, 0, alphabet.length - 1)]
+  }
+
+  name += "-"
+
+  for (let i = 0; i < numbersLength; i++) {
+    name += randomInt(Math.random, 0, 9)
+  }
+
+  return name
+}
+
 const createNatureWorld = (rng) => {
   const size = 16 //randomInt(rng, 4, 6) * 2
 
@@ -83,13 +103,13 @@ const createNatureWorld = (rng) => {
     }
   }
 
-  let world = []
+  let map = []
 
   for (let y = 0; y < size + 2; y++) {
-    world.push([])
+    map.push([])
 
     for (let z = 0; z < size + 2; z++) {
-      world[y].push([])
+      map[y].push([])
 
       for (let x = 0; x < size + 2; x++) {
         if (
@@ -99,7 +119,7 @@ const createNatureWorld = (rng) => {
           z === size + 1 ||
           y >= size
         ) {
-          world[y][z].push(null)
+          map[y][z].push(null)
           continue
         }
 
@@ -117,33 +137,33 @@ const createNatureWorld = (rng) => {
             availableBlocks.length - 1,
           )
 
-          world[y][z].push(availableBlocks[index])
+          map[y][z].push(availableBlocks[index])
         } else if (
           y === height &&
           !isEmpty &&
           hasGrass &&
           (y >= horizon || !hasWater)
         ) {
-          world[y][z].push(grass)
+          map[y][z].push(grass)
         } else if (y < (hasGrass ? horizon : horizon - 1) && hasWater) {
-          world[y][z].push(liquid)
+          map[y][z].push(liquid)
         } else {
-          world[y][z].push(null)
+          map[y][z].push(null)
         }
       }
     }
   }
 
-  return world
+  return map
 }
 
 const createRandomWorld = () => {
-  const seed = Math.random()
+  const name = randomName()
+  const seed = name
   const rng = seedrandom(seed)
-  const rand = rng()
   const generator = createNatureWorld
 
-  return generator(rng)
+  return { map: generator(rng), data: { name } }
 }
 
 export default createRandomWorld

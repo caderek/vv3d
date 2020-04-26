@@ -95,6 +95,7 @@ const createScene = async (engine, canvas, mobile) => {
     //shadows.refresh()
     createWorld(game, null, baseBlocks, scene, shadows, lights)
     camera.goToOrbit()
+    ship.refreshScreen()
     game.pause = false
   }
 

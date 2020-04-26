@@ -5,11 +5,12 @@ import WorldGraph from "./world/world-graph"
 import { saveWorld } from "./save"
 
 const createWorld = (game, savedWorld, baseBlocks, scene, shadows, lights) => {
-  game.world.map = savedWorld ? savedWorld : createRandomWorld()
+  const { map, data } = savedWorld ? savedWorld : createRandomWorld()
+  game.world.map = map
+  game.world.data = data
   game.world.graph = new WorldGraph(game)
 
   game.world.size = game.world.map.length
-  console.log("World size:", game.world.size - 2)
   game.world.items = []
 
   for (const key in baseBlocks) {
@@ -37,7 +38,7 @@ const createWorld = (game, savedWorld, baseBlocks, scene, shadows, lights) => {
   }
 
   lights.createSkybox(game.world.size)
-  saveWorld(game.world.map)
+  saveWorld(game)
 }
 
 export default createWorld
