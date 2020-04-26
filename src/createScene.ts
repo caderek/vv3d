@@ -77,6 +77,7 @@ const createScene = async (engine, canvas, mobile) => {
       size: null,
       items: null,
     },
+    pause: false,
   }
 
   createWorld(game, savedWorld, baseBlocks, scene, shadows, lights)
@@ -89,9 +90,11 @@ const createScene = async (engine, canvas, mobile) => {
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
 
   const next = () => {
+    game.pause = true
     game.world.items.forEach((item) => item.dispose())
     createWorld(game, null, baseBlocks, scene, shadows, lights)
     camera.goToOrbit()
+    game.pause = false
   }
 
   const action1 = createPrimaryAction({
@@ -143,7 +146,7 @@ const createScene = async (engine, canvas, mobile) => {
     }
   })
 
-  return { renderFrame, scene }
+  return { renderFrame, scene, game }
 }
 
 export default createScene

@@ -24,12 +24,14 @@ const main = async () => {
 
   BABYLON.Engine.audioEngine.useCustomUnlockedButton = true
 
-  const { renderFrame, scene } = await createScene(engine, canvas, mobile)
+  const { renderFrame, scene, game } = await createScene(engine, canvas, mobile)
 
   gameLoop(() => {
-    stats.begin()
-    renderFrame()
-    stats.end()
+    if (!game.pause) {
+      stats.begin()
+      renderFrame()
+      stats.end()
+    }
   }, targetFPS)
 
   window.addEventListener("resize", function () {
