@@ -49,8 +49,15 @@ class Ship {
       })
 
     scene.meshes
-      .filter((mesh) => mesh.name.includes("ship"))
+      .filter(
+        (mesh) =>
+          mesh.name.includes("ship") &&
+          !mesh.name.includes("glow") &&
+          !mesh.name.includes("button") &&
+          !mesh.name.includes("laser"),
+      )
       .forEach((mesh) => {
+        console.log("mesh.name :>> ", mesh.name)
         mesh.material.maxSimultaneousLights = 12
         shadowGenerator.addShadowCaster(mesh)
       })
@@ -63,12 +70,10 @@ class Ship {
     screen.width = "400px"
     screen.height = "100px"
     screen.thickness = 0
-    // rect1.background = "black"
     gui.addControl(screen)
 
     const label = new GUI.TextBlock()
     label.text = "Welcome to the new planet!"
-    // label.color = "#E70075"
     label.color = "#008DE7"
     label.fontFamily = "monospace"
     screen.addControl(label)

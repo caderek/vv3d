@@ -7,7 +7,7 @@ class Shadows {
   constructor(scene, light) {
     this.scene = scene
 
-    const shadowGenerator = new BABYLON.ShadowGenerator(2048, light)
+    const shadowGenerator = new BABYLON.ShadowGenerator(4096, light)
 
     shadowGenerator.bias = 0.01
     shadowGenerator.usePercentageCloserFiltering = true
