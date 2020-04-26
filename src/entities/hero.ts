@@ -14,7 +14,7 @@ class Hero {
   private visible: boolean
   private light: any
 
-  constructor(scene, game, sounds) {
+  constructor(scene, game, sounds, shadowGenerator) {
     this.game = game
     this.scene = scene
     this.sounds = sounds
@@ -36,6 +36,7 @@ class Hero {
       .filter((mesh) => mesh.name.includes("hero"))
       .forEach((mesh) => {
         mesh.material.maxSimultaneousLights = 12
+        shadowGenerator.addShadowCaster(mesh)
       })
 
     scene.getMeshByName("hero-glow.R").material.disableLighting = true
