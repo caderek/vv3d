@@ -53,9 +53,10 @@ class Ship {
 
     const screenMesh = scene.getMeshByName("ship-screen")
     const screen = new GUI.Rectangle()
-    screen.width = "400px"
-    screen.height = "100px"
+    screen.width = "320px"
+    screen.height = "110px"
     screen.thickness = 0
+    // screen.background = "blue"
     gui.addControl(screen)
 
     const label = new GUI.TextBlock()
