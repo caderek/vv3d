@@ -68,7 +68,7 @@ const createScene = async (engine, canvas, mobile) => {
 
   if (savedWorldEntry) {
     savedWorld = JSON.parse(savedWorldEntry)
-    if (!savedWorld.map) {
+    if (Array.isArray(savedWorld)) {
       savedWorld = { map: savedWorld, data: { name: "EARTH-123" } }
     }
   }
