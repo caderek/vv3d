@@ -92,7 +92,7 @@ const createScene = async (engine, canvas, mobile) => {
   const next = () => {
     game.pause = true
     game.world.items.forEach((item) => item.dispose())
-    shadows.refresh()
+    //shadows.refresh()
     createWorld(game, null, baseBlocks, scene, shadows, lights)
     camera.goToOrbit()
     game.pause = false
