@@ -1,10 +1,19 @@
 {
+  "dir": "ltr",
+  "lang": "en",
   "name": "Void Voyage",
-  "short_name": "VV",
-  "theme_color": "#2196f3",
-  "background_color": "#2196f3",
-  "display": "standalone",
-  "orientation": "portrait",
   "scope": "/",
-  "start_url": "/"
+  "display": "fullscreen",
+  "start_url": "https://voidvoyage.com/",
+  "short_name": "VV",
+  "theme_color": "transparent",
+  "description": "",
+  "orientation": "portrait-primary",
+  "background_color": "transparent",
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "icons": [],
+  "url": "https://voidvoyage.com",
+  "screenshots": [],
+  "generated": "true"
 }
