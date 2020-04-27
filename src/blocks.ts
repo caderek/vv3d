@@ -90,13 +90,31 @@ const blocks = {
   },
   35: {
     id: 35,
-    name: "stone-white-stairs-2",
+    name: "stone-white-stairs-inset",
     rotatable: true,
     groups: ["processed"],
   },
   36: {
     id: 36,
+    name: "stone-white-stairs-outset",
+    rotatable: true,
+    groups: ["processed"],
+  },
+  37: {
+    id: 37,
     name: "stone-white-slant",
+    rotatable: true,
+    groups: ["processed"],
+  },
+  38: {
+    id: 38,
+    name: "stone-white-slant-inset",
+    rotatable: true,
+    groups: ["processed"],
+  },
+  39: {
+    id: 39,
+    name: "stone-white-slant-outset",
     rotatable: true,
     groups: ["processed"],
   },
