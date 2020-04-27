@@ -22,15 +22,18 @@ const createWorld = (game, savedWorld, baseBlocks, scene, shadows, lights) => {
     for (let z = 0; z < game.world.size; z++) {
       for (let x = 0; x < game.world.size; x++) {
         if (game.world.map[y][z][x] !== null) {
+          const [id, rotation] = String(game.world.map[y][z][x]).split("_")
+
           createVoxel(
             scene,
             game,
-            baseBlocks[blocksInfo[game.world.map[y][z][x]].name],
+            baseBlocks[blocksInfo[id].name],
             shadows.shadowGenerator,
             y,
             z,
             x,
             false,
+            rotation,
           )
         }
       }

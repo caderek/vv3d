@@ -114,8 +114,6 @@ const createSecondaryAction = ({
             )
           },
           "button-blue": () => {
-            // window.localStorage.removeItem("world")
-            // location.reload()
             next()
           },
           "button-yellow": () => {
@@ -157,12 +155,11 @@ const createSecondaryAction = ({
           y,
           z,
           x,
+          true,
         )
       } else {
         sounds.denied.play()
       }
-
-      // worldGraph.remove(y, z, x)
     } else {
       hero.move(pickedMesh.id)
     }
