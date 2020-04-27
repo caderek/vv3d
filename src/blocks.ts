@@ -82,6 +82,24 @@ const blocks = {
     rotatable: true,
     groups: ["processed", "furniture"],
   },
+  34: {
+    id: 34,
+    name: "stone-white-stairs",
+    rotatable: true,
+    groups: ["processed"],
+  },
+  35: {
+    id: 35,
+    name: "stone-white-stairs-2",
+    rotatable: true,
+    groups: ["processed"],
+  },
+  36: {
+    id: 36,
+    name: "stone-white-slant",
+    rotatable: true,
+    groups: ["processed"],
+  },
 }
 
 const blocksIds = Object.keys(blocks)
