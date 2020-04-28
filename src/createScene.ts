@@ -13,6 +13,7 @@ import handleControls from "./actions/handle-controls"
 import { Modes } from "./types/enums"
 import * as GUI from "babylonjs-gui"
 import createWorld from "./createWorld"
+import Blocks from "./blocks/blocks"
 
 const createScene = async (engine, canvas, mobile) => {
   const state = {
@@ -63,6 +64,10 @@ const createScene = async (engine, canvas, mobile) => {
     }),
   )
 
+  Object.values(baseBlocks).forEach((mesh) => {
+    mesh.receiveShadows = true
+  })
+
   let savedWorldEntry = window.localStorage.getItem("world")
   let savedWorld
 
@@ -78,14 +83,17 @@ const createScene = async (engine, canvas, mobile) => {
       map: null,
       graph: null,
       size: null,
-      items: null,
+      items: [],
     },
     pause: false,
   }
 
   const camera = new Camera(scene, canvas, game)
+  const blocks = new Blocks(scene, game, shadows)
 
   createWorld(game, savedWorld, baseBlocks, scene, shadows, lights)
+
+  blocks.create(1, 0, 2, 1, 2)
 
   const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
   gui.idealHeight = 1080

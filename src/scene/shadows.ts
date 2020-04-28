@@ -23,13 +23,17 @@ class Shadows {
     shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_MEDIUM
 
     // !Exclude invisible meshes and sky box
-    this.scene.meshes
-      .filter((mesh) => names.includes(mesh.name))
-      .forEach((mesh) => {
-        mesh.receiveShadows = true
-      })
+    // this.scene.meshes
+    //   .filter((mesh) => names.includes(mesh.name))
+    //   .forEach((mesh) => {
+    //     mesh.receiveShadows = true
+    //   })
 
     this.shadowGenerator = shadowGenerator
+  }
+
+  addCaster(mesh) {
+    this.shadowGenerator.addShadowCaster(mesh)
   }
 
   refresh() {

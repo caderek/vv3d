@@ -28,7 +28,7 @@ const createWorld = (game, savedWorld, baseBlocks, scene, shadows, lights) => {
             scene,
             game,
             baseBlocks[blocksInfo[id].name],
-            shadows.shadowGenerator,
+            shadows,
             y,
             z,
             x,

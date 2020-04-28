@@ -1,4 +1,5 @@
 import "pepjs"
+import "@pwabuilder/pwainstall"
 import * as BABYLON from "babylonjs"
 import "babylonjs-loaders"
 // @ts-ignore
@@ -18,8 +19,8 @@ const main = async () => {
   const canvas = document.getElementById("viewport") as HTMLCanvasElement
 
   const engine = new BABYLON.Engine(canvas, true, {
-    preserveDrawingBuffer: true,
-    stencil: true,
+    // preserveDrawingBuffer: true,
+    // stencil: true,
     disableWebGL2Support: true,
   })
 

@@ -47,7 +47,7 @@ const createVoxel = (
   scene,
   game,
   parentMesh,
-  shadowGenerator,
+  shadows,
   y,
   z,
   x,
@@ -70,7 +70,7 @@ const createVoxel = (
     BABYLON.AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY
 
   if (!parentMesh.name.includes("glow")) {
-    shadowGenerator.addShadowCaster(item)
+    shadows.addCaster(item)
   }
 
   let light
@@ -109,7 +109,7 @@ const createVoxel = (
     game.world.map[y][z][x] = blockData.id
   }
 
-  item.freezeWorldMatrix()
+  // item.freezeWorldMatrix()
 
   if (save) {
     saveWorld(game)

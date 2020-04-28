@@ -151,7 +151,7 @@ const createSecondaryAction = ({
           scene,
           game,
           baseBlocks[state.activeBlock],
-          shadows.shadowGenerator,
+          shadows,
           y,
           z,
           x,
