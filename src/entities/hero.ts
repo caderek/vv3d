@@ -39,7 +39,6 @@ class Hero {
       })
 
     scene.getMeshByName("hero-glow.R").material.disableLighting = true
-    scene.getMeshByName("hero-helmet-glass").material.alpha = 0.5
 
     this.toggle()
   }
