@@ -227,7 +227,7 @@ class WorldGraph {
     const xx = base.x + inc.x
 
     return {
-      isEmpty: this.game.world.map?.[yy]?.[zz]?.[xx] === null,
+      isEmpty: this.game.world.map?.[yy]?.[zz]?.[xx] === 0,
       yy,
       zz,
       xx,
@@ -235,7 +235,7 @@ class WorldGraph {
   }
 
   private addPaths(y, z, x) {
-    if (this.game.world.map?.[y]?.[z]?.[x] === null) {
+    if (this.game.world.map?.[y]?.[z]?.[x] === 0) {
       const base = { x, y, z }
 
       this.graph.addNode(`${y}_${z}_${x}`, { y, z, x })
@@ -281,7 +281,7 @@ class WorldGraph {
   }
 
   private removePaths(y, z, x) {
-    if (this.game.world.map?.[y]?.[z]?.[x] === null) {
+    if (this.game.world.map?.[y]?.[z]?.[x] === 0) {
       const base = { x, y, z }
 
       increments.forEach((inc) => {

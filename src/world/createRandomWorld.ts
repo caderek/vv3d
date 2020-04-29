@@ -1,4 +1,4 @@
-import { blocksValues } from "../blocks"
+import { materialEntries } from "../blocks/materials"
 // @ts-ignore
 import * as SimplexNoise from "simplex-noise"
 // @ts-ignore
@@ -52,30 +52,30 @@ const createNatureWorld = (rng) => {
   const hasGrass = rng() > 0.5 && hasWater
   const hasCaves = rng() > 0.5
 
-  const resourceBlocks = blocksValues
+  const resourceMaterials = materialEntries
     .filter(({ groups }) => groups.includes("resource"))
     .map((item) => item.id)
-  const crystalBlocks = blocksValues
+  const crystalMaterials = materialEntries
     .filter(({ groups }) => groups.includes("crystal"))
     .map((item) => item.id)
-  const bioBlocks = blocksValues
+  const bioMaterials = materialEntries
     .filter(({ groups }) => groups.includes("bio"))
     .map((item) => item.id)
-  const liquidBlocks = blocksValues
+  const liquidMaterials = materialEntries
     .filter(({ groups }) => groups.includes("water"))
     .map((item) => item.id)
 
-  const liquid = liquidBlocks[randomInt(rng, 0, liquidBlocks.length - 1)]
-  const grass = bioBlocks[randomInt(rng, 0, bioBlocks.length - 1)]
+  const liquid = liquidMaterials[randomInt(rng, 0, liquidMaterials.length - 1)]
+  const grass = bioMaterials[randomInt(rng, 0, bioMaterials.length - 1)]
 
-  const availableBlocks = []
+  const availableMaterials = []
 
   const variety = randomInt(rng, 1, 10)
 
   for (let i = 0; i < variety; i++) {
     const threshold = i == 0 ? 0.01 : 0.1
-    const group = rng() > threshold ? resourceBlocks : crystalBlocks
-    availableBlocks.push(group[randomInt(rng, 0, group.length - 1)])
+    const group = rng() > threshold ? resourceMaterials : crystalMaterials
+    availableMaterials.push(group[randomInt(rng, 0, group.length - 1)])
   }
 
   const simplex = new SimplexNoise(rng)
@@ -119,7 +119,7 @@ const createNatureWorld = (rng) => {
           z === size + 1 ||
           y >= size
         ) {
-          map[y][z].push(null)
+          map[y][z].push(0)
           continue
         }
 
@@ -134,21 +134,21 @@ const createNatureWorld = (rng) => {
           const index = randomToInt(
             Math.abs(rand),
             0,
-            availableBlocks.length - 1,
+            availableMaterials.length - 1,
           )
 
-          map[y][z].push(availableBlocks[index])
+          map[y][z].push(`1_${availableMaterials[index]}`)
         } else if (
           y === height &&
           !isEmpty &&
           hasGrass &&
           (y >= horizon || !hasWater)
         ) {
-          map[y][z].push(grass)
+          map[y][z].push(`1_${grass}`)
         } else if (y < (hasGrass ? horizon : horizon - 1) && hasWater) {
-          map[y][z].push(liquid)
+          map[y][z].push(`1_${liquid}`)
         } else {
-          map[y][z].push(null)
+          map[y][z].push(0)
         }
       }
     }

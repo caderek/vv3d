@@ -1,8 +1,6 @@
 import { blocksValues } from "../blocks"
 import { Modes } from "../types/enums"
-import { saveWorld } from "../save"
 import downloadImage from "../helpers/downloadImage"
-import createVoxel from "../createVoxel"
 
 const toolbox = document.getElementById("toolbox")
 
@@ -35,7 +33,7 @@ const createSecondaryAction = ({
   hero,
   lights,
   mobile,
-  baseBlocks,
+  blocks,
   shadows,
   next,
 }) => () => {
@@ -45,6 +43,8 @@ const createSecondaryAction = ({
     (mesh) =>
       mesh.isPickable && mesh.isEnabled && !blockNames.includes(mesh.id),
   )
+
+  console.log({ picked: pickedMesh.name, pickedMesh })
 
   if (hit === true) {
     if (modelsMeta.has(pickedMesh)) {
@@ -147,16 +147,7 @@ const createSecondaryAction = ({
         sounds.build.play()
         ship.shoot(y, z, x, "left")
 
-        createVoxel(
-          scene,
-          game,
-          baseBlocks[state.activeBlock],
-          shadows,
-          y,
-          z,
-          x,
-          true,
-        )
+        blocks.create(y, z, x, state.activeShape, state.activeMaterial, undefined, true)
       } else {
         sounds.denied.play()
       }

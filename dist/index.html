@@ -74,8 +74,8 @@
         background: #222;
         position: absolute;
         top: 0;
-        padding: 20px;
         text-align: center;
+        overflow: auto;
       }
 
       .splash p {
@@ -103,13 +103,23 @@
         border-radius: 10px;
       }
 
+      .toolbox__selected {
+        padding: 20px;
+        background: #111;
+      }
+
+      .toolbox__shapes, .toolbox__materials {
+        padding: 20px;
+      }
+
       .toolbox-switch p {
         margin-top: 10px;
         text-align: center;
         font-family: sans-serif;
       }
 
-      .item {
+
+      .selected-shape, .selected-material {
         display: inline-block;
         width: 128px;
         height: 128px;
@@ -118,6 +128,48 @@
         margin: 10px;
         cursor: pointer;
         background-size: cover;
+      }
+
+      .back {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #008DFF;
+        padding: 20px;
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+        font-family: sans-serif;
+        border-radius: 10px;
+      }
+
+      .selected-shape {
+        background-image: url(/models/ico/cube.png);
+      }
+
+      .selected-material {
+        background: #FAFAFA;
+      }
+
+
+      .shape {
+        display: inline-block;
+        width: 128px;
+        height: 128px;
+        border: solid 5px black;
+        border-radius: 10px;
+        margin: 10px;
+        cursor: pointer;
+        background-size: cover;
+      }
+
+      .material {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        margin: 10px;
+        cursor: pointer;
       }
 
       .next {
@@ -132,20 +184,20 @@
   <body role="application">
     <pwa-install></pwa-install>
     <canvas id="viewport" touch-action="none" role="application"></canvas>
-    <div id="toolbox" class="toolbox hidden"></div>
+    <div id="toolbox" class="toolbox hidden">
+      <div id="toolbox-selected" class="toolbox__selected">
+        <div id="selected-shape" class="selected-shape">&nbsp;</div>
+        <div id="selected-material" class="selected-material">&nbsp;</div>
+        <button id="back" class="back">BACK</button>
+      </div>
+      <div id="toolbox-shapes" class="toolbox__shapes"></div>
+      <div id="toolbox-materials" class="toolbox__materials"></div>
+    </div>
     <div class="options hidden">
       <div id="light-switch" class="light-switch">DAY / NIGHT</div>
       <div id="mode-switch" class="light-switch">BUILD</div>
       <div id="screenshot" class="light-switch">TAKE SCREENSHOT</div>
       <div id="next" class="light-switch next">NEXT</div>
-    </div>
-    <div id="toolbox-switch" class="toolbox-switch hidden">
-      <img
-        id="active-item"
-        class="toolbox__img"
-        src="/models/ico/stone-green.png"
-      />
-      <p>TOOLBOX</p>
     </div>
     <div id="splash" class="splash hidden">
       <p>World size:</p>

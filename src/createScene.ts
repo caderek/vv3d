@@ -17,7 +17,8 @@ import Blocks from "./blocks/blocks"
 
 const createScene = async (engine, canvas, mobile) => {
   const state = {
-    activeBlock: "stone-green",
+    activeShape: 1,
+    activeMaterial: 1,
     mode: Modes.build,
     day: true,
     music: false,
@@ -58,16 +59,6 @@ const createScene = async (engine, canvas, mobile) => {
   const lights = new Lights(scene)
   const shadows = new Shadows(scene, lights.top)
 
-  const baseBlocks = Object.fromEntries(
-    blocksValues.map(({ name }) => {
-      return [name, scene.meshes.find((mesh) => mesh.name === name)]
-    }),
-  )
-
-  Object.values(baseBlocks).forEach((mesh) => {
-    mesh.receiveShadows = true
-  })
-
   let savedWorldEntry = window.localStorage.getItem("world")
   let savedWorld
 
@@ -91,9 +82,7 @@ const createScene = async (engine, canvas, mobile) => {
   const camera = new Camera(scene, canvas, game)
   const blocks = new Blocks(scene, game, shadows)
 
-  createWorld(game, savedWorld, baseBlocks, scene, shadows, lights)
-
-  blocks.create(1, 0, 2, 1, 2)
+  createWorld(game, savedWorld, blocks, scene, shadows, lights)
 
   const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
   gui.idealHeight = 1080
@@ -104,8 +93,7 @@ const createScene = async (engine, canvas, mobile) => {
   const next = () => {
     game.pause = true
     game.world.items.forEach((item) => item.dispose())
-    //shadows.refresh()
-    createWorld(game, null, baseBlocks, scene, shadows, lights)
+    createWorld(game, null, blocks, scene, shadows, lights)
     camera.goToOrbit()
     ship.refreshScreen()
     game.pause = false
@@ -132,7 +120,7 @@ const createScene = async (engine, canvas, mobile) => {
     hero,
     lights,
     mobile,
-    baseBlocks,
+    blocks,
     shadows,
     next,
   })
@@ -148,16 +136,36 @@ const createScene = async (engine, canvas, mobile) => {
     scene.render()
   }
 
+  const $toolbox = document.getElementById('toolbox')
+  const $selectedShape = document.getElementById('selected-shape')
+  const $selectedMaterial = document.getElementById('selected-material')
+
   // @ts-ignore
-  document.getElementById("toolbox").addEventListener("click", ({ target }) => {
+  document.getElementById("toolbox-shapes").addEventListener("click", ({ target }) => {
     // @ts-ignore
-    if (target.dataset.type === "item") {
+    if (target.dataset.type === "shape") {
       sounds.button.play()
       // @ts-ignore
-      state.activeBlock = target.dataset.id
+      state.activeShape = target.dataset.id
       // @ts-ignore
-      toolbox.classList.toggle("hidden")
+      $selectedShape.style.backgroundImage = `url(/models/ico/${target.dataset.name}.png)`
     }
+  })
+
+  document.getElementById("toolbox-materials").addEventListener("click", ({ target }) => {
+    // @ts-ignore
+    if (target.dataset.type === "material") {
+      sounds.button.play()
+      // @ts-ignore
+      state.activeMaterial = target.dataset.id
+      // @ts-ignore
+      $selectedMaterial.style.background = target.dataset.color
+    }
+  })
+
+  document.getElementById('back').addEventListener('click', () => {
+    sounds.button.play()
+    $toolbox.classList.toggle("hidden")
   })
 
   return { renderFrame, scene, game }

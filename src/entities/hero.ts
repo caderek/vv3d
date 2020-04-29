@@ -54,7 +54,7 @@ class Hero {
     const coords = destination.split("_").map(Number)
     coords[0] += 1
     const [y, z, x] = coords
-    if (this.game.world.map?.[y]?.[z]?.[x] !== null) {
+    if (this.game.world.map?.[y]?.[z]?.[x] !== 0) {
       console.log("No!")
       this.sounds.denied.play()
       return
