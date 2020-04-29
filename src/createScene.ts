@@ -64,8 +64,10 @@ const createScene = async (engine, canvas, mobile) => {
 
   if (savedWorldEntry) {
     savedWorld = JSON.parse(savedWorldEntry)
-    if (Array.isArray(savedWorld)) {
-      savedWorld = { map: savedWorld, data: { name: "EARTH-123" } }
+
+    if (savedWorld.version !== 1) {
+      window.localStorage.removeItem("world")
+      savedWorld = undefined
     }
   }
 
@@ -136,34 +138,38 @@ const createScene = async (engine, canvas, mobile) => {
     scene.render()
   }
 
-  const $toolbox = document.getElementById('toolbox')
-  const $selectedShape = document.getElementById('selected-shape')
-  const $selectedMaterial = document.getElementById('selected-material')
+  const $toolbox = document.getElementById("toolbox")
+  const $selectedShape = document.getElementById("selected-shape")
+  const $selectedMaterial = document.getElementById("selected-material")
 
   // @ts-ignore
-  document.getElementById("toolbox-shapes").addEventListener("click", ({ target }) => {
-    // @ts-ignore
-    if (target.dataset.type === "shape") {
-      sounds.button.play()
+  document
+    .getElementById("toolbox-shapes")
+    .addEventListener("click", ({ target }) => {
       // @ts-ignore
-      state.activeShape = target.dataset.id
-      // @ts-ignore
-      $selectedShape.style.backgroundImage = `url(/models/ico/${target.dataset.name}.png)`
-    }
-  })
+      if (target.dataset.type === "shape") {
+        sounds.button.play()
+        // @ts-ignore
+        state.activeShape = target.dataset.id
+        // @ts-ignore
+        $selectedShape.style.backgroundImage = `url(/models/ico/${target.dataset.name}.png)`
+      }
+    })
 
-  document.getElementById("toolbox-materials").addEventListener("click", ({ target }) => {
-    // @ts-ignore
-    if (target.dataset.type === "material") {
-      sounds.button.play()
+  document
+    .getElementById("toolbox-materials")
+    .addEventListener("click", ({ target }) => {
       // @ts-ignore
-      state.activeMaterial = target.dataset.id
-      // @ts-ignore
-      $selectedMaterial.style.background = target.dataset.color
-    }
-  })
+      if (target.dataset.type === "material") {
+        sounds.button.play()
+        // @ts-ignore
+        state.activeMaterial = target.dataset.id
+        // @ts-ignore
+        $selectedMaterial.style.background = target.dataset.color
+      }
+    })
 
-  document.getElementById('back').addEventListener('click', () => {
+  document.getElementById("back").addEventListener("click", () => {
     sounds.button.play()
     $toolbox.classList.toggle("hidden")
   })
