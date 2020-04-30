@@ -4,6 +4,7 @@ import Lights from "./scene/lights"
 import Shadows from "./scene/shadows"
 import { blocksValues } from "./blocks"
 import Hero from "./entities/hero"
+import Bot from "./entities/bot"
 import Ship from "./entities/ship"
 import loadModels from "./loaders/load-models"
 import Camera from "./scene/camera"
@@ -90,6 +91,7 @@ const createScene = async (engine, canvas, mobile) => {
   gui.idealHeight = 1080
 
   const hero = new Hero(scene, game, sounds, shadows.shadowGenerator)
+  const bot = new Bot(scene, game, sounds, shadows.shadowGenerator)
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
 
   const next = () => {
@@ -133,6 +135,7 @@ const createScene = async (engine, canvas, mobile) => {
     controls()
 
     hero.render()
+    bot.render()
     ship.render()
 
     scene.render()

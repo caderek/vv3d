@@ -36,6 +36,25 @@ const loadModels = async (scene) => {
   await new Promise((resolve, reject) => {
     BABYLON.SceneLoader.Append(
       "models/",
+      `bot.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
+
+  const botRoot = scene.getMeshByName("bot").parent
+
+  scene.meshes
+    .filter((mesh) => mesh.name.includes("bot"))
+    .forEach((mesh) => {
+      modelsMeta.set(mesh, { root: botRoot, rootName: "bot" })
+    })
+
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
       `ship.glb`,
       scene,
       resolve,
