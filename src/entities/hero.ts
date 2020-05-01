@@ -94,6 +94,8 @@ class Hero {
       })
 
     this.light.intensity = this.visible ? 1 : 0
+
+    this.bot.toggle()
   }
 
   render() {

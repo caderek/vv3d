@@ -41,7 +41,6 @@ class Bot {
       })
 
     scene.getMeshByName("bot-flame-glow").material.disableLighting = true
-    // this.toggle()
   }
 
   bounce() {
