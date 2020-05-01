@@ -5,7 +5,9 @@ import Shadows from "./scene/shadows"
 import { blocksValues } from "./blocks"
 import Hero from "./entities/hero"
 import Bot from "./entities/bot"
+import Gun from "./entities/gun"
 import Ship from "./entities/ship"
+import Cyclops from "./entities/cyclops"
 import loadModels from "./loaders/load-models"
 import Camera from "./scene/camera"
 import createPrimaryAction from "./actions/action-primary"
@@ -92,7 +94,13 @@ const createScene = async (engine, canvas, mobile) => {
 
   const bot = new Bot(scene, game, sounds, shadows.shadowGenerator)
   const hero = new Hero(scene, game, sounds, bot)
+  const gun = new Gun(scene, game, sounds)
+  hero.changeGun(gun)
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
+  const enemies = [
+    new Cyclops(scene, game, sounds).place(10, 5, 5),
+    new Cyclops(scene, game, sounds).place(10, 7, 8),
+  ]
 
   const next = () => {
     game.pause = true
@@ -137,6 +145,7 @@ const createScene = async (engine, canvas, mobile) => {
     hero.render()
     bot.render()
     ship.render()
+    enemies.forEach((enemy) => enemy.render())
 
     scene.render()
   }

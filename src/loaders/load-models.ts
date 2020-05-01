@@ -36,6 +36,25 @@ const loadModels = async (scene) => {
   await new Promise((resolve, reject) => {
     BABYLON.SceneLoader.Append(
       "models/",
+      `gun-pew-pew.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
+
+  const gunRoot = scene.getMeshByName("gun-pew-pew").parent
+
+  scene.meshes
+    .filter((mesh) => mesh.name.includes("gun-pew-pew"))
+    .forEach((mesh) => {
+      modelsMeta.set(mesh, { root: gunRoot, rootName: "gun-pew-pew" })
+    })
+
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
       `bot.glb`,
       scene,
       resolve,
@@ -50,6 +69,25 @@ const loadModels = async (scene) => {
     .filter((mesh) => mesh.name.includes("bot"))
     .forEach((mesh) => {
       modelsMeta.set(mesh, { root: botRoot, rootName: "bot" })
+    })
+
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
+      `cyclops.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
+
+  const cyclopsRoot = scene.getMeshByName("cyclops").parent
+
+  scene.meshes
+    .filter((mesh) => mesh.name.includes("cyclops"))
+    .forEach((mesh) => {
+      modelsMeta.set(mesh, { root: cyclopsRoot, rootName: "cyclops" })
     })
 
   await new Promise((resolve, reject) => {

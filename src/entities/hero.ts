@@ -1,8 +1,10 @@
 import * as BABYLON from "babylonjs"
 import Bot from "./bot"
+import Gun from "./gun"
 
 class Hero {
   public mesh: any
+  private hand: any
   private game: any
   private scene: any
   private sounds: any
@@ -15,6 +17,7 @@ class Hero {
   private visible: boolean
   private light: any
   private bot: Bot
+  private gun: Gun
 
   constructor(scene, game, sounds, bot) {
     this.game = game
@@ -34,6 +37,7 @@ class Hero {
     this.velocityX = 0
     this.visible = true
     this.light = scene.getLightByID("Point")
+    this.hand = scene.getMeshByName("hero-arm.R")
 
     scene.meshes
       .filter((mesh) => mesh.name.includes("hero"))
@@ -96,6 +100,16 @@ class Hero {
     this.light.intensity = this.visible ? 1 : 0
 
     this.bot.toggle()
+
+    if (this.gun) {
+      this.gun.toggle()
+    }
+  }
+
+  changeGun(gun) {
+    this.gun = gun
+    gun.mesh.setParent(this.hand)
+    this.gun.toggle()
   }
 
   render() {
