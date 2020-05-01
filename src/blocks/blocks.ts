@@ -33,8 +33,6 @@ class Blocks {
     this.materials = createMaterials(scene)
     this.shapes = createShapes(scene)
     this.baseBlocks = {}
-
-    console.log({ materials: this.materials, shapes: this.shapes })
   }
 
   create(y, z, x, shapeId, materialId, rotation = undefined, save = false) {
@@ -94,9 +92,6 @@ class Blocks {
   }
 
   private createBaseBlock(shapeId, materialId) {
-    if (!this.shapes[shapeId]) {
-      console.log({ shapeId })
-    }
     const baseBlock = this.shapes[shapeId].mesh.clone(
       `${shapeId}_${materialId}`,
     )
@@ -108,15 +103,15 @@ class Blocks {
   }
 
   private addLight(y, z, x, lightSettings) {
-      const light = new BABYLON.PointLight(
-        `light_${y}_${z}_${x}`,
-        new BABYLON.Vector3(x, y, z),
-        this.scene,
-      )
-      light.intensity = lightSettings.intensity
-      light.diffuse = new BABYLON.Color3(...lightSettings.color)
+    const light = new BABYLON.PointLight(
+      `light_${y}_${z}_${x}`,
+      new BABYLON.Vector3(x, y, z),
+      this.scene,
+    )
+    light.intensity = lightSettings.intensity
+    light.diffuse = new BABYLON.Color3(...lightSettings.color)
 
-      this.game.world.items.push(light)
+    this.game.world.items.push(light)
   }
 
   private createBox(y, z, x) {

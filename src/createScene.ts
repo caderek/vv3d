@@ -90,8 +90,8 @@ const createScene = async (engine, canvas, mobile) => {
   const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
   gui.idealHeight = 1080
 
-  const hero = new Hero(scene, game, sounds, shadows.shadowGenerator)
   const bot = new Bot(scene, game, sounds, shadows.shadowGenerator)
+  const hero = new Hero(scene, game, sounds, bot)
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
 
   const next = () => {

@@ -13,16 +13,18 @@ class Bot {
   private velocityX: number
   private visible: boolean
   private light: any
+  private delay: number
 
   constructor(scene, game, sounds, shadowGenerator) {
     this.game = game
     this.scene = scene
     this.sounds = sounds
+    this.delay = 0
     this.mesh = scene.getMeshByName("bot").parent
-    this.mesh.position.y = this.game.world.map.length - 1 - 0.5
+    this.mesh.position.y = this.game.world.map.length - 1 + 1
     this.mesh.position.z = 2
     this.mesh.position.x = 2
-    this.position = { y: (this.game.world.map.length - 1) * 10, z: 0, x: 0 }
+    this.position = { y: (this.game.world.map.length - 1) * 10, z: 20, x: 20 }
     this.mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)
     this.remainingPath = []
     this.remainingSteps = 0
@@ -38,6 +40,7 @@ class Bot {
         mesh.material.maxSimultaneousLights = 12
       })
 
+    scene.getMeshByName("bot-flame-glow").material.disableLighting = true
     // this.toggle()
   }
 
@@ -48,7 +51,14 @@ class Bot {
     animations.forEach((animation) => animation.play(true))
   }
 
-  move(destination) {}
+  move({ y, z, x }) {
+    this.delay = 15
+
+    this.remainingPath = this.game.world.graph.find(
+      `${this.position.y / 10}_${this.position.z / 10}_${this.position.x / 10}`,
+      `${y}_${z}_${x}`,
+    )
+  }
 
   toggle() {
     this.visible = !this.visible
@@ -63,26 +73,31 @@ class Bot {
   }
 
   render() {
+    if (this.delay !== 0) {
+      this.delay--
+      return
+    }
+
     if (this.remainingPath.length > 0 || this.remainingSteps > 0) {
       if (this.remainingSteps === 0) {
         const waypoint = this.remainingPath.shift()
         this.velocityZ = waypoint.z - this.position.z / 10
         this.velocityY = waypoint.y - this.position.y / 10
         this.velocityX = waypoint.x - this.position.x / 10
-        this.remainingSteps = 5
+        this.remainingSteps = 10
       }
 
-      this.position.y += this.velocityY * 2
-      this.position.z += this.velocityZ * 2
-      this.position.x += this.velocityX * 2
+      this.position.y += this.velocityY
+      this.position.z += this.velocityZ
+      this.position.x += this.velocityX
 
-      this.mesh.position.y = this.position.y / 10 - 0.5
+      this.mesh.position.y = this.position.y / 10 + 1
       this.mesh.position.z = this.position.z / 10
       this.mesh.position.x = this.position.x / 10
 
       this.remainingSteps -= 1
     } else {
-      this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 48, BABYLON.Space.LOCAL)
+      this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 60, BABYLON.Space.LOCAL)
     }
   }
 }

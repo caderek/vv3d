@@ -44,7 +44,7 @@ const createSecondaryAction = ({
       mesh.isPickable && mesh.isEnabled && !blockNames.includes(mesh.id),
   )
 
-  console.log({ picked: pickedMesh.name, pickedMesh })
+  // console.log({ picked: pickedMesh.name, pickedMesh })
 
   if (hit === true) {
     if (modelsMeta.has(pickedMesh)) {
@@ -147,7 +147,15 @@ const createSecondaryAction = ({
         sounds.build.play()
         ship.shoot(y, z, x, "left")
 
-        blocks.create(y, z, x, state.activeShape, state.activeMaterial, undefined, true)
+        blocks.create(
+          y,
+          z,
+          x,
+          state.activeShape,
+          state.activeMaterial,
+          undefined,
+          true,
+        )
       } else {
         sounds.denied.play()
       }

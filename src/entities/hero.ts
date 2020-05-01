@@ -1,4 +1,5 @@
 import * as BABYLON from "babylonjs"
+import Bot from "./bot"
 
 class Hero {
   public mesh: any
@@ -13,11 +14,13 @@ class Hero {
   private velocityX: number
   private visible: boolean
   private light: any
+  private bot: Bot
 
-  constructor(scene, game, sounds, shadowGenerator) {
+  constructor(scene, game, sounds, bot) {
     this.game = game
     this.scene = scene
     this.sounds = sounds
+    this.bot = bot
     this.mesh = scene.getMeshByName("hero").parent
     this.mesh.position.y = this.game.world.map.length - 1 - 0.5
     this.mesh.position.z = 0
@@ -54,8 +57,8 @@ class Hero {
     const coords = destination.split("_").map(Number)
     coords[0] += 1
     const [y, z, x] = coords
+
     if (this.game.world.map?.[y]?.[z]?.[x] !== 0) {
-      console.log("No!")
       this.sounds.denied.play()
       return
     }
@@ -66,12 +69,19 @@ class Hero {
     )
 
     if (this.remainingPath.length !== 0) {
+      const botTarget =
+        this.remainingPath.length > 2
+          ? this.remainingPath[this.remainingPath.length - 3]
+          : null
+
       this.sounds.go.play()
+
+      if (botTarget !== null) {
+        this.bot.move(botTarget)
+      }
     } else {
       this.sounds.denied.play()
     }
-
-    console.log("Distance:", this.remainingPath.length)
   }
 
   toggle() {
