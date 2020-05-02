@@ -1,6 +1,7 @@
 import * as BABYLON from "babylonjs"
 import Bot from "./bot"
 import Gun from "./gun"
+import getFirstEmptyField from "../helpers/getFirstEmptyField"
 
 class Hero {
   public mesh: any
@@ -25,10 +26,6 @@ class Hero {
     this.sounds = sounds
     this.bot = bot
     this.mesh = scene.getMeshByName("hero").parent
-    this.mesh.position.y = this.game.world.map.length - 1 - 0.5
-    this.mesh.position.z = 0
-    this.mesh.position.x = 0
-    this.position = { y: (this.game.world.map.length - 1) * 10, z: 0, x: 0 }
     this.mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)
     this.remainingPath = []
     this.remainingSteps = 0
@@ -38,6 +35,8 @@ class Hero {
     this.visible = true
     this.light = scene.getLightByID("Point")
     this.hand = scene.getMeshByName("hero-arm.R")
+
+    this.resetPosition()
 
     scene.meshes
       .filter((mesh) => mesh.name.includes("hero"))
@@ -100,6 +99,7 @@ class Hero {
     this.light.intensity = this.visible ? 1 : 0
 
     this.bot.toggle()
+    this.resetPosition()
 
     if (this.gun) {
       this.gun.toggle()
@@ -110,6 +110,14 @@ class Hero {
     this.gun = gun
     gun.mesh.setParent(this.hand)
     this.gun.toggle()
+  }
+
+  private resetPosition() {
+    const y = getFirstEmptyField(this.game.world.map, 1, 9)
+    this.position = { y: y * 10, z: 10, x: 90 }
+    this.mesh.position.y = y - 0.5
+    this.mesh.position.z = 1
+    this.mesh.position.x = 9
   }
 
   render() {

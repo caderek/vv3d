@@ -1,5 +1,6 @@
 import * as BABYLON from "babylonjs"
 import * as GUI from "babylonjs-gui"
+import getFirstEmptyField from "../helpers/getFirstEmptyField"
 
 class Ship {
   public mesh: any
@@ -27,10 +28,6 @@ class Ship {
     this.camera = camera
     this.mesh = scene.getMeshByName("ship").parent
     this.mesh.parent = null
-    this.mesh.position.y = this.game.world.map.length / 2 - 1
-    this.mesh.position.z = -2
-    this.mesh.position.x = this.game.world.map.length / 2
-    this.position = { y: (this.game.world.map.length - 1) * 10, z: 0, x: 0 }
     this.mesh.rotate(BABYLON.Axis.Y, (Math.PI / 2) * 3, BABYLON.Space.LOCAL)
     this.remainingPath = []
     this.remainingSteps = 0
@@ -90,9 +87,9 @@ class Ship {
     } else {
       this.mesh.parent = null
       this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.LOCAL)
-      this.mesh.position.y = this.game.world.map.length / 2 - 1
-      this.mesh.position.z = -2
-      this.mesh.position.x = this.game.world.map.length / 2
+      this.mesh.position.y = getFirstEmptyField(this.game.world.map, 1, 9) - 0.5
+      this.mesh.position.z = -1
+      this.mesh.position.x = 9
       this.camera.goToHero()
       this.screen.screen.isVisible = false
     }
