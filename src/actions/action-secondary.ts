@@ -70,16 +70,15 @@ const createSecondaryAction = ({
             toolbox.classList.toggle("hidden")
           },
           "button-green": () => {
-            const dataUrl = canvas.toDataURL("image/png")
-
-            if (mobile) {
-              // const image = new Image()
-              // image.src = dataUrl
-              // const win = window.open("")
-              // win.document.write(image.outerHTML)
-            } else {
-              downloadImage(dataUrl, "my-world.png")
-            }
+            // const dataUrl = canvas.toDataURL("image/png")
+            // if (mobile) {
+            //   const image = new Image()
+            //   image.src = dataUrl
+            //   const win = window.open("")
+            //   win.document.write(image.outerHTML)
+            // } else {
+            //   downloadImage(dataUrl, "my-world.png")
+            // }
           },
           "button-orange": () => {
             state.music = !state.music
