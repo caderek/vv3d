@@ -44,13 +44,13 @@ const createSecondaryAction = ({
       mesh.isPickable && mesh.isEnabled && !blockNames.includes(mesh.id),
   )
 
-  console.log({ picked: pickedMesh.name, pickedMesh })
+  // console.log({ picked: pickedMesh.name, pickedMesh })
 
   if (hit === true) {
     if (modelsMeta.has(pickedMesh)) {
       const meta = modelsMeta.get(pickedMesh)
 
-      console.log({ meta })
+      // console.log({ meta })
 
       if (meta.type === "monster" && state.mode === Modes.hero) {
         game.gun.shoot(meta.model)
