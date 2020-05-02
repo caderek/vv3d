@@ -1,23 +1,44 @@
 import * as BABYLON from "babylonjs"
 
+let counter = 0
+
 class Cyclops {
   public mesh: any
   private game: any
   private scene: any
   private sounds: any
 
-  constructor(scene, game, sounds) {
+  constructor(scene, game, sounds, modelsMeta) {
     this.game = game
     this.scene = scene
     this.sounds = sounds
-    this.mesh = scene.getMeshByName("cyclops").parent.clone("cyclopes")
+
+    const name = `cyclops_${counter++}`
+    const baseMesh = scene.getMeshByName("cyclops")
+    this.mesh = baseMesh.parent.clone(name)
     this.mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)
 
-    scene.meshes
-      .filter((mesh) => mesh.name.includes("cyclops"))
-      .forEach((mesh) => {
-        mesh.material.maxSimultaneousLights = 12
+    const clonedMesh = this.mesh.getChildren()[0]
+    clonedMesh.isVisible = true
+    clonedMesh.isPickable = true
+
+    modelsMeta.set(clonedMesh, {
+      root: this.mesh,
+      rootName: name,
+      type: "monster",
+      model: this,
+    })
+
+    clonedMesh.getChildren().forEach((mesh) => {
+      mesh.isVisible = true
+      mesh.isPickable = true
+      modelsMeta.set(mesh, {
+        root: this.mesh,
+        rootName: name,
+        type: "monster",
+        model: this,
       })
+    })
   }
 
   place(y, z, x) {
@@ -29,7 +50,7 @@ class Cyclops {
   }
 
   render() {
-    this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 48, BABYLON.Space.LOCAL)
+    this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 100, BABYLON.Space.LOCAL)
   }
 }
 

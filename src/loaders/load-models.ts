@@ -82,12 +82,11 @@ const loadModels = async (scene) => {
     )
   })
 
-  const cyclopsRoot = scene.getMeshByName("cyclops").parent
-
   scene.meshes
     .filter((mesh) => mesh.name.includes("cyclops"))
     .forEach((mesh) => {
-      modelsMeta.set(mesh, { root: cyclopsRoot, rootName: "cyclops" })
+      mesh.isVisible = false
+      mesh.isPickable = false
     })
 
   await new Promise((resolve, reject) => {
