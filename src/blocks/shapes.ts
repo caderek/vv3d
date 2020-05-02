@@ -49,21 +49,21 @@ const shapeEntries = [
     name: "chair",
     rotatable: true,
   },
-  {
-    id: 11,
-    name: "oven",
-    rotatable: true,
-  },
-  {
-    id: 12,
-    name: "shelf",
-    rotatable: true,
-  },
-  {
-    id: 13,
-    name: "cupboard",
-    rotatable: true,
-  },
+  // {
+  //   id: 11,
+  //   name: "oven",
+  //   rotatable: true,
+  // },
+  // {
+  //   id: 12,
+  //   name: "shelf",
+  //   rotatable: true,
+  // },
+  // {
+  //   id: 13,
+  //   name: "cupboard",
+  //   rotatable: true,
+  // },
 ]
 
 const createShapes = (scene) =>

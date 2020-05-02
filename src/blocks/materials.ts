@@ -160,7 +160,7 @@ const materialEntries = [
   {
     id: 14,
     name: "stone-purple",
-    color: [0.220, 0.003, 1],
+    color: [0.22, 0.003, 1],
     colorHex: "#810AFF",
     roughness: 0.8,
     metallic: 0,
@@ -277,8 +277,8 @@ const materialEntries = [
   {
     id: 24,
     name: "crystal-magenta",
-    color: [1, 0, 0.411],
-    colorHex: "#FF00AC",
+    color: [0.799, 0, 0.178],
+    colorHex: "#E70075",
     roughness: 0.8,
     metallic: 0,
     alpha: 1,
@@ -289,8 +289,8 @@ const materialEntries = [
   {
     id: 25,
     name: "crystal-cyan",
-    color: [0, 0.305, 1],
-    colorHex: "#0096FF",
+    color: [0, 0.266, 0.799],
+    colorHex: "#008DE7",
     roughness: 0.8,
     metallic: 0,
     alpha: 1,

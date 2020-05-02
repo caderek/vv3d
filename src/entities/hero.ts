@@ -33,7 +33,7 @@ class Hero {
     this.velocityZ = 0
     this.velocityX = 0
     this.visible = true
-    this.light = scene.getLightByID("Point")
+    this.light = scene.getLightByName("hero-light")
     this.hand = scene.getMeshByName("hero-arm.R")
 
     this.resetPosition()

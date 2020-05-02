@@ -13,7 +13,7 @@ class Bot {
   private velocityZ: number
   private velocityX: number
   private visible: boolean
-  private light: any
+  private lights: any
   private delay: number
 
   constructor(scene, game, sounds, shadowGenerator) {
@@ -32,13 +32,17 @@ class Bot {
     this.velocityZ = 0
     this.velocityX = 0
     this.visible = true
-    this.light = scene.getLightByID("Point")
+    this.lights = scene.lights.filter((light) => light.name.includes("bot"))
 
-    scene.meshes
-      .filter((mesh) => mesh.name.includes("bot"))
-      .forEach((mesh) => {
-        mesh.material.maxSimultaneousLights = 12
-      })
+    const botMeshes = scene.meshes.filter((mesh) => mesh.name.includes("bot"))
+
+    this.lights.forEach((light) => {
+      light.includedOnlyMeshes = botMeshes
+    })
+
+    botMeshes.forEach((mesh) => {
+      mesh.material.maxSimultaneousLights = 12
+    })
 
     scene.getMeshByName("bot-flame-glow").material.disableLighting = true
   }
@@ -68,7 +72,10 @@ class Bot {
         mesh.isVisible = this.visible
       })
 
-    this.light.intensity = this.visible ? 1 : 0
+    this.lights.forEach((light) => {
+      light.intensity = this.visible ? 1 : 0
+    })
+
     this.resetPosition()
   }
 

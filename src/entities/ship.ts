@@ -4,6 +4,7 @@ import getFirstEmptyField from "../helpers/getFirstEmptyField"
 
 class Ship {
   public mesh: any
+  private lights: any
   public orbiting: boolean
   private scene: any
   private game: any
@@ -35,6 +36,17 @@ class Ship {
     this.velocityZ = 0
     this.velocityX = 0
     this.orbiting = false
+    this.lights = scene.lights.filter((light) => light.name.includes("ship"))
+
+    const shipMeshes = scene.meshes.filter((mesh) => mesh.name.includes("ship"))
+
+    this.lights.forEach((light) => {
+      light.includedOnlyMeshes = shipMeshes
+    })
+
+    shipMeshes.forEach((mesh) => {
+      mesh.material.maxSimultaneousLights = 12
+    })
 
     scene.meshes
       .filter(
