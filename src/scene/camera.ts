@@ -19,11 +19,14 @@ class Camera {
     )
 
     camera.inertia = 0
-    camera.checkCollisions = true
     camera.panningInertia = 0
     camera.panningSensibility = 100
     camera.pinchPrecision = 20
     camera.pinchToPanMaxDistance = 40
+    camera.allowUpsideDown = false
+    camera.checkCollisions = true
+    camera.lowerRadiusLimit = 10
+    camera.upperRadiusLimit = 50
 
     camera.attachControl(canvas, true)
 

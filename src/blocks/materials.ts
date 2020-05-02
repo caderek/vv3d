@@ -340,8 +340,8 @@ const materialEntries = [
   {
     id: 29,
     name: "snow",
-    color: [1, 1, 1],
-    colorHex: "#FFFFFF",
+    color: [0.578, 0.831, 1],
+    colorHex: "#C8EBFF",
     roughness: 0.2,
     metallic: 0,
     alpha: 1,

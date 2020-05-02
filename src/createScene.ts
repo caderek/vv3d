@@ -101,8 +101,8 @@ const createScene = async (engine, canvas, mobile) => {
   hero.changeGun(gun)
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
   const enemies = [
-    new Cyclops(scene, game, sounds, modelsMeta).place(10, 5, 5),
-    new Cyclops(scene, game, sounds, modelsMeta).place(10, 7, 8),
+    // new Cyclops(scene, game, sounds, modelsMeta).place(10, 5, 5),
+    // new Cyclops(scene, game, sounds, modelsMeta).place(10, 7, 8),
   ]
 
   const next = () => {
@@ -113,6 +113,21 @@ const createScene = async (engine, canvas, mobile) => {
     ship.refreshScreen()
     game.pause = false
   }
+
+  var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 100.0 }, scene)
+  skybox.position.x = 9
+  skybox.position.y = 9
+  skybox.position.z = 9
+  var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene)
+  skyboxMaterial.backFaceCulling = false
+  skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+    "skybox/skybox",
+    scene,
+  )
+  skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE
+  skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0)
+  skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0)
+  skybox.material = skyboxMaterial
 
   const action1 = createPrimaryAction({
     scene,
@@ -182,6 +197,12 @@ const createScene = async (engine, canvas, mobile) => {
         state.activeMaterial = target.dataset.id
         // @ts-ignore
         $selectedMaterial.style.background = target.dataset.color
+
+        // @ts-ignore
+        const emission = Number(target.dataset.emission)
+        $selectedMaterial.style.boxShadow =
+          // @ts-ignore
+          emission > 0 ? `0 0 20px ${target.dataset.color}` : "none"
       }
     })
 

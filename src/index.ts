@@ -73,15 +73,19 @@ const renderToolboxMaterial = (id, colorHex, emission) => `
     class="material"
     data-type="material"
     data-color="${colorHex}"
+    data-emission="${emission}"
     data-id="${id}"
-    style="background: ${colorHex}; ${emission > 0 ? `box-shadow: 0 0 20px ${colorHex}` : ''}"
+    style="background: ${colorHex}; ${
+  emission > 0 ? `box-shadow: 0 0 20px ${colorHex}` : ""
+}"
   ></div>
 `
 
 const toolboxMaterials = materialEntries
-  .map(({ id, colorHex, emission }) => renderToolboxMaterial(id, colorHex, emission))
+  .map(({ id, colorHex, emission }) =>
+    renderToolboxMaterial(id, colorHex, emission),
+  )
   .join("\n")
 
 $toolboxShapes.innerHTML = toolboxShapes
 $toolboxMaterials.innerHTML = toolboxMaterials
-

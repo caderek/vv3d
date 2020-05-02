@@ -81,6 +81,14 @@ class Ship {
       label,
     }
 
+    scene.meshes
+      .filter(
+        (mesh) => mesh.name.includes("text") || mesh.name.includes("icon"),
+      )
+      .forEach((mesh) => {
+        mesh.isPickable = false
+      })
+
     this.createRay()
     this.toggle()
   }

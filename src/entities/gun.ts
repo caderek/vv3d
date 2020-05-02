@@ -58,7 +58,6 @@ class Gun {
     })
 
     this.ray.isVisible = true
-    this.sounds.gun.play()
   }
 
   private createRay() {

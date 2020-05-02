@@ -59,7 +59,6 @@ const createSecondaryAction = ({
       if (meta.rootName === "ship") {
         if (!ship.orbiting) {
           state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
-          lights.toggleSkybox()
           ship.toggle()
           hero.toggle()
           sounds.ship.play()
@@ -74,11 +73,10 @@ const createSecondaryAction = ({
             const dataUrl = canvas.toDataURL("image/png")
 
             if (mobile) {
-              const image = new Image()
-              image.src = dataUrl
-
-              const win = window.open("")
-              win.document.write(image.outerHTML)
+              // const image = new Image()
+              // image.src = dataUrl
+              // const win = window.open("")
+              // win.document.write(image.outerHTML)
             } else {
               downloadImage(dataUrl, "my-world.png")
             }
@@ -124,7 +122,6 @@ const createSecondaryAction = ({
           },
           "button-yellow": () => {
             state.mode = state.mode === Modes.build ? Modes.hero : Modes.build
-            lights.toggleSkybox()
             ship.toggle()
             hero.toggle()
             game.world.graph.create(game.world.map)
