@@ -10,6 +10,7 @@ class Gun {
   private laser: any
   private ray: any
   private rayCounter: number
+  private target: any
 
   constructor(scene, game, sounds) {
     this.game = game
@@ -34,6 +35,12 @@ class Gun {
   }
 
   shoot(target) {
+    this.target = target
+    this.rayCounter = 10
+    this.sounds.gun.play()
+  }
+
+  private renderRay() {
     BABYLON.MeshBuilder.CreateTube("gun-ray-glow", {
       path: [
         new BABYLON.Vector3(
@@ -42,16 +49,15 @@ class Gun {
           this.laser.absolutePosition.z,
         ),
         new BABYLON.Vector3(
-          target.mesh.absolutePosition.x,
-          target.mesh.absolutePosition.y,
-          target.mesh.absolutePosition.z,
+          this.target.mesh.absolutePosition.x,
+          this.target.mesh.absolutePosition.y,
+          this.target.mesh.absolutePosition.z,
         ),
       ],
       instance: this.ray,
     })
 
     this.ray.isVisible = true
-    this.rayCounter = 10
     this.sounds.gun.play()
   }
 
@@ -93,6 +99,7 @@ class Gun {
     if (this.rayCounter === 0 && this.ray.isVisible) {
       this.ray.isVisible = false
     } else if (this.rayCounter !== 0) {
+      this.renderRay()
       this.rayCounter--
     }
   }
