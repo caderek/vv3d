@@ -1,6 +1,7 @@
 import { blocksValues } from "../blocks"
 import { Modes } from "../types/enums"
 import { saveWorld } from "../save"
+import { gather, build } from "./building"
 
 const blockNames = blocksValues.map(({ name }) => name)
 
@@ -11,8 +12,9 @@ const createPrimaryAction = ({
   modelsMeta,
   sounds,
   ship,
+  blocks,
 }) => () => {
-  const { hit, pickedMesh } = scene.pick(
+  const { hit, pickedMesh, faceId } = scene.pick(
     scene.pointerX,
     scene.pointerY,
     (mesh) =>
@@ -24,17 +26,12 @@ const createPrimaryAction = ({
       const meta = modelsMeta.get(pickedMesh)
       console.log(meta)
     } else if (state.mode === Modes.build) {
-      sounds.gather.play()
-      pickedMesh.dispose()
-      scene.getMeshByName(`item_${pickedMesh.id}`).dispose()
-      const light = scene.getLightByID(`light_${pickedMesh.id}`)
-      if (light) {
-        light.dispose()
+      if (state.reverseBuild) {
+        build(game, pickedMesh, faceId, ship, sounds, blocks, state)
+      } else {
+        gather(scene, game, pickedMesh, ship, sounds)
+        saveWorld(game)
       }
-      const [y, z, x] = pickedMesh.id.split("_").map(Number)
-      ship.shoot(y, z, x, "right")
-      game.world.map[y][z][x] = 0
-      saveWorld(game)
     }
   }
 }

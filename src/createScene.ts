@@ -26,6 +26,7 @@ const createScene = async (engine, canvas, mobile) => {
     day: true,
     music: false,
     track: 0,
+    reverseBuild: false,
   }
 
   const scene = new BABYLON.Scene(engine)
@@ -84,6 +85,7 @@ const createScene = async (engine, canvas, mobile) => {
     },
     gun: null,
     pause: false,
+    mobile,
   }
 
   const camera = new Camera(scene, canvas, game)
@@ -136,6 +138,7 @@ const createScene = async (engine, canvas, mobile) => {
     modelsMeta,
     sounds,
     ship,
+    blocks,
   })
 
   const action2 = createSecondaryAction({

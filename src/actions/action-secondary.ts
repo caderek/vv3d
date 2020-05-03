@@ -1,23 +1,9 @@
 import { blocksValues } from "../blocks"
 import { Modes } from "../types/enums"
-import downloadImage from "../helpers/downloadImage"
+import { gather, build } from "./building"
+import { saveWorld } from "../save"
 
 const toolbox = document.getElementById("toolbox")
-
-const incrementByFace = {
-  0: { z: 1, y: 0, x: 0 },
-  1: { z: 1, y: 0, x: 0 },
-  2: { z: -1, y: 0, x: 0 },
-  3: { z: -1, y: 0, x: 0 },
-  4: { z: 0, y: 0, x: 1 },
-  5: { z: 0, y: 0, x: 1 },
-  6: { z: 0, y: 0, x: -1 },
-  7: { z: 0, y: 0, x: -1 },
-  8: { z: 0, y: 1, x: 0 },
-  9: { z: 0, y: 1, x: 0 },
-  10: { z: 0, y: -1, x: 0 },
-  11: { z: 0, y: -1, x: 0 },
-}
 
 const blockNames = blocksValues.map(({ name }) => name)
 
@@ -72,10 +58,14 @@ const createSecondaryAction = ({
             toolbox.classList.toggle("hidden")
           },
           "button-green": () => {
-            BABYLON.Tools.CreateScreenshot(engine, camera, {
-              width: window.innerWidth,
-              height: window.innerHeight,
-            })
+            if (!mobile) {
+              BABYLON.Tools.CreateScreenshot(engine, camera, {
+                width: window.innerWidth,
+                height: window.innerHeight,
+              })
+            } else {
+              state.reverseBuild = !state.reverseBuild
+            }
           },
           "button-orange": () => {
             state.music = !state.music
@@ -130,33 +120,11 @@ const createSecondaryAction = ({
         }
       }
     } else if (state.mode === Modes.build) {
-      const inc = incrementByFace[faceId]
-      const y = pickedMesh.position.y + inc.y
-      const z = pickedMesh.position.z + inc.z
-      const x = pickedMesh.position.x + inc.x
-
-      if (
-        y >= 0 &&
-        y < game.world.size - 2 &&
-        z > 0 &&
-        z < game.world.size - 1 &&
-        x > 0 &&
-        x < game.world.size - 1
-      ) {
-        sounds.build.play()
-        ship.shoot(y, z, x, "left")
-
-        blocks.create(
-          y,
-          z,
-          x,
-          state.activeShape,
-          state.activeMaterial,
-          undefined,
-          true,
-        )
+      if (state.reverseBuild) {
+        gather(scene, game, pickedMesh, ship, sounds)
+        saveWorld(game)
       } else {
-        sounds.denied.play()
+        build(game, pickedMesh, faceId, ship, sounds, blocks, state)
       }
     } else {
       hero.move(pickedMesh.id)

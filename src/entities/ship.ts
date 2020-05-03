@@ -57,6 +57,12 @@ class Ship {
         mesh.material.disableLighting = true
       })
 
+    if (game.mobile) {
+      scene.getMeshByName("ship-button-icon-camera").isVisible = false
+    } else {
+      scene.getMeshByName("ship-button-icon-toggle-lasers").isVisible = false
+    }
+
     this.laserLeft = scene.getMeshByName("ship-laser.L")
     this.laserRight = scene.getMeshByName("ship-laser.R")
 
