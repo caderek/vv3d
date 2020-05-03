@@ -22,7 +22,7 @@ const main = async () => {
   const canvas = document.getElementById("viewport") as HTMLCanvasElement
 
   const engine = new BABYLON.Engine(canvas, true, {
-    // preserveDrawingBuffer: true,
+    preserveDrawingBuffer: true,
     // stencil: true,
     disableWebGL2Support: true,
   })

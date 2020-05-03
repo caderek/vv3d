@@ -153,6 +153,8 @@ const createScene = async (engine, canvas, mobile) => {
     blocks,
     shadows,
     next,
+    engine,
+    camera,
   })
 
   const controls = handleControls(scene, action1, action2, canvas, mobile)

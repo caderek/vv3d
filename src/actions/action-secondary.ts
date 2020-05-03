@@ -36,6 +36,8 @@ const createSecondaryAction = ({
   blocks,
   shadows,
   next,
+  engine,
+  camera,
 }) => () => {
   const { hit, pickedMesh, faceId } = scene.pick(
     scene.pointerX,
@@ -70,15 +72,10 @@ const createSecondaryAction = ({
             toolbox.classList.toggle("hidden")
           },
           "button-green": () => {
-            // const dataUrl = canvas.toDataURL("image/png")
-            // if (mobile) {
-            //   const image = new Image()
-            //   image.src = dataUrl
-            //   const win = window.open("")
-            //   win.document.write(image.outerHTML)
-            // } else {
-            //   downloadImage(dataUrl, "my-world.png")
-            // }
+            BABYLON.Tools.CreateScreenshot(engine, camera, {
+              width: window.innerWidth,
+              height: window.innerHeight,
+            })
           },
           "button-orange": () => {
             state.music = !state.music
