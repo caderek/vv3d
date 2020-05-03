@@ -61,7 +61,7 @@ class Lights {
   private createLights() {
     const top = new BABYLON.DirectionalLight(
       "topLight",
-      new BABYLON.Vector3(50, -50, 50),
+      new BABYLON.Vector3(30, -30, 30),
       this.scene,
     )
     top.diffuse = new BABYLON.Color3(1, 1, 1)
@@ -71,7 +71,7 @@ class Lights {
 
     const bottom = new BABYLON.DirectionalLight(
       "bottomLight",
-      new BABYLON.Vector3(-50, 50, -50),
+      new BABYLON.Vector3(-30, 30, -30),
       this.scene,
     )
     bottom.intensity = 0.5

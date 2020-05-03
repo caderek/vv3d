@@ -102,7 +102,7 @@ const createSecondaryAction = ({
               state.day
                 ? {
                     top: 4,
-                    bottom: 0.5,
+                    bottom: 1,
                     ambient: 0.2,
                     skyAlpha: 0.95,
                     color: "#FFFFFF",
@@ -110,7 +110,7 @@ const createSecondaryAction = ({
                 : {
                     top: 0.1,
                     bottom: 0.1,
-                    ambient: 0.05,
+                    ambient: 0.1,
                     skyAlpha: 0.1,
                     color: "#9fbfff",
                   },
