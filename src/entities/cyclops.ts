@@ -39,6 +39,8 @@ class Cyclops {
         model: this,
       })
     })
+
+    game.world.items.push(this.mesh)
   }
 
   place(y, z, x) {
@@ -48,6 +50,8 @@ class Cyclops {
 
     return this
   }
+
+  move() {}
 
   render() {
     this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 100, BABYLON.Space.LOCAL)

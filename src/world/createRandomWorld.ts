@@ -3,6 +3,7 @@ import { materialEntries } from "../blocks/materials"
 import * as SimplexNoise from "simplex-noise"
 // @ts-ignore
 import seedrandom from "seedrandom"
+import getFirstEmptyField from "../helpers/getFirstEmptyField"
 
 const randomToInt = (num, min, max) => {
   return Math.floor(num * (max - min + 1)) + min
@@ -11,6 +12,8 @@ const randomToInt = (num, min, max) => {
 const randomInt = (rng, min, max) => {
   return Math.floor(rng() * (max - min + 1)) + min
 }
+
+const mobTypes = [{ name: "Cyclops" }]
 
 const randomName = () => {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -157,13 +160,30 @@ const createNatureWorld = (rng) => {
   return map
 }
 
+const addMobs = (rng, map) => {
+  const amount = randomInt(rng, 0, 10)
+  let mobs = []
+
+  for (let i = 0; i < amount; i++) {
+    const name = mobTypes[randomInt(rng, 0, mobTypes.length - 1)].name
+    const x = randomInt(rng, 1, map.length - 2)
+    const z = randomInt(rng, 1, map.length - 2)
+    const y = getFirstEmptyField(map, z, x)
+    mobs.push({ name, y, z, x })
+  }
+
+  return mobs
+}
+
 const createRandomWorld = () => {
   const name = randomName()
   const seed = name
   const rng = seedrandom(seed)
   const generator = createNatureWorld
+  const map = generator(rng)
+  const mobs = addMobs(rng, map)
 
-  return { map: generator(rng), data: { name } }
+  return { map, data: { name }, mobs }
 }
 
 export default createRandomWorld

@@ -7,7 +7,6 @@ import Hero from "./entities/hero"
 import Bot from "./entities/bot"
 import Gun from "./entities/gun"
 import Ship from "./entities/ship"
-import Cyclops from "./entities/cyclops"
 import loadModels from "./loaders/load-models"
 import Camera from "./scene/camera"
 import createPrimaryAction from "./actions/action-primary"
@@ -82,7 +81,9 @@ const createScene = async (engine, canvas, mobile) => {
       graph: null,
       size: null,
       items: [],
+      mobs: [],
     },
+    mobs: [],
     gun: null,
     pause: false,
     mobile,
@@ -91,7 +92,16 @@ const createScene = async (engine, canvas, mobile) => {
   const camera = new Camera(scene, canvas, game)
   const blocks = new Blocks(scene, game, shadows)
 
-  createWorld(game, savedWorld, blocks, scene, shadows, lights)
+  createWorld(
+    game,
+    savedWorld,
+    blocks,
+    scene,
+    shadows,
+    lights,
+    sounds,
+    modelsMeta,
+  )
 
   const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
   gui.idealHeight = 1080
@@ -102,15 +112,11 @@ const createScene = async (engine, canvas, mobile) => {
   game.gun = gun
   hero.changeGun(gun)
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
-  const enemies = [
-    // new Cyclops(scene, game, sounds, modelsMeta).place(10, 5, 5),
-    // new Cyclops(scene, game, sounds, modelsMeta).place(10, 7, 8),
-  ]
 
   const next = () => {
     game.pause = true
     game.world.items.forEach((item) => item.dispose())
-    createWorld(game, null, blocks, scene, shadows, lights)
+    createWorld(game, null, blocks, scene, shadows, lights, sounds, modelsMeta)
     camera.goToOrbit()
     ship.refreshScreen()
     game.pause = false
@@ -170,7 +176,7 @@ const createScene = async (engine, canvas, mobile) => {
     bot.render()
     ship.render()
     gun.render()
-    enemies.forEach((enemy) => enemy.render())
+    game.mobs.forEach((enemy) => enemy.render())
 
     scene.render()
   }

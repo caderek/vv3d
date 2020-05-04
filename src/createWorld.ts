@@ -2,12 +2,27 @@ import blocksInfo from "./blocks"
 import createRandomWorld from "./world/createRandomWorld"
 import WorldGraph from "./world/world-graph"
 import { saveWorld } from "./save"
+import Cyclops from "./entities/cyclops"
 
-const createWorld = (game, savedWorld, blocks, scene, shadows, lights) => {
-  const { map, data } = savedWorld ? savedWorld : createRandomWorld()
+const mobClasses = {
+  Cyclops,
+}
+
+const createWorld = (
+  game,
+  savedWorld,
+  blocks,
+  scene,
+  shadows,
+  lights,
+  sounds,
+  modelsMeta,
+) => {
+  const { map, data, mobs } = savedWorld ? savedWorld : createRandomWorld()
   game.world.map = map
   game.world.data = data
   game.world.graph = new WorldGraph(game)
+  game.world.mobs = mobs
 
   game.world.size = game.world.map.length
   game.world.items = []
@@ -27,6 +42,13 @@ const createWorld = (game, savedWorld, blocks, scene, shadows, lights) => {
   }
 
   lights.createSkybox(game.world.size)
+
+  if (mobs) {
+    game.mobs = mobs.map(({ name, y, z, x }) =>
+      new mobClasses[name](scene, game, sounds, modelsMeta).place(y, z, x),
+    )
+  }
+
   saveWorld(game)
 }
 
