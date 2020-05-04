@@ -54,7 +54,7 @@ class Cyclops {
   move() {}
 
   render() {
-    this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 100, BABYLON.Space.LOCAL)
+    this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 80, BABYLON.Space.LOCAL)
   }
 }
 
