@@ -5,7 +5,7 @@ const saveWorld = (game) => {
       map: game.world.map,
       data: game.world.data,
       mobs: game.world.mobs,
-      version: "0.1.0",
+      version: "0.1.1",
     }),
   )
 }
