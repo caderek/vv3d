@@ -2,11 +2,7 @@ import blocksInfo from "./blocks"
 import createRandomWorld from "./world/createRandomWorld"
 import WorldGraph from "./world/world-graph"
 import { saveWorld } from "./save"
-import Cyclops from "./entities/cyclops"
-
-const mobClasses = {
-  Cyclops,
-}
+import Mob from "./entities/mob"
 
 const createWorld = (
   game,
@@ -44,8 +40,9 @@ const createWorld = (
   lights.createSkybox(game.world.size)
 
   if (mobs) {
-    game.mobs = mobs.map(({ name, y, z, x }) =>
-      new mobClasses[name](scene, game, sounds, modelsMeta).place(y, z, x),
+    console.log("Mobs count:", mobs.length)
+    game.mobs = mobs.map(({ mobData, y, z, x }) =>
+      new Mob(mobData, scene, game, sounds, modelsMeta).place(y, z, x),
     )
   }
 

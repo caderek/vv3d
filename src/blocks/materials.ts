@@ -371,6 +371,10 @@ const createMaterials = (scene) =>
     }),
   )
 
-export { materialEntries }
+const materialsByID = Object.fromEntries(
+  materialEntries.map((entry) => [entry.id, entry]),
+)
+
+export { materialEntries, materialsByID }
 
 export default createMaterials

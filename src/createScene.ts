@@ -63,6 +63,8 @@ const createScene = async (engine, canvas, mobile) => {
   const lights = new Lights(scene)
   const shadows = new Shadows(scene, lights.top)
 
+  // window.localStorage.removeItem("world")
+
   let savedWorldEntry = window.localStorage.getItem("world")
   let savedWorld
 

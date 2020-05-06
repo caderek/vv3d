@@ -40,7 +40,7 @@ const createSecondaryAction = ({
 
       // console.log({ meta })
 
-      if (meta.type === "monster" && state.mode === Modes.hero) {
+      if (meta.type === "mob" && state.mode === Modes.hero) {
         game.gun.shoot(meta.model)
       }
 

@@ -5,7 +5,7 @@ import "babylonjs-loaders"
 // @ts-ignore
 import * as isMobile from "is-mobile"
 import { blocksValues } from "./blocks"
-// import stats from "./helpers/stats"
+import stats from "./helpers/stats"
 import gameLoop from "./game-loop"
 import createScene from "./createScene"
 import * as GUI from "babylonjs-gui"
@@ -16,7 +16,7 @@ const $toolboxShapes = document.getElementById("toolbox-shapes")
 const $toolboxMaterials = document.getElementById("toolbox-materials")
 
 const mobile = isMobile()
-const targetFPS = 20
+const targetFPS = 30
 
 const main = async () => {
   const canvas = document.getElementById("viewport") as HTMLCanvasElement
@@ -31,11 +31,20 @@ const main = async () => {
 
   const { renderFrame, scene, game } = await createScene(engine, canvas, mobile)
 
+  const camera = scene.activeCamera
+
+  // new BABYLON.FxaaPostProcess("fxaa", 1.0, camera)
+  // new BABYLON.BlackAndWhitePostProcess("bandw", 1.0, camera)
+  // new BABYLON.BloomEffect(scene, 1, 1, 1);
+  // scene.fogMode = BABYLON.Scene.FOGMODE_EXP
+  // scene.fogDensity = 0.01
+  // scene.fogColor = new BABYLON.Color3(0.799, 0, 0.178)
+
   gameLoop(() => {
     if (!game.pause) {
-      // stats.begin()
+      stats.begin()
       renderFrame()
-      // stats.end()
+      stats.end()
     }
   }, targetFPS)
 

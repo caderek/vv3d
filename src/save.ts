@@ -1,5 +1,4 @@
 const saveWorld = (game) => {
-  console.log({ mobsSave: game.world.mobs })
   window.localStorage.setItem(
     "world",
     JSON.stringify({

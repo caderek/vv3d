@@ -74,7 +74,7 @@ const loadModels = async (scene) => {
   await new Promise((resolve, reject) => {
     BABYLON.SceneLoader.Append(
       "models/",
-      `cyclops.glb`,
+      `mobs.glb`,
       scene,
       resolve,
       null,
@@ -83,7 +83,12 @@ const loadModels = async (scene) => {
   })
 
   scene.meshes
-    .filter((mesh) => mesh.name.includes("cyclops"))
+    .filter(
+      (mesh) =>
+        mesh.name.includes("bobby") ||
+        mesh.name.includes("andy") ||
+        mesh.name.includes("john"),
+    )
     .forEach((mesh) => {
       mesh.isVisible = false
       mesh.isPickable = false
