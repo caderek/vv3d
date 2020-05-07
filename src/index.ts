@@ -16,7 +16,7 @@ const $toolboxShapes = document.getElementById("toolbox-shapes")
 const $toolboxMaterials = document.getElementById("toolbox-materials")
 
 const mobile = isMobile()
-const targetFPS = 30
+const targetFPS = 20
 
 const main = async () => {
   const canvas = document.getElementById("viewport") as HTMLCanvasElement

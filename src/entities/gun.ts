@@ -3,18 +3,20 @@ import Bot from "./bot"
 
 class Gun {
   public mesh: any
+  public laser: any
   private game: any
   private scene: any
   private sounds: any
   private visible: boolean
-  private laser: any
   private ray: any
   private rayCounter: number
   private target: any
+  private modelsMeta: any
 
-  constructor(scene, game, sounds) {
+  constructor(scene, game, sounds, modelsMeta) {
     this.game = game
     this.scene = scene
+    this.modelsMeta = modelsMeta
     this.sounds = sounds
     this.mesh = scene.getMeshByName("gun-pew-pew").parent
     // this.mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)

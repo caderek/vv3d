@@ -41,7 +41,7 @@ const createSecondaryAction = ({
       // console.log({ meta })
 
       if (meta.type === "mob" && state.mode === Modes.hero) {
-        game.gun.shoot(meta.model)
+        game.hero.attack(meta.model)
       }
 
       if (meta.rootName === "ship") {

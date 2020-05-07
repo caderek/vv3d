@@ -42,7 +42,7 @@ const createWorld = (
   if (mobs) {
     console.log("Mobs count:", mobs.length)
     game.mobs = mobs.map(({ mobData, y, z, x }) =>
-      new Mob(mobData, scene, game, sounds, modelsMeta).place(y, z, x),
+      new Mob(mobData, scene, game, sounds, modelsMeta, shadows).place(y, z, x),
     )
   }
 
