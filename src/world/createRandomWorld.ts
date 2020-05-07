@@ -170,6 +170,11 @@ const generateMobs = (rng, map) => {
 
   for (let z = 1; z < map.length - 1; z++) {
     for (let x = 1; x < map.length - 1; x++) {
+      // Exclude hero and bot positions
+      if ((z === 1 && x === 9) || (z === 1 && x === 8)) {
+        continue
+      }
+
       const y = getFirstEmptyField(map, z, x) - 1
 
       if (y > 0) {

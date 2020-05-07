@@ -47,6 +47,7 @@ const createScene = async (engine, canvas, mobile) => {
     gather: new BABYLON.Sound("gather", "sound/gather.mp3", scene),
     build: new BABYLON.Sound("build", "sound/build.mp3", scene),
     gun: new BABYLON.Sound("gun", "sound/gun.mp3", scene),
+    copy: new BABYLON.Sound("copy", "sound/copy.mp3", scene),
   }
 
   const songs = [

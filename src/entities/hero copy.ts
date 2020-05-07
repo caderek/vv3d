@@ -65,27 +65,18 @@ class Hero {
   attack(target) {
     this.attacking = true
     this.target = target
-
-    if (!this.checkIfTargetIsInRange(this.gun.laser.absolutePosition, target)) {
-      this.sounds.copy.play()
-      this.getInRange(target)
-    } else {
-      this.shoot(target)
-    }
-  }
-
-  private shoot(target) {
-    this.rotateTowards(target)
-    this.gun.shoot(target)
-
-    this.attacking = false
-  }
-
-  private rotateTowards(target) {
     const angle = -this.getAngleBetweenHeroAndTarget(target)
     const axis = new BABYLON.Vector3(0, 1, 0)
     const quaternion = BABYLON.Quaternion.RotationAxis(axis, angle)
     this.mesh.rotationQuaternion = quaternion
+
+    if (this.isTargetInRange(target)) {
+      this.gun.shoot(target)
+      this.attacking = false
+      this.steps = null
+    } else {
+      this.sounds.copy.play()
+    }
   }
 
   private getAngleBetweenHeroAndTarget(target) {
@@ -98,40 +89,9 @@ class Hero {
     return rad
   }
 
-  private getInRange(target) {
-    const isTargetInRange = this.checkIfTargetIsInRange(
-      this.gun.laser.absolutePosition,
-      target,
-    )
-
-    if (!isTargetInRange) {
-      const targetFieldId = `${Math.round(target.mesh.position.y)}_${
-        target.mesh.position.z
-      }_${target.mesh.position.x}`
-
-      const steps = this.game.world.graph
-        .find(
-          `${this.position.y / 10}_${this.position.z / 10}_${
-            this.position.x / 10
-          }`,
-          targetFieldId,
-        )
-        .slice(0, -1)
-
-      for (let i = 0; i < steps.length; i++) {
-        const from = new BABYLON.Vector3(steps[i].x, steps[i].y, steps[i].z)
-        const isTargetInRange = this.checkIfTargetIsInRange(from, target)
-        if (isTargetInRange) {
-          this.remainingPath = steps.slice(0, i + 1)
-          break
-        }
-      }
-    }
-  }
-
-  private checkIfTargetIsInRange(from, target) {
+  private isTargetInRange(target) {
     const pickingRay = BABYLON.Ray.CreateNewFromTo(
-      from,
+      this.gun.laser.absolutePosition,
       target.mesh.absolutePosition,
     )
 
@@ -140,7 +100,37 @@ class Hero {
       return mesh.isPickable && (meta === undefined || meta.type === "mob")
     })
 
-    return hit.pickedMesh === target.mesh
+    if (hit.pickedMesh !== target.mesh) {
+      this.moveOneStep(
+        Math.round(target.mesh.position.y),
+        target.mesh.position.z,
+        target.mesh.position.x,
+      )
+
+      return false
+    }
+
+    return true
+  }
+
+  moveOneStep(y, z, x) {
+    if (!this.steps) {
+      this.steps = this.game.world.graph.find(
+        `${this.position.y / 10}_${this.position.z / 10}_${
+          this.position.x / 10
+        }`,
+        `${y}_${z}_${x}`,
+      )
+    }
+
+    const step = [this.steps.shift()]
+
+    if (step.length === 1) {
+      this.remainingPath = step
+      return true
+    }
+
+    return false
   }
 
   move(destination) {
@@ -231,7 +221,7 @@ class Hero {
       this.remainingSteps -= 1
     } else {
       if (this.attacking) {
-        this.shoot(this.target)
+        this.attack(this.target)
       } else {
         // this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 48, BABYLON.Space.LOCAL)
       }
