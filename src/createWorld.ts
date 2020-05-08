@@ -40,10 +40,15 @@ const createWorld = (
   lights.createSkybox(game.world.size)
 
   if (mobs) {
-    console.log("Mobs count:", mobs.length)
-    game.mobs = mobs.map(({ mobData, y, z, x }) =>
-      new Mob(mobData, scene, game, sounds, modelsMeta, shadows).place(y, z, x),
-    )
+    mobs.forEach(({ mobData, y, z, x }) => {
+      game.mobs.set(
+        new Mob(mobData, scene, game, sounds, modelsMeta, shadows).place(
+          y,
+          z,
+          x,
+        ),
+      )
+    })
   }
 
   saveWorld(game)

@@ -1,4 +1,5 @@
 import * as BABYLON from "babylonjs"
+import { saveWorld } from "../save"
 
 let counter = 0
 
@@ -100,6 +101,12 @@ class Mob {
           this.dead = true
           this.sounds.pop.play()
           this.mesh.dispose()
+          this.game.mobs.delete(this)
+          // !todo optimize this to quickly remove from array (or change array to object)
+          this.game.world.mobs = this.game.world.mobs.filter(
+            ({ mobData }) => mobData.id !== this.mobData.id,
+          )
+          saveWorld(this.game)
         } else {
           this.ticksToDie--
         }

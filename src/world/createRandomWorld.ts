@@ -186,7 +186,10 @@ const generateMobs = (rng, map) => {
   }
 
   for (let i = 0; i < amount; i++) {
-    const mobData = mobsData[randomInt(rng, 0, mobsData.length - 1)]
+    const mobData = {
+      ...mobsData[randomInt(rng, 0, mobsData.length - 1)],
+      id: i,
+    }
 
     const spawns =
       mobData.environment === Environments.land

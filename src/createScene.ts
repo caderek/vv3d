@@ -87,7 +87,7 @@ const createScene = async (engine, canvas, mobile) => {
       items: [],
       mobs: [],
     },
-    mobs: [],
+    mobs: new Map(),
     hero: null,
     pause: false,
     mobile,
@@ -180,7 +180,7 @@ const createScene = async (engine, canvas, mobile) => {
     bot.render()
     ship.render()
     gun.render()
-    game.mobs.forEach((enemy) => enemy.render())
+    game.mobs.forEach((_, mob) => mob.render())
 
     scene.render()
   }
