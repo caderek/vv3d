@@ -8,12 +8,19 @@ class Mob {
   private scene: any
   private sounds: any
   private mobData: any
+  private dying: boolean
+  private dead: boolean
+  private ticksToDie: number
+  private health: number
 
   constructor(mobData, scene, game, sounds, modelsMeta, shadows) {
     this.game = game
     this.scene = scene
     this.sounds = sounds
     this.mobData = mobData
+    this.health = mobData.health
+    this.dead = false
+    this.dying = false
 
     const name = `${mobData.type}_${counter++}`
     const baseMesh = scene.getMeshByName(mobData.type)
@@ -56,6 +63,18 @@ class Mob {
 
   move() {}
 
+  takeDamage(damage, weaponCycle) {
+    this.health -= damage
+
+    if (this.health <= 0) {
+      this.dying = true
+      this.ticksToDie = weaponCycle - 2
+      return true
+    }
+
+    return false
+  }
+
   private createHitBox(name) {
     const box = BABYLON.MeshBuilder.CreateBox(
       name,
@@ -75,6 +94,17 @@ class Mob {
 
   render() {
     this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 80, BABYLON.Space.LOCAL)
+    if (!this.dead) {
+      if (this.dying) {
+        if (this.ticksToDie <= 0) {
+          this.dead = true
+          this.sounds.pop.play()
+          this.mesh.dispose()
+        } else {
+          this.ticksToDie--
+        }
+      }
+    }
   }
 }
 

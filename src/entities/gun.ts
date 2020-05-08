@@ -4,6 +4,8 @@ import Bot from "./bot"
 class Gun {
   public mesh: any
   public laser: any
+  public damage: number
+  public cycle: number
   private game: any
   private scene: any
   private sounds: any
@@ -19,9 +21,10 @@ class Gun {
     this.modelsMeta = modelsMeta
     this.sounds = sounds
     this.mesh = scene.getMeshByName("gun-pew-pew").parent
-    // this.mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)
     this.visible = true
     this.laser = scene.getMeshByName("gun-pew-pew-crystal-glow")
+    this.damage = 5
+    this.cycle = 10
 
     scene.meshes
       .filter((mesh) => mesh.name.includes("gun"))
@@ -99,6 +102,7 @@ class Gun {
   render() {
     if (this.rayCounter === 0 && this.ray.isVisible) {
       this.ray.isVisible = false
+      this.sounds.gun.stop()
     } else if (this.rayCounter !== 0) {
       this.renderRay()
       this.rayCounter--

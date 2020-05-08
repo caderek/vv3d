@@ -22,7 +22,7 @@ class Hero {
   private attacking: boolean
   private target: any
   private modelsMeta: any
-  private steps: any[]
+  private attackTicks: number
 
   constructor(scene, game, sounds, bot, modelsMeta) {
     this.game = game
@@ -31,6 +31,7 @@ class Hero {
     this.modelsMeta = modelsMeta
     this.bot = bot
     this.attacking = false
+    this.attackTicks = 0
     this.mesh = scene.getMeshByName("hero").parent
     this.mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)
     this.remainingPath = []
@@ -75,10 +76,12 @@ class Hero {
   }
 
   private shoot(target) {
+    this.attackTicks = this.gun.cycle
     this.rotateTowards(target)
     this.gun.shoot(target)
+    const isDead = target.takeDamage(this.gun.damage, this.gun.cycle)
 
-    this.attacking = false
+    this.attacking = !isDead
   }
 
   private rotateTowards(target) {
@@ -145,6 +148,7 @@ class Hero {
 
   move(destination) {
     this.attacking = false
+    this.attackTicks = 0
     this.target = null
 
     const coords = destination.split("_").map(Number)
@@ -178,6 +182,8 @@ class Hero {
   }
 
   toggle() {
+    this.attacking = false
+    this.target = null
     this.visible = !this.visible
     this.mesh.isVisible = this.visible
     this.scene.meshes
@@ -231,7 +237,11 @@ class Hero {
       this.remainingSteps -= 1
     } else {
       if (this.attacking) {
-        this.shoot(this.target)
+        if (this.attackTicks === 0) {
+          this.shoot(this.target)
+        } else {
+          this.attackTicks--
+        }
       } else {
         // this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 48, BABYLON.Space.LOCAL)
       }

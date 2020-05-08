@@ -19,6 +19,7 @@ const mobsData = [
     speed: 1,
     sight: 10,
     damage: 1,
+    health: 10,
   },
   {
     type: "john",
@@ -28,6 +29,7 @@ const mobsData = [
     speed: 1,
     sight: 10,
     damage: 1,
+    health: 20,
   },
   {
     type: "bobby",
@@ -37,6 +39,7 @@ const mobsData = [
     speed: 1,
     sight: 10,
     damage: 1,
+    health: 5,
   },
 ]
 
