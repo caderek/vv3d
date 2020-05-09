@@ -405,7 +405,11 @@ const createMaterials = (scene) =>
       material.roughness = entry.roughness
       material.metallic = entry.metallic
       material.maxSimultaneousLights = 12
-      material.backFaceCulling = true
+      // material.backFaceCulling = entry.alpha === 1
+
+      if (entry.alpha !== 1) {
+        material.alphaMode = BABYLON.Engine.ALPHA_MAXIMIZED
+      }
 
       if (entry.emission !== 0) {
         material.emissiveColor = new BABYLON.Color3(...entry.color)

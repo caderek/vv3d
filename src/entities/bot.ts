@@ -58,7 +58,9 @@ class Bot {
     this.delay = 15
 
     this.remainingPath = this.game.world.graph.find(
-      `${this.position.y / 10}_${this.position.z / 10}_${this.position.x / 10}`,
+      `${Math.round(this.position.y / 10)}_${Math.round(
+        this.position.z / 10,
+      )}_${Math.round(this.position.x / 10)}`,
       `${y}_${z}_${x}`,
     )
   }

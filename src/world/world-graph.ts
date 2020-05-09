@@ -2,6 +2,7 @@
 import createGraph from "ngraph.graph"
 // @ts-ignore
 import Path from "ngraph.path"
+import { materialsByID } from "../blocks/materials"
 
 const perpendicularWeight = 1
 const diagonalWeight2d = Math.sqrt(2)
@@ -221,13 +222,27 @@ class WorldGraph {
     }
   }
 
+  private isAirOrWater(worldItem) {
+    if (worldItem === undefined) {
+      return false
+    }
+
+    if (worldItem === 0) {
+      return true
+    }
+
+    const material = worldItem.split("_")[1]
+
+    return materialsByID[material].groups.includes("water")
+  }
+
   private checkTarget(base, inc) {
     const yy = base.y + inc.y
     const zz = base.z + inc.z
     const xx = base.x + inc.x
 
     return {
-      isEmpty: this.game.world.map?.[yy]?.[zz]?.[xx] === 0,
+      isEmpty: this.isAirOrWater(this.game.world.map?.[yy]?.[zz]?.[xx]),
       yy,
       zz,
       xx,
@@ -235,7 +250,7 @@ class WorldGraph {
   }
 
   private addPaths(y, z, x) {
-    if (this.game.world.map?.[y]?.[z]?.[x] === 0) {
+    if (this.isAirOrWater(this.game.world.map?.[y]?.[z]?.[x])) {
       const base = { x, y, z }
 
       this.graph.addNode(`${y}_${z}_${x}`, { y, z, x })
@@ -281,7 +296,7 @@ class WorldGraph {
   }
 
   private removePaths(y, z, x) {
-    if (this.game.world.map?.[y]?.[z]?.[x] === 0) {
+    if (this.isAirOrWater(this.game.world.map?.[y]?.[z]?.[x])) {
       const base = { x, y, z }
 
       increments.forEach((inc) => {
@@ -337,13 +352,10 @@ class WorldGraph {
   }
 
   find(from, to) {
-    if (!this.graph.hasNode(from)) {
-      const [y, z, x] = from.split("_")
-      from = `${Math.round(y)}_${Math.round(z)}_${Math.round(x)}`
-    }
-
-    if (!this.graph.hasNode(to)) {
+    if (!this.graph.hasNode(from) || !this.graph.hasNode(to)) {
       return []
+      // const [y, z, x] = from.split("_")
+      // from = `${Math.round(y)}_${Math.round(z)}_${Math.round(x)}`
     }
 
     const pathFinder = Path.nba(this.graph, {
