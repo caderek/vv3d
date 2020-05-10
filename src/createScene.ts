@@ -75,7 +75,7 @@ const createScene = async (engine, canvas, mobile) => {
   if (savedWorldEntry) {
     savedWorld = JSON.parse(savedWorldEntry)
 
-    if (savedWorld.version !== "0.1.2") {
+    if (savedWorld.version !== "0.1.3") {
       window.localStorage.removeItem("world")
       savedWorld = undefined
     }
