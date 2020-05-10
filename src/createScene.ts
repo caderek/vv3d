@@ -75,7 +75,7 @@ const createScene = async (engine, canvas, mobile) => {
   if (savedWorldEntry) {
     savedWorld = JSON.parse(savedWorldEntry)
 
-    if (savedWorld.version !== "0.1.5") {
+    if (savedWorld.version !== "0.1.6") {
       window.localStorage.removeItem("world")
       savedWorld = undefined
     }
@@ -219,13 +219,28 @@ const createScene = async (engine, canvas, mobile) => {
       // @ts-ignore
       if (target.dataset.type === "material") {
         sounds.button.play()
-        // @ts-ignore
-        state.activeMaterial = target.dataset.id
-        // @ts-ignore
-        $selectedMaterial.style.background = target.dataset.color
 
         // @ts-ignore
         const emission = Number(target.dataset.emission)
+        // @ts-ignore
+        const light = target.dataset.light === '1'
+
+        // @ts-ignore
+        state.activeMaterial = target.dataset.id
+        if (light) {
+          // @ts-ignore
+          $selectedMaterial.style.background = 'none'
+          $selectedMaterial.style.backgroundImage =
+            // @ts-ignore
+            `radial-gradient(${target.dataset.color}, rgba(0, 0, 0, 0))`
+        } else {
+          // @ts-ignore
+          $selectedMaterial.style.backgroundImage = 'none'
+          // @ts-ignore
+          $selectedMaterial.style.background = target.dataset.color
+        }
+
+
         $selectedMaterial.style.boxShadow =
           // @ts-ignore
           emission > 0 ? `0 0 20px ${target.dataset.color}` : "none"

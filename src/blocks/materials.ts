@@ -264,6 +264,18 @@ const materialEntries = [
   },
   {
     id: 23,
+    name: "snow",
+    color: [0.578, 0.831, 1],
+    colorHex: "#C8EBFF",
+    roughness: 0.2,
+    metallic: 0,
+    alpha: 1,
+    emission: 0,
+    light: null,
+    groups: ["bio"],
+  },
+  {
+    id: 24,
     name: "crystal-yellow",
     color: [1, 0.468, 0],
     colorHex: "#FFB600",
@@ -275,7 +287,7 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 24,
+    id: 25,
     name: "crystal-magenta",
     color: [0.799, 0, 0.178],
     colorHex: "#E70075",
@@ -287,7 +299,7 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 25,
+    id: 26,
     name: "crystal-cyan",
     color: [0, 0.266, 0.799],
     colorHex: "#008DE7",
@@ -299,7 +311,7 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 26,
+    id: 27,
     name: "crystal-red",
     color: [1, 0.011, 0],
     colorHex: "#FF1B00",
@@ -311,7 +323,7 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 27,
+    id: 28,
     name: "crystal-green",
     color: [0.266, 1, 0],
     colorHex: "#8DFF00",
@@ -323,7 +335,7 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 28,
+    id: 29,
     name: "light-white",
     color: [1, 1, 1],
     colorHex: "#FFFFFF",
@@ -336,18 +348,6 @@ const materialEntries = [
       color: [1, 1, 1],
     },
     groups: ["light"],
-  },
-  {
-    id: 29,
-    name: "snow",
-    color: [0.578, 0.831, 1],
-    colorHex: "#C8EBFF",
-    roughness: 0.2,
-    metallic: 0,
-    alpha: 1,
-    emission: 0,
-    light: null,
-    groups: ["bio"],
   },
   {
     id: 30,

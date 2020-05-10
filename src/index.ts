@@ -37,8 +37,8 @@ const main = async () => {
   // new BABYLON.BlackAndWhitePostProcess("bandw", 1.0, camera)
   // new BABYLON.BloomEffect(scene, 1, 1, 1);
   // scene.fogMode = BABYLON.Scene.FOGMODE_EXP
-  // scene.fogDensity = 0.01
-  // scene.fogColor = new BABYLON.Color3(0.799, 0, 0.178)
+  // scene.fogDensity = 0.1
+  // scene.fogColor = new BABYLON.Color3(0, 0, 0)
 
   gameLoop(() => {
     if (!game.pause) {
@@ -77,22 +77,29 @@ const toolboxShapes = shapeEntries
   .map(({ name, id }) => renderToolboxShape(name, id))
   .join("\n")
 
-const renderToolboxMaterial = (id, colorHex, emission) => `
-  <div
-    class="material"
-    data-type="material"
-    data-color="${colorHex}"
-    data-emission="${emission}"
-    data-id="${id}"
-    style="background: ${colorHex}; ${
-  emission > 0 ? `box-shadow: 0 0 20px ${colorHex}` : ""
-}"
-  ></div>
-`
+const renderToolboxMaterial = (id, colorHex, emission, light) => {
+  const style = light
+    ? `background-image: radial-gradient(${colorHex}, rgba(0, 0, 0, 0)); box-shadow: 0 0 20px ${colorHex}`
+    : emission > 0
+    ? `background: ${colorHex}; box-shadow: 0 0 20px ${colorHex}`
+    : `background: ${colorHex};`
+
+  return `
+    <div
+      class="material"
+      data-type="material"
+      data-color="${colorHex}"
+      data-emission="${emission}"
+      data-light=${light ? 1 : 0}
+      data-id="${id}"
+      style="${style}"
+    ></div>
+  `
+}
 
 const toolboxMaterials = materialEntries
-  .map(({ id, colorHex, emission }) =>
-    renderToolboxMaterial(id, colorHex, emission),
+  .map(({ id, colorHex, emission, light }) =>
+    renderToolboxMaterial(id, colorHex, emission, light),
   )
   .join("\n")
 

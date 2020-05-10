@@ -310,7 +310,7 @@ class Hero {
           this.attackTicks--
         }
       } else {
-        // this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 48, BABYLON.Space.LOCAL)
+        this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 64, BABYLON.Space.LOCAL)
       }
     }
   }
