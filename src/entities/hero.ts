@@ -5,6 +5,7 @@ import getFirstEmptyField from "../helpers/getFirstEmptyField"
 
 class Hero {
   public mesh: any
+  public onLand: boolean
   private hand: any
   private game: any
   private scene: any
@@ -15,7 +16,6 @@ class Hero {
   private velocityY: number
   private velocityZ: number
   private velocityX: number
-  private visible: boolean
   private light: any
   private bot: Bot
   private gun: Gun
@@ -23,6 +23,8 @@ class Hero {
   private target: any
   private modelsMeta: any
   private attackTicks: number
+  private life: number
+  private visible: boolean
 
   constructor(scene, game, sounds, bot, modelsMeta) {
     this.game = game
@@ -32,8 +34,16 @@ class Hero {
     this.bot = bot
     this.attacking = false
     this.attackTicks = 0
-    this.mesh = scene.getMeshByName("hero").parent
-    this.mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)
+    this.life = 100
+
+    const hitBox = this.createHitBox("h-box")
+    const baseMesh = scene.getMeshByName("hero")
+
+    baseMesh.setParent(hitBox)
+    baseMesh.position.y = -0.25
+    baseMesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.LOCAL)
+
+    this.mesh = hitBox
     this.remainingPath = []
     this.remainingSteps = 0
     this.velocityY = 0
@@ -42,6 +52,14 @@ class Hero {
     this.visible = true
     this.light = scene.getLightByName("hero-light")
     this.hand = scene.getMeshByName("hero-arm.R")
+    this.onLand = true
+
+    modelsMeta.set(hitBox, {
+      root: hitBox,
+      rootName: "hero",
+      type: "hero",
+      model: this,
+    })
 
     this.resetPosition()
 
@@ -75,13 +93,33 @@ class Hero {
     }
   }
 
-  private shoot(target) {
-    this.attackTicks = this.gun.cycle
-    this.rotateTowards(target)
-    this.gun.shoot(target)
-    const isDead = target.takeDamage(this.gun.damage, this.gun.cycle)
+  takeDamage(damage) {
+    this.sounds.ugh.play()
+    this.life -= damage
 
-    this.attacking = !isDead
+    if (this.life <= 0) {
+      this.die()
+    }
+  }
+
+  private die() {
+    this.sounds.die.play()
+    this.toggle()
+    this.game.ship.toggle()
+    this.life = 100
+  }
+
+  revealPosition() {}
+
+  private shoot(target) {
+    if (this.checkIfTargetIsInRange) {
+      this.attackTicks = this.gun.cycle
+      this.rotateTowards(target)
+      this.gun.shoot(target)
+      const isDead = target.takeDamage(this.gun.damage, this.gun.cycle)
+
+      this.attacking = !isDead
+    }
   }
 
   private rotateTowards(target) {
@@ -108,17 +146,18 @@ class Hero {
     )
 
     if (!isTargetInRange) {
-      const targetFieldId = `${Math.round(target.mesh.position.y)}_${
-        target.mesh.position.z
-      }_${target.mesh.position.x}`
+      this.attackTicks = 0
+
+      const targetFieldId = `${Math.round(target.mesh.position.y)}_${Math.round(
+        target.mesh.position.z,
+      )}_${Math.round(target.mesh.position.x)}`
+
+      const heroFieldId = `${this.position.y / 10}_${this.position.z / 10}_${
+        this.position.x / 10
+      }`
 
       const steps = this.game.world.graph
-        .find(
-          `${this.position.y / 10}_${this.position.z / 10}_${
-            this.position.x / 10
-          }`,
-          targetFieldId,
-        )
+        .find(heroFieldId, targetFieldId)
         .slice(0, -1)
 
       for (let i = 0; i < steps.length; i++) {
@@ -184,10 +223,10 @@ class Hero {
   }
 
   toggle() {
+    this.onLand = !this.onLand
     this.attacking = false
     this.target = null
     this.visible = !this.visible
-    this.mesh.isVisible = this.visible
     this.scene.meshes
       .filter((mesh) => mesh.name.includes("hero"))
       .forEach((mesh) => {
@@ -213,9 +252,29 @@ class Hero {
   private resetPosition() {
     const y = getFirstEmptyField(this.game.world.map, 1, 9)
     this.position = { y: y * 10, z: 10, x: 90 }
-    this.mesh.position.y = y - 0.5
+    this.mesh.position.y = y + 0.5
     this.mesh.position.z = 1
     this.mesh.position.x = 9
+  }
+
+  private createHitBox(name) {
+    const box = BABYLON.MeshBuilder.CreateBox(
+      name,
+      {
+        width: 1,
+        height: 1,
+        depth: 1,
+      },
+      this.scene,
+    )
+
+    box.material = new BABYLON.StandardMaterial("boxxx", this.scene)
+    box.material.alpha = 0.8
+
+    box.isVisible = false
+    box.isPickable = true
+
+    return box
   }
 
   render() {
@@ -232,7 +291,7 @@ class Hero {
       this.position.z += this.velocityZ * 2
       this.position.x += this.velocityX * 2
 
-      this.mesh.position.y = this.position.y / 10 - 0.5
+      this.mesh.position.y = this.position.y / 10 + 0.5
       this.mesh.position.z = this.position.z / 10
       this.mesh.position.x = this.position.x / 10
 

@@ -30,7 +30,7 @@ const loadModels = async (scene) => {
   scene.meshes
     .filter((mesh) => mesh.name.includes("hero"))
     .forEach((mesh) => {
-      modelsMeta.set(mesh, { root: heroRoot, rootName: "hero" })
+      mesh.isPickable = false
     })
 
   await new Promise((resolve, reject) => {

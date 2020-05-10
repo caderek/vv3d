@@ -49,6 +49,8 @@ const createScene = async (engine, canvas, mobile) => {
     gun: new BABYLON.Sound("gun", "sound/gun.mp3", scene),
     copy: new BABYLON.Sound("copy", "sound/copy.mp3", scene),
     pop: new BABYLON.Sound("pop", "sound/pop.mp3", scene),
+    ugh: new BABYLON.Sound("ugh", "sound/ugh.mp3", scene),
+    die: new BABYLON.Sound("die", "sound/die.mp3", scene),
   }
 
   const songs = [
@@ -88,7 +90,9 @@ const createScene = async (engine, canvas, mobile) => {
       mobs: [],
     },
     mobs: new Map(),
+    bullets: new Map(),
     hero: null,
+    ship: null,
     pause: false,
     mobile,
   }
@@ -116,9 +120,12 @@ const createScene = async (engine, canvas, mobile) => {
   const gun = new Gun(scene, game, sounds, modelsMeta)
   hero.changeGun(gun)
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
+  game.ship = ship
 
   const next = () => {
     game.pause = true
+    game.bullets.forEach((_, bullet) => bullet.mesh.dispose())
+    game.bullets = new Map()
     game.world.items.forEach((item) => item.dispose())
     createWorld(game, null, blocks, scene, shadows, lights, sounds, modelsMeta)
     camera.goToOrbit()
@@ -180,6 +187,7 @@ const createScene = async (engine, canvas, mobile) => {
     bot.render()
     ship.render()
     gun.render()
+    game.bullets.forEach((_, bullet) => bullet.render())
     game.mobs.forEach((_, mob) => mob.render())
 
     scene.render()

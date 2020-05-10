@@ -166,7 +166,7 @@ const createNatureWorld = (rng) => {
 }
 
 const generateMobs = (rng, map) => {
-  const amount = randomInt(rng, 1, 10)
+  const amount = randomInt(rng, 1, 20)
   let mobs = []
 
   const spawnPoints = {
@@ -223,7 +223,7 @@ const createRandomWorld = () => {
   const rng = seedrandom(seed)
   const generator = createNatureWorld
   const { map, hasLife } = generator(rng)
-  const mobs = hasLife ? generateMobs(rng, map) : []
+  const mobs = generateMobs(rng, map) //hasLife ? generateMobs(rng, map) : []
 
   return { map, data: { name }, mobs }
 }

@@ -1,8 +1,9 @@
 import * as BABYLON from "babylonjs"
 import { saveWorld } from "../save"
-import { Environments } from "../world/mobsData"
+import { Environments, Behaviors } from "../world/mobsData"
 import { materialsByID } from "../blocks/materials"
 import { randomInt } from "../helpers/random"
+import Bullet from "./bullet"
 
 let counter = 0
 
@@ -23,12 +24,18 @@ class Mob {
   private health: number
   private gridPosition: any
   private checkFn: any
-  private action: Actions
   private remainingPath: any[]
   private remainingSteps: number
   private velocityX: number
   private velocityY: number
   private velocityZ: number
+  private remainingWait: number
+  private continueMoving: boolean
+  private actions: any[]
+  private rotationSpeed: number
+  private modelsMeta: any
+  private speed: number
+  private attackTicks: number
 
   constructor(mobData, scene, game, sounds, modelsMeta, shadows) {
     this.game = game
@@ -45,9 +52,16 @@ class Mob {
     }[mobData.environment]
     this.remainingPath = []
     this.remainingSteps = 0
+    this.continueMoving = false
     this.velocityX = 0
     this.velocityY = 0
     this.velocityZ = 0
+    this.rotationSpeed = randomInt(Math.random, 6, 10) * 10
+    this.modelsMeta = modelsMeta
+    this.speed = this.mobData.speed
+    this.attackTicks = 0
+
+    this.actions = [this.move, this.stay]
 
     const name = `${mobData.type}_${counter++}`
     const baseMesh = scene.getMeshByName(mobData.type)
@@ -93,7 +107,7 @@ class Mob {
   }
 
   move() {
-    this.action = Actions.move
+    this.continueMoving = Math.random() < this.mobData.mobility
     const availableBlocks = this.getAvailableBlocks()
 
     if (availableBlocks.length === 0) {
@@ -110,7 +124,9 @@ class Mob {
     )
   }
 
-  stay() {}
+  stay() {
+    this.remainingWait = randomInt(Math.random, 20, 100)
+  }
 
   private getAvailableBlocks() {
     const availableBlocks = []
@@ -203,8 +219,78 @@ class Mob {
     return box
   }
 
+  attack() {
+    if (
+      this.game.hero &&
+      this.game.hero.onLand &&
+      this.mobData.behavior === Behaviors.aggressive
+    ) {
+      const isTargetInRange = this.checkIfTargetIsInRange(
+        this.mesh.absolutePosition,
+      )
+
+      if (isTargetInRange) {
+        this.attackTicks = 20
+        this.game.bullets.set(
+          new Bullet(
+            this.scene,
+            this.game,
+            this.mesh,
+            this.mobData.damage,
+            this.mobData.attackSpeed,
+          ),
+        )
+      } else {
+        this.getInRange()
+      }
+    }
+  }
+
+  private getInRange() {
+    const heroFieldId = `${Math.round(
+      this.game.hero.mesh.position.y,
+    )}_${Math.round(this.game.hero.mesh.position.z)}_${Math.round(
+      this.game.hero.mesh.position.x,
+    )}`
+
+    const mobFieldId = `${Math.round(this.gridPosition.y)}_${Math.round(
+      this.gridPosition.z,
+    )}_${Math.round(this.gridPosition.x)}`
+
+    const steps = this.game.world.graph
+      .find(mobFieldId, heroFieldId)
+      .slice(0, -1)
+
+    for (let i = 0; i < steps.length; i++) {
+      const from = new BABYLON.Vector3(steps[i].x, steps[i].y, steps[i].z)
+      const isTargetInRange = this.checkIfTargetIsInRange(from)
+      if (isTargetInRange) {
+        this.remainingPath = steps.slice(0, i + 1)
+        break
+      }
+    }
+  }
+
+  private checkIfTargetIsInRange(from) {
+    const pickingRay = BABYLON.Ray.CreateNewFromTo(
+      from,
+      this.game.hero.mesh.absolutePosition,
+    )
+
+    const hit = this.scene.pickWithRay(pickingRay, (mesh) => {
+      const meta = this.modelsMeta.get(mesh)
+      return mesh.isPickable && (meta === undefined || meta.type === "hero")
+    })
+
+    return hit.pickedMesh === this.game.hero.mesh
+  }
+
   render() {
-    this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 80, BABYLON.Space.LOCAL)
+    this.mesh.rotate(
+      BABYLON.Axis.Y,
+      Math.PI / this.rotationSpeed,
+      BABYLON.Space.LOCAL,
+    )
 
     if (!this.dead) {
       if (this.dying) {
@@ -234,24 +320,56 @@ class Mob {
           this.velocityY = waypoint.y - this.gridPosition.y
           this.velocityX = waypoint.x - this.gridPosition.x
 
-          this.remainingSteps = Math.round(1 / this.mobData.speed)
+          this.remainingSteps = Math.round(1 / this.speed)
         }
 
-        this.gridPosition.y += this.velocityY * this.mobData.speed
-        this.gridPosition.z += this.velocityZ * this.mobData.speed
-        this.gridPosition.x += this.velocityX * this.mobData.speed
+        this.gridPosition.y += this.velocityY * this.speed
+        this.gridPosition.z += this.velocityZ * this.speed
+        this.gridPosition.x += this.velocityX * this.speed
 
-        this.mesh.position.y += this.velocityY * this.mobData.speed
-        this.mesh.position.z += this.velocityZ * this.mobData.speed
-        this.mesh.position.x += this.velocityX * this.mobData.speed
+        this.mesh.position.y += this.velocityY * this.speed
+        this.mesh.position.z += this.velocityZ * this.speed
+        this.mesh.position.x += this.velocityX * this.speed
 
         this.remainingSteps--
+      } else if (this.remainingWait > 0) {
+        this.remainingWait--
+      } else if (this.attackTicks !== 0) {
+        this.attackTicks--
       } else {
         this.gridPosition.z = Math.round(this.gridPosition.z)
         this.gridPosition.y = Math.round(this.gridPosition.y)
         this.gridPosition.x = Math.round(this.gridPosition.x)
 
-        this.move()
+        const action = randomInt(Math.random, 0, 2)
+
+        if (this.continueMoving) {
+          this.move()
+          return
+        }
+
+        if (this.mobData.behavior === Behaviors.aggressive) {
+          const distanceToHero = this.game.hero.mesh.position
+            .subtract(this.mesh.position)
+            .length()
+
+          if (distanceToHero <= this.mobData.sight) {
+            this.speed = this.mobData.runSpeed
+            this.attack()
+            return
+          }
+        }
+
+        this.speed = this.mobData.speed
+
+        switch (action) {
+          case Actions.move:
+            this.move()
+            break
+          case Actions.stay:
+            this.stay()
+            break
+        }
       }
     }
   }

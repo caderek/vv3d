@@ -22,6 +22,7 @@ const createWorld = (
 
   game.world.size = game.world.map.length
   game.world.items = []
+  game.mobs = new Map()
 
   for (let y = 0; y < game.world.size; y++) {
     for (let z = 0; z < game.world.size; z++) {
