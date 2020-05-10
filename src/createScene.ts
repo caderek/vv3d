@@ -115,7 +115,7 @@ const createScene = async (engine, canvas, mobile) => {
   gui.idealHeight = 1080
 
   const bot = new Bot(scene, game, sounds, shadows.shadowGenerator)
-  const hero = new Hero(scene, game, sounds, bot, modelsMeta)
+  const hero = new Hero(scene, state, game, sounds, bot, modelsMeta)
   game.hero = hero
   const gun = new Gun(scene, game, sounds, modelsMeta)
   hero.changeGun(gun)

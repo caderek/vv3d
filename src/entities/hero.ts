@@ -2,12 +2,14 @@ import * as BABYLON from "babylonjs"
 import Bot from "./bot"
 import Gun from "./gun"
 import getFirstEmptyField from "../helpers/getFirstEmptyField"
+import { Modes } from "../types/enums"
 
 class Hero {
   public mesh: any
   public onLand: boolean
   private hand: any
   private game: any
+  private state: any
   private scene: any
   private sounds: any
   private position: any
@@ -26,7 +28,7 @@ class Hero {
   private life: number
   private visible: boolean
 
-  constructor(scene, game, sounds, bot, modelsMeta) {
+  constructor(scene, state, game, sounds, bot, modelsMeta) {
     this.game = game
     this.scene = scene
     this.sounds = sounds
@@ -35,6 +37,7 @@ class Hero {
     this.attacking = false
     this.attackTicks = 0
     this.life = 100
+    this.state = state
 
     const hitBox = this.createHitBox("h-box")
     const baseMesh = scene.getMeshByName("hero")
@@ -106,6 +109,7 @@ class Hero {
     this.sounds.die.play()
     this.toggle()
     this.game.ship.toggle()
+    this.state.mode = this.state.mode === Modes.build ? Modes.hero : Modes.build
     this.life = 100
   }
 
