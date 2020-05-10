@@ -13,7 +13,7 @@ enum Environments {
 const mobsData = [
   {
     type: "andy",
-    offsetY: -0.2,
+    offsetY: 0,
     environment: Environments.land,
     behavior: Behaviors.peaceful,
     speed: 0.05,
@@ -25,7 +25,7 @@ const mobsData = [
     mobility: 0.5,
   },
   {
-    type: "john",
+    type: "pete",
     offsetY: 0.2,
     environment: Environments.air,
     behavior: Behaviors.aggressive,
@@ -38,7 +38,7 @@ const mobsData = [
     mobility: 0.8,
   },
   {
-    type: "bobby",
+    type: "nemo",
     offsetY: -0.3,
     environment: Environments.water,
     behavior: Behaviors.peaceful,

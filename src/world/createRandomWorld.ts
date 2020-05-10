@@ -55,10 +55,10 @@ const createNatureWorld = (rng) => {
   const hasCaves = rng() > 0.5
   const lifeRand = rng()
   const hasLife = hasGrass
-    ? lifeRand > 0.5
+    ? lifeRand > 0.3
     : hasWater
-    ? lifeRand > 0.8
-    : lifeRand > 0.99
+    ? lifeRand > 0.5
+    : lifeRand > 0.9
 
   const resourceMaterials = materialEntries
     .filter(({ groups }) => groups.includes("resource"))
@@ -166,7 +166,7 @@ const createNatureWorld = (rng) => {
 }
 
 const generateMobs = (rng, map) => {
-  const amount = randomInt(rng, 1, 20)
+  const amount = randomInt(rng, 3, 15)
   let mobs = []
 
   const spawnPoints = {
@@ -223,7 +223,7 @@ const createRandomWorld = () => {
   const rng = seedrandom(seed)
   const generator = createNatureWorld
   const { map, hasLife } = generator(rng)
-  const mobs = generateMobs(rng, map) //hasLife ? generateMobs(rng, map) : []
+  const mobs = hasLife ? generateMobs(rng, map) : []
 
   return { map, data: { name }, mobs }
 }

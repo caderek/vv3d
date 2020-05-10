@@ -75,7 +75,7 @@ const createScene = async (engine, canvas, mobile) => {
   if (savedWorldEntry) {
     savedWorld = JSON.parse(savedWorldEntry)
 
-    if (savedWorld.version !== "0.1.3") {
+    if (savedWorld.version !== "0.1.5") {
       window.localStorage.removeItem("world")
       savedWorld = undefined
     }
@@ -121,6 +121,8 @@ const createScene = async (engine, canvas, mobile) => {
   hero.changeGun(gun)
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
   game.ship = ship
+
+  console.log({ scene })
 
   const next = () => {
     game.pause = true

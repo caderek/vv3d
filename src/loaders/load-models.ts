@@ -85,9 +85,9 @@ const loadModels = async (scene) => {
   scene.meshes
     .filter(
       (mesh) =>
-        mesh.name.includes("bobby") ||
         mesh.name.includes("andy") ||
-        mesh.name.includes("john"),
+        mesh.name.includes("pete") ||
+        mesh.name.includes("nemo"),
     )
     .forEach((mesh) => {
       mesh.isVisible = false
