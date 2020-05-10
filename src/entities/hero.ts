@@ -118,7 +118,7 @@ class Hero {
   private shoot(target) {
     if (this.checkIfTargetIsInRange) {
       this.attackTicks = this.gun.cycle
-      this.rotateTowards(target)
+      this.rotateTowards(target.mesh.position)
       this.gun.shoot(target)
       const isDead = target.takeDamage(this.gun.damage, this.gun.cycle)
 
@@ -136,7 +136,7 @@ class Hero {
   private getAngleBetweenHeroAndTarget(target) {
     const angle = BABYLON.Angle.BetweenTwoPoints(
       new BABYLON.Vector2(this.mesh.position.x, this.mesh.position.z),
-      new BABYLON.Vector2(target.mesh.position.x, target.mesh.position.z),
+      new BABYLON.Vector2(target.x, target.z),
     )
     const rad = angle.radians()
 
@@ -289,6 +289,8 @@ class Hero {
         this.velocityY = waypoint.y - this.position.y / 10
         this.velocityX = waypoint.x - this.position.x / 10
         this.remainingSteps = 5
+
+        this.rotateTowards(new BABYLON.Vector3(waypoint.x, waypoint.y, waypoint.z))
       }
 
       this.position.y += this.velocityY * 2

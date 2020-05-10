@@ -36,6 +36,7 @@ class Mob {
   private modelsMeta: any
   private speed: number
   private attackTicks: number
+  private attacking: boolean
 
   constructor(mobData, scene, game, sounds, modelsMeta, shadows) {
     this.game = game
@@ -60,6 +61,7 @@ class Mob {
     this.modelsMeta = modelsMeta
     this.speed = this.mobData.speed
     this.attackTicks = 0
+    this.attacking = false
 
     this.actions = [this.move, this.stay]
 
@@ -230,6 +232,7 @@ class Mob {
       )
 
       if (isTargetInRange) {
+        this.rotateTowards(this.game.hero.mesh.position)
         this.attackTicks = 20
         this.game.bullets.set(
           new Bullet(
@@ -245,6 +248,25 @@ class Mob {
       }
     }
   }
+
+
+  private rotateTowards(target) {
+    const angle = -this.getAngleToTarget(target) + Math.PI / 2
+    const axis = new BABYLON.Vector3(0, 1, 0)
+    const quaternion = BABYLON.Quaternion.RotationAxis(axis, angle)
+    this.mesh.rotationQuaternion = quaternion
+  }
+
+  private getAngleToTarget(target) {
+    const angle = BABYLON.Angle.BetweenTwoPoints(
+      new BABYLON.Vector2(this.mesh.position.x, this.mesh.position.z),
+      new BABYLON.Vector2(target.x, target.z),
+    )
+    const rad = angle.radians()
+
+    return rad
+  }
+
 
   private getInRange() {
     const heroFieldId = `${Math.round(
@@ -286,12 +308,6 @@ class Mob {
   }
 
   render() {
-    this.mesh.rotate(
-      BABYLON.Axis.Y,
-      Math.PI / this.rotationSpeed,
-      BABYLON.Space.LOCAL,
-    )
-
     if (!this.dead) {
       if (this.dying) {
         if (this.ticksToDie <= 0) {
@@ -321,6 +337,8 @@ class Mob {
           this.velocityX = waypoint.x - this.gridPosition.x
 
           this.remainingSteps = Math.round(1 / this.speed)
+
+          this.rotateTowards(new BABYLON.Vector3(waypoint.x, waypoint.y, waypoint.z))
         }
 
         this.gridPosition.y += this.velocityY * this.speed
@@ -333,6 +351,12 @@ class Mob {
 
         this.remainingSteps--
       } else if (this.remainingWait > 0) {
+        this.mesh.rotate(
+          BABYLON.Axis.Y,
+          Math.PI / this.rotationSpeed,
+          BABYLON.Space.LOCAL,
+        )
+
         this.remainingWait--
       } else if (this.attackTicks !== 0) {
         this.attackTicks--
