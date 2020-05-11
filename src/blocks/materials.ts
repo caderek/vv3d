@@ -264,6 +264,18 @@ const materialEntries = [
   },
   {
     id: 23,
+    name: "snow",
+    color: [0.578, 0.831, 1],
+    colorHex: "#C8EBFF",
+    roughness: 0.2,
+    metallic: 0,
+    alpha: 1,
+    emission: 0,
+    light: null,
+    groups: ["bio"],
+  },
+  {
+    id: 24,
     name: "crystal-yellow",
     color: [1, 0.468, 0],
     colorHex: "#FFB600",
@@ -275,7 +287,7 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 24,
+    id: 25,
     name: "crystal-magenta",
     color: [0.799, 0, 0.178],
     colorHex: "#E70075",
@@ -287,7 +299,7 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 25,
+    id: 26,
     name: "crystal-cyan",
     color: [0, 0.266, 0.799],
     colorHex: "#008DE7",
@@ -299,7 +311,7 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 26,
+    id: 27,
     name: "crystal-red",
     color: [1, 0.011, 0],
     colorHex: "#FF1B00",
@@ -311,7 +323,7 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 27,
+    id: 28,
     name: "crystal-green",
     color: [0.266, 1, 0],
     colorHex: "#8DFF00",
@@ -323,13 +335,13 @@ const materialEntries = [
     groups: ["crystal"],
   },
   {
-    id: 28,
+    id: 29,
     name: "light-white",
     color: [1, 1, 1],
     colorHex: "#FFFFFF",
     roughness: 0.8,
     metallic: 0,
-    alpha: 1,
+    alpha: 0.5,
     emission: 1,
     light: {
       intensity: 10,
@@ -338,16 +350,49 @@ const materialEntries = [
     groups: ["light"],
   },
   {
-    id: 29,
-    name: "snow",
-    color: [0.578, 0.831, 1],
-    colorHex: "#C8EBFF",
-    roughness: 0.2,
+    id: 30,
+    name: "light-red",
+    color: [1, 0, 0],
+    colorHex: "#FF0000",
+    roughness: 0.8,
     metallic: 0,
-    alpha: 1,
-    emission: 0,
-    light: null,
-    groups: ["bio"],
+    alpha: 0.5,
+    emission: 1,
+    light: {
+      intensity: 10,
+      color: [1, 0, 0],
+    },
+    groups: ["light"],
+  },
+  {
+    id: 31,
+    name: "light-magenta",
+    color: [0.799, 0, 0.178],
+    colorHex: "#E70075",
+    roughness: 0.8,
+    metallic: 0,
+    alpha: 0.5,
+    emission: 1,
+    light: {
+      intensity: 10,
+      color: [0.799, 0, 0.178],
+    },
+    groups: ["light"],
+  },
+  {
+    id: 32,
+    name: "light-cyan",
+    color: [0, 0.266, 0.799],
+    colorHex: "#008DE7",
+    roughness: 0.8,
+    metallic: 0,
+    alpha: 0.5,
+    emission: 1,
+    light: {
+      intensity: 10,
+      color: [0, 0.266, 0.799],
+    },
+    groups: ["light"],
   },
 ]
 
@@ -360,7 +405,11 @@ const createMaterials = (scene) =>
       material.roughness = entry.roughness
       material.metallic = entry.metallic
       material.maxSimultaneousLights = 12
-      material.backFaceCulling = true
+      // material.backFaceCulling = entry.alpha === 1
+
+      if (entry.alpha !== 1) {
+        material.alphaMode = BABYLON.Engine.ALPHA_MAXIMIZED
+      }
 
       if (entry.emission !== 0) {
         material.emissiveColor = new BABYLON.Color3(...entry.color)
@@ -371,6 +420,10 @@ const createMaterials = (scene) =>
     }),
   )
 
-export { materialEntries }
+const materialsByID = Object.fromEntries(
+  materialEntries.map((entry) => [entry.id, entry]),
+)
+
+export { materialEntries, materialsByID }
 
 export default createMaterials

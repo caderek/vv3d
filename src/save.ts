@@ -4,7 +4,8 @@ const saveWorld = (game) => {
     JSON.stringify({
       map: game.world.map,
       data: game.world.data,
-      version: "0.1.0",
+      mobs: game.world.mobs,
+      version: "0.1.6",
     }),
   )
 }

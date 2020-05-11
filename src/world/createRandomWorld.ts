@@ -1,8 +1,10 @@
-import { materialEntries } from "../blocks/materials"
+import { materialEntries, materialsByID } from "../blocks/materials"
 // @ts-ignore
 import * as SimplexNoise from "simplex-noise"
 // @ts-ignore
 import seedrandom from "seedrandom"
+import getFirstEmptyField from "../helpers/getFirstEmptyField"
+import mobsData, { Environments } from "./mobsData"
 
 const randomToInt = (num, min, max) => {
   return Math.floor(num * (max - min + 1)) + min
@@ -51,6 +53,12 @@ const createNatureWorld = (rng) => {
   const hasWater = rng() > 0.5
   const hasGrass = rng() > 0.5 && hasWater
   const hasCaves = rng() > 0.5
+  const lifeRand = rng()
+  const hasLife = hasGrass
+    ? lifeRand > 0.3
+    : hasWater
+    ? lifeRand > 0.5
+    : lifeRand > 0.9
 
   const resourceMaterials = materialEntries
     .filter(({ groups }) => groups.includes("resource"))
@@ -154,7 +162,59 @@ const createNatureWorld = (rng) => {
     }
   }
 
-  return map
+  return { map, hasLife }
+}
+
+const generateMobs = (rng, map) => {
+  const amount = randomInt(rng, 3, 15)
+  let mobs = []
+
+  const spawnPoints = {
+    land: [],
+    water: [],
+  }
+
+  for (let z = 1; z < map.length - 1; z++) {
+    for (let x = 1; x < map.length - 1; x++) {
+      // Exclude hero and bot positions
+      if ((z === 1 && x === 9) || (z === 1 && x === 8)) {
+        continue
+      }
+
+      const y = getFirstEmptyField(map, z, x) - 1
+
+      if (y > 0) {
+        const blockMaterial = map[y][z][x].split("_")[1]
+        const isWater = materialsByID[blockMaterial].groups.includes("water")
+        spawnPoints[isWater ? "water" : "land"].push({ y: y + 1, z, x })
+      }
+    }
+  }
+
+  for (let i = 0; i < amount; i++) {
+    const mobData = {
+      ...mobsData[randomInt(rng, 0, mobsData.length - 1)],
+      id: i,
+    }
+
+    const spawns =
+      mobData.environment === Environments.land
+        ? spawnPoints.land
+        : mobData.environment === Environments.water
+        ? spawnPoints.water
+        : rng() > 0.5
+        ? spawnPoints.land
+        : spawnPoints.water
+
+    const index = randomInt(rng, 0, spawns.length)
+    const point = spawns.splice(index, 1)[0]
+
+    if (point) {
+      mobs.push({ mobData, ...point })
+    }
+  }
+
+  return mobs
 }
 
 const createRandomWorld = () => {
@@ -162,8 +222,10 @@ const createRandomWorld = () => {
   const seed = name
   const rng = seedrandom(seed)
   const generator = createNatureWorld
+  const { map, hasLife } = generator(rng)
+  const mobs = hasLife ? generateMobs(rng, map) : []
 
-  return { map: generator(rng), data: { name } }
+  return { map, data: { name }, mobs }
 }
 
 export default createRandomWorld

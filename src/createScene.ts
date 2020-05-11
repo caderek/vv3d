@@ -7,7 +7,6 @@ import Hero from "./entities/hero"
 import Bot from "./entities/bot"
 import Gun from "./entities/gun"
 import Ship from "./entities/ship"
-import Cyclops from "./entities/cyclops"
 import loadModels from "./loaders/load-models"
 import Camera from "./scene/camera"
 import createPrimaryAction from "./actions/action-primary"
@@ -48,6 +47,10 @@ const createScene = async (engine, canvas, mobile) => {
     gather: new BABYLON.Sound("gather", "sound/gather.mp3", scene),
     build: new BABYLON.Sound("build", "sound/build.mp3", scene),
     gun: new BABYLON.Sound("gun", "sound/gun.mp3", scene),
+    copy: new BABYLON.Sound("copy", "sound/copy.mp3", scene),
+    pop: new BABYLON.Sound("pop", "sound/pop.mp3", scene),
+    ugh: new BABYLON.Sound("ugh", "sound/ugh.mp3", scene),
+    die: new BABYLON.Sound("die", "sound/die.mp3", scene),
   }
 
   const songs = [
@@ -64,13 +67,15 @@ const createScene = async (engine, canvas, mobile) => {
   const lights = new Lights(scene)
   const shadows = new Shadows(scene, lights.top)
 
+  // window.localStorage.removeItem("world")
+
   let savedWorldEntry = window.localStorage.getItem("world")
   let savedWorld
 
   if (savedWorldEntry) {
     savedWorld = JSON.parse(savedWorldEntry)
 
-    if (savedWorld.version !== "0.1.0") {
+    if (savedWorld.version !== "0.1.6") {
       window.localStorage.removeItem("world")
       savedWorld = undefined
     }
@@ -82,8 +87,12 @@ const createScene = async (engine, canvas, mobile) => {
       graph: null,
       size: null,
       items: [],
+      mobs: [],
     },
-    gun: null,
+    mobs: new Map(),
+    bullets: new Map(),
+    hero: null,
+    ship: null,
     pause: false,
     mobile,
   }
@@ -91,26 +100,36 @@ const createScene = async (engine, canvas, mobile) => {
   const camera = new Camera(scene, canvas, game)
   const blocks = new Blocks(scene, game, shadows)
 
-  createWorld(game, savedWorld, blocks, scene, shadows, lights)
+  createWorld(
+    game,
+    savedWorld,
+    blocks,
+    scene,
+    shadows,
+    lights,
+    sounds,
+    modelsMeta,
+  )
 
   const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
   gui.idealHeight = 1080
 
   const bot = new Bot(scene, game, sounds, shadows.shadowGenerator)
-  const hero = new Hero(scene, game, sounds, bot)
-  const gun = new Gun(scene, game, sounds)
-  game.gun = gun
+  const hero = new Hero(scene, state, game, sounds, bot, modelsMeta)
+  game.hero = hero
+  const gun = new Gun(scene, game, sounds, modelsMeta)
   hero.changeGun(gun)
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
-  const enemies = [
-    // new Cyclops(scene, game, sounds, modelsMeta).place(10, 5, 5),
-    // new Cyclops(scene, game, sounds, modelsMeta).place(10, 7, 8),
-  ]
+  game.ship = ship
+
+  console.log({ scene })
 
   const next = () => {
     game.pause = true
+    game.bullets.forEach((_, bullet) => bullet.mesh.dispose())
+    game.bullets = new Map()
     game.world.items.forEach((item) => item.dispose())
-    createWorld(game, null, blocks, scene, shadows, lights)
+    createWorld(game, null, blocks, scene, shadows, lights, sounds, modelsMeta)
     camera.goToOrbit()
     ship.refreshScreen()
     game.pause = false
@@ -170,7 +189,8 @@ const createScene = async (engine, canvas, mobile) => {
     bot.render()
     ship.render()
     gun.render()
-    enemies.forEach((enemy) => enemy.render())
+    game.bullets.forEach((_, bullet) => bullet.render())
+    game.mobs.forEach((_, mob) => mob.render())
 
     scene.render()
   }
@@ -199,13 +219,28 @@ const createScene = async (engine, canvas, mobile) => {
       // @ts-ignore
       if (target.dataset.type === "material") {
         sounds.button.play()
-        // @ts-ignore
-        state.activeMaterial = target.dataset.id
-        // @ts-ignore
-        $selectedMaterial.style.background = target.dataset.color
 
         // @ts-ignore
         const emission = Number(target.dataset.emission)
+        // @ts-ignore
+        const light = target.dataset.light === '1'
+
+        // @ts-ignore
+        state.activeMaterial = target.dataset.id
+        if (light) {
+          // @ts-ignore
+          $selectedMaterial.style.background = 'none'
+          $selectedMaterial.style.backgroundImage =
+            // @ts-ignore
+            `radial-gradient(${target.dataset.color}, rgba(0, 0, 0, 0))`
+        } else {
+          // @ts-ignore
+          $selectedMaterial.style.backgroundImage = 'none'
+          // @ts-ignore
+          $selectedMaterial.style.background = target.dataset.color
+        }
+
+
         $selectedMaterial.style.boxShadow =
           // @ts-ignore
           emission > 0 ? `0 0 20px ${target.dataset.color}` : "none"

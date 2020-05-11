@@ -58,7 +58,9 @@ class Bot {
     this.delay = 15
 
     this.remainingPath = this.game.world.graph.find(
-      `${this.position.y / 10}_${this.position.z / 10}_${this.position.x / 10}`,
+      `${Math.round(this.position.y / 10)}_${Math.round(
+        this.position.z / 10,
+      )}_${Math.round(this.position.x / 10)}`,
       `${y}_${z}_${x}`,
     )
   }
@@ -77,6 +79,23 @@ class Bot {
     })
 
     this.resetPosition()
+  }
+
+  private rotateTowards(target) {
+    const angle = -this.getAngleBetweenHeroAndTarget(target) - Math.PI / 2
+    const axis = new BABYLON.Vector3(0, 1, 0)
+    const quaternion = BABYLON.Quaternion.RotationAxis(axis, angle)
+    this.mesh.rotationQuaternion = quaternion
+  }
+
+  private getAngleBetweenHeroAndTarget(target) {
+    const angle = BABYLON.Angle.BetweenTwoPoints(
+      new BABYLON.Vector2(this.mesh.position.x, this.mesh.position.z),
+      new BABYLON.Vector2(target.x, target.z),
+    )
+    const rad = angle.radians()
+
+    return rad
   }
 
   private resetPosition() {
@@ -100,6 +119,8 @@ class Bot {
         this.velocityY = waypoint.y - this.position.y / 10
         this.velocityX = waypoint.x - this.position.x / 10
         this.remainingSteps = 10
+
+        this.rotateTowards(new BABYLON.Vector3(waypoint.x, waypoint.y, waypoint.z))
       }
 
       this.position.y += this.velocityY
@@ -112,7 +133,7 @@ class Bot {
 
       this.remainingSteps -= 1
     } else {
-      this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 60, BABYLON.Space.LOCAL)
+      this.mesh.rotate(BABYLON.Axis.Y, Math.PI / 80, BABYLON.Space.LOCAL)
     }
   }
 }
