@@ -122,8 +122,6 @@ const createScene = async (engine, canvas, mobile) => {
   const ship = new Ship(scene, game, camera, gui, shadows.shadowGenerator)
   game.ship = ship
 
-  console.log({ scene })
-
   const next = () => {
     game.pause = true
     game.bullets.forEach((_, bullet) => bullet.mesh.dispose())

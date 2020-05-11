@@ -5,7 +5,7 @@ import "babylonjs-loaders"
 // @ts-ignore
 import * as isMobile from "is-mobile"
 import { blocksValues } from "./blocks"
-import stats from "./helpers/stats"
+// import stats from "./helpers/stats"
 import gameLoop from "./game-loop"
 import createScene from "./createScene"
 import * as GUI from "babylonjs-gui"
@@ -42,9 +42,9 @@ const main = async () => {
 
   gameLoop(() => {
     if (!game.pause) {
-      stats.begin()
+      // stats.begin()
       renderFrame()
-      stats.end()
+      // stats.end()
     }
   }, targetFPS)
 
