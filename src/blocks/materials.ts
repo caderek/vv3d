@@ -76,8 +76,8 @@ const materialEntries = [
   {
     id: 7,
     name: "stone-brown",
-    color: [0.288, 0.024, 0],
-    colorHex: "#922B00",
+    color: [0.178, 0.041, 0.013],
+    colorHex: "#75391E",
     roughness: 0.8,
     metallic: 0,
     alpha: 1,
@@ -100,8 +100,8 @@ const materialEntries = [
   {
     id: 9,
     name: "stone-dark-brown",
-    color: [0.178, 0.053, 0],
-    colorHex: "#754100",
+    color: [0.077, 0.018, 0.014],
+    colorHex: "#4E251F",
     roughness: 0.8,
     metallic: 0,
     alpha: 1,

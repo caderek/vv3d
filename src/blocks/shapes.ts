@@ -171,6 +171,57 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
   },
+  {
+    id: 31,
+    name: "hill-reverse",
+    rotatable: true,
+    rotationType: "side",
+  },
+  {
+    id: 32,
+    name: "hill-reverse-inset",
+    rotatable: true,
+    rotationType: "corner",
+  },
+  {
+    id: 33,
+    name: "hill-reverse-outset",
+    rotatable: true,
+    rotationType: "corner",
+  },
+  {
+    id: 34,
+    name: "pillar",
+    rotatable: false,
+  },
+  {
+    id: 35,
+    name: "table2",
+    rotatable: false,
+  },
+  {
+    id: 36,
+    name: "fence",
+    rotatable: true,
+    rotationType: "side",
+  },
+  {
+    id: 37,
+    name: "fence-corner",
+    rotatable: true,
+    rotationType: "corner",
+  },
+  {
+    id: 38,
+    name: "fence-tee",
+    rotatable: true,
+    rotationType: "side",
+  },
+  {
+    id: 39,
+    name: "fence-cross",
+    rotatable: false,
+  },
 
   // {
   //   id: 11,

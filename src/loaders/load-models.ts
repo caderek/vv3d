@@ -6,17 +6,6 @@ const loadModels = async (scene) => {
   await new Promise((resolve, reject) => {
     BABYLON.SceneLoader.Append(
       "models/",
-      `blocks.glb`,
-      scene,
-      resolve,
-      null,
-      reject,
-    )
-  })
-
-  await new Promise((resolve, reject) => {
-    BABYLON.SceneLoader.Append(
-      "models/",
       `hero.glb`,
       scene,
       resolve,
@@ -116,6 +105,17 @@ const loadModels = async (scene) => {
         name: mesh.name.slice(5),
       })
     })
+
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
+      `blocks.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
 
   // console.log({ sceneLights: scene.lights.map((light) => light.name) })
   return modelsMeta

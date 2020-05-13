@@ -65,14 +65,14 @@ class Lights {
       this.scene,
     )
     top.diffuse = new BABYLON.Color3(1, 1, 1)
-    top.intensity = 4
+    top.intensity = 2
     top.autoUpdateExtends = false
     top.autoCalcShadowZBounds = true
     top.setEnabled(true)
 
     const bottom = new BABYLON.DirectionalLight(
       "underLight",
-      new BABYLON.Vector3(9, 30, -30),
+      new BABYLON.Vector3(9, 30, 9),
       this.scene,
     )
     bottom.intensity = 0.5
