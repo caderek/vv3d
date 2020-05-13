@@ -245,7 +245,7 @@ const materialEntries = [
     colorHex: "#2462FF",
     roughness: 0.4,
     metallic: 0,
-    alpha: 1,
+    alpha: 0.9,
     emission: 0,
     light: null,
     groups: ["water"],
@@ -257,7 +257,7 @@ const materialEntries = [
     colorHex: "#008DFF",
     roughness: 0.4,
     metallic: 0,
-    alpha: 1,
+    alpha: 0.9,
     emission: 0,
     light: null,
     groups: ["water"],
@@ -407,6 +407,7 @@ const createMaterials = (scene) =>
       material.maxSimultaneousLights = 12
 
       if (entry.alpha !== 1) {
+        material.needDepthPrePass = true
         material.alphaMode = BABYLON.Engine.ALPHA_COMBINE
       }
 
