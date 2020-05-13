@@ -405,7 +405,6 @@ const createMaterials = (scene) =>
       material.roughness = entry.roughness
       material.metallic = entry.metallic
       material.maxSimultaneousLights = 12
-      // material.backFaceCulling = entry.alpha === 1
 
       if (entry.alpha !== 1) {
         material.alphaMode = BABYLON.Engine.ALPHA_MAXIMIZED

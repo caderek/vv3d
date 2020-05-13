@@ -11,6 +11,7 @@ import createScene from "./createScene"
 import * as GUI from "babylonjs-gui"
 import { shapeEntries } from "./blocks/shapes"
 import { materialEntries } from "./blocks/materials"
+import AmbientOcclusion from "./scene/ambient-occlusion"
 
 const $toolboxShapes = document.getElementById("toolbox-shapes")
 const $toolboxMaterials = document.getElementById("toolbox-materials")
@@ -32,6 +33,8 @@ const main = async () => {
   const { renderFrame, scene, game } = await createScene(engine, canvas, mobile)
 
   const camera = scene.activeCamera
+
+  // new AmbientOcclusion(scene, camera)
 
   // new BABYLON.FxaaPostProcess("fxaa", 1.0, camera)
   // new BABYLON.BlackAndWhitePostProcess("bandw", 1.0, camera)

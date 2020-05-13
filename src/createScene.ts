@@ -221,23 +221,22 @@ const createScene = async (engine, canvas, mobile) => {
         // @ts-ignore
         const emission = Number(target.dataset.emission)
         // @ts-ignore
-        const light = target.dataset.light === '1'
+        const light = target.dataset.light === "1"
 
         // @ts-ignore
         state.activeMaterial = target.dataset.id
         if (light) {
           // @ts-ignore
-          $selectedMaterial.style.background = 'none'
+          $selectedMaterial.style.background = "none"
           $selectedMaterial.style.backgroundImage =
             // @ts-ignore
             `radial-gradient(${target.dataset.color}, rgba(0, 0, 0, 0))`
         } else {
           // @ts-ignore
-          $selectedMaterial.style.backgroundImage = 'none'
+          $selectedMaterial.style.backgroundImage = "none"
           // @ts-ignore
           $selectedMaterial.style.background = target.dataset.color
         }
-
 
         $selectedMaterial.style.boxShadow =
           // @ts-ignore

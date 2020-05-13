@@ -2,7 +2,19 @@ import createMaterials from "./materials"
 import createShapes from "./shapes"
 import { saveWorld } from "../save"
 
-const cornerAngles = [
+const cornerAngles = [0, Math.PI / 2, Math.PI, Math.PI + Math.PI / 2]
+const flipAngles = [
+  0,
+  Math.PI / 4,
+  Math.PI / 2,
+  (3 * Math.PI) / 4,
+  Math.PI,
+  (5 * Math.PI) / 4,
+  Math.PI + Math.PI / 2,
+  (7 * Math.PI) / 4,
+]
+
+const sideAngles = [
   Math.PI / 4,
   (3 * Math.PI) / 4,
   (5 * Math.PI) / 4,
@@ -52,12 +64,10 @@ class Blocks {
     item.position.x = x + gap * x
     item.isPickable = false
     item.isVisible = true
-    item.material.maxSimultaneousLights = 12
-    item.cullingStrategy =
-      BABYLON.AbstractMesh.CULLINGSTRATEGY_BOUNDINGSPHERE_ONLY
 
     if (this.shapes[shapeId].rotatable) {
-      rotation = rotation !== undefined ? rotation : this.getRotation(x, z)
+      rotation =
+        rotation !== undefined ? rotation : this.getRotation(x, z, shapeId)
 
       item.rotate(BABYLON.Axis.Y, rotationAngles[rotation], BABYLON.Space.LOCAL)
       this.game.world.map[y][z][x] = `${shapeId}_${materialId}_${rotation}`
@@ -133,7 +143,7 @@ class Blocks {
     this.game.world.items.push(box)
   }
 
-  private getRotation(x, z) {
+  private getRotation(x, z, shapeId) {
     const angle = BABYLON.Angle.BetweenTwoPoints(
       new BABYLON.Vector2(
         this.scene.activeCamera.position.x,
@@ -145,14 +155,40 @@ class Blocks {
 
     let rotation = 0
 
-    if (rad > cornerAngles[0] && rad <= cornerAngles[1]) {
-      rotation = Rotations.FRONT
-    } else if (rad > cornerAngles[1] && rad <= cornerAngles[2]) {
-      rotation = Rotations.RIGHT
-    } else if (rad > cornerAngles[2] && rad <= cornerAngles[3]) {
-      rotation = Rotations.BACK
+    if (this.shapes[shapeId].rotationType === "flip") {
+      const angles = flipAngles
+
+      if (
+        (rad > angles[0] && rad <= angles[1]) ||
+        (rad > angles[5] && rad <= angles[6])
+      ) {
+        rotation = Rotations.BACK
+      } else if (
+        (rad > angles[1] && rad <= angles[2]) ||
+        (rad > angles[4] && rad <= angles[5])
+      ) {
+        rotation = Rotations.FRONT
+      } else if (
+        (rad > angles[3] && rad <= angles[4]) ||
+        (rad > angles[6] && rad <= angles[7])
+      ) {
+        rotation = Rotations.RIGHT
+      } else {
+        rotation = Rotations.LEFT
+      }
     } else {
-      rotation = Rotations.LEFT
+      const angles =
+        this.shapes[shapeId].rotationType === "side" ? sideAngles : cornerAngles
+
+      if (rad > angles[0] && rad <= angles[1]) {
+        rotation = Rotations.FRONT
+      } else if (rad > angles[1] && rad <= angles[2]) {
+        rotation = Rotations.RIGHT
+      } else if (rad > angles[2] && rad <= angles[3]) {
+        rotation = Rotations.BACK
+      } else {
+        rotation = Rotations.LEFT
+      }
     }
 
     return rotation
