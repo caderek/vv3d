@@ -407,6 +407,7 @@ const createMaterials = (scene) =>
       material.maxSimultaneousLights = 12
 
       if (entry.alpha !== 1) {
+        material.needDepthPrePass = true
         material.alphaMode = BABYLON.Engine.ALPHA_COMBINE
       }
 
