@@ -243,7 +243,7 @@ const materialEntries = [
     name: "water-salty",
     color: [0.018, 0.122, 1],
     colorHex: "#2462FF",
-    roughness: 0.8,
+    roughness: 0.4,
     metallic: 0,
     alpha: 1,
     emission: 0,
@@ -255,7 +255,7 @@ const materialEntries = [
     name: "water-fresh",
     color: [0, 0.266, 1],
     colorHex: "#008DFF",
-    roughness: 0.8,
+    roughness: 0.4,
     metallic: 0,
     alpha: 1,
     emission: 0,
@@ -339,7 +339,7 @@ const materialEntries = [
     name: "light-white",
     color: [1, 1, 1],
     colorHex: "#FFFFFF",
-    roughness: 0.8,
+    roughness: 1,
     metallic: 0,
     alpha: 0.5,
     emission: 1,
@@ -354,9 +354,9 @@ const materialEntries = [
     name: "light-red",
     color: [1, 0, 0],
     colorHex: "#FF0000",
-    roughness: 0.8,
+    roughness: 1,
     metallic: 0,
-    alpha: 0.5,
+    alpha: 0.7,
     emission: 1,
     light: {
       intensity: 10,
@@ -369,9 +369,9 @@ const materialEntries = [
     name: "light-magenta",
     color: [0.799, 0, 0.178],
     colorHex: "#E70075",
-    roughness: 0.8,
+    roughness: 1,
     metallic: 0,
-    alpha: 0.5,
+    alpha: 0.7,
     emission: 1,
     light: {
       intensity: 10,
@@ -384,9 +384,9 @@ const materialEntries = [
     name: "light-cyan",
     color: [0, 0.266, 0.799],
     colorHex: "#008DE7",
-    roughness: 0.8,
+    roughness: 1,
     metallic: 0,
-    alpha: 0.5,
+    alpha: 0.7,
     emission: 1,
     light: {
       intensity: 10,
@@ -407,7 +407,7 @@ const createMaterials = (scene) =>
       material.maxSimultaneousLights = 12
 
       if (entry.alpha !== 1) {
-        material.alphaMode = BABYLON.Engine.ALPHA_MAXIMIZED
+        material.alphaMode = BABYLON.Engine.ALPHA_COMBINE
       }
 
       if (entry.emission !== 0) {
