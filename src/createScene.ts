@@ -16,6 +16,7 @@ import { Modes } from "./types/enums"
 import * as GUI from "babylonjs-gui"
 import createWorld from "./createWorld"
 import Blocks from "./blocks/blocks"
+import * as textures from "babylonjs-procedural-textures"
 
 const createScene = async (engine, canvas, mobile) => {
   const state = {

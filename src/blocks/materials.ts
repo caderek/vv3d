@@ -1,4 +1,8 @@
 import * as BABYLON from "babylonjs"
+//@ts-ignore
+import * as textures from "babylonjs-procedural-textures"
+
+console.log({ textures })
 
 const materialEntries = [
   {
@@ -212,7 +216,7 @@ const materialEntries = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio"],
+    groups: ["bio", "grass"],
   },
   {
     id: 19,
@@ -224,7 +228,7 @@ const materialEntries = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio"],
+    groups: ["bio", "grass"],
   },
   {
     id: 20,
@@ -236,14 +240,14 @@ const materialEntries = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio"],
+    groups: ["bio", "grass"],
   },
   {
     id: 21,
     name: "water-salty",
     color: [0.018, 0.122, 1],
     colorHex: "#2462FF",
-    roughness: 0.4,
+    roughness: 0,
     metallic: 0,
     alpha: 0.9,
     emission: 0,
@@ -255,7 +259,7 @@ const materialEntries = [
     name: "water-fresh",
     color: [0, 0.266, 1],
     colorHex: "#008DFF",
-    roughness: 0.4,
+    roughness: 0,
     metallic: 0,
     alpha: 0.9,
     emission: 0,
@@ -399,7 +403,7 @@ const materialEntries = [
 const createMaterials = (scene) =>
   Object.fromEntries(
     materialEntries.map((entry) => {
-      const material = new BABYLON.PBRMaterial(entry.name, scene)
+      let material = new BABYLON.PBRMaterial(entry.name, scene)
       material.alpha = entry.alpha
       material.albedoColor = new BABYLON.Color3(...entry.color)
       material.roughness = entry.roughness
@@ -414,6 +418,22 @@ const createMaterials = (scene) =>
       if (entry.emission !== 0) {
         material.emissiveColor = new BABYLON.Color3(...entry.color)
         material.emissiveIntensity = entry.emission
+      }
+
+      if (entry.groups.includes("water")) {
+        material.bumpTexture = new BABYLON.Texture("textures/bump.jpg", scene)
+      }
+
+      if (entry.groups.includes("grass")) {
+        material.albedoTexture = new BABYLON.Texture(
+          "textures/grass.png",
+          scene,
+          true,
+          true,
+          BABYLON.Texture.NEAREST_SAMPLINGMODE,
+        )
+        material.albedoTexture.hasAlpha = true
+        material.albedoColor = BABYLON.Color3.White()
       }
 
       return [entry.id, { ...entry, material }]

@@ -377,6 +377,13 @@ babylonjs-loaders@^4.1.0:
     babylonjs "4.1.0"
     babylonjs-gltf2interface "4.1.0"
 
+babylonjs-procedural-textures@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/babylonjs-procedural-textures/-/babylonjs-procedural-textures-4.1.0.tgz#1d818c96744dcc5aca99d67b9f3de3f8edb3aed2"
+  integrity sha512-Mea4e5YcP/PskH2H+FZ2GEytNc/XOT27rGY0a9VwxED+vKTqVU/brVJ1V+/xWpkk6q+JsZaaKhvg4/7lu+Kp1Q==
+  dependencies:
+    babylonjs "4.1.0"
+
 babylonjs@4.1.0, babylonjs@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/babylonjs/-/babylonjs-4.1.0.tgz#a2d1d6765795e9d44f002831554d63d6275394bd"

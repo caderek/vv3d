@@ -131,8 +131,13 @@ const createNatureWorld = (rng) => {
           continue
         }
 
-        // world[y][z].push(10)
-        // continue
+        // if (y === 1) {
+        //   map[y][z].push(`1_3`)
+        //   continue
+        // } else {
+        //   map[y][z].push(0)
+        //   continue
+        // }
 
         const height = heights[z - 1][x - 1]
         const rand = simplex.noise3D(y, z, x)

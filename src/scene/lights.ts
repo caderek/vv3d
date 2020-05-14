@@ -65,7 +65,7 @@ class Lights {
       this.scene,
     )
     top.diffuse = new BABYLON.Color3(1, 1, 1)
-    top.intensity = 2
+    top.intensity = 3
     top.autoUpdateExtends = false
     top.autoCalcShadowZBounds = true
     top.setEnabled(true)

@@ -218,7 +218,7 @@ const shapeEntries = [
   },
   {
     id: 39,
-    name: "pipe-corner-bottom",
+    name: "pipe-corner-down",
     rotatable: true,
     rotationType: "side",
   },

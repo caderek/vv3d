@@ -88,7 +88,7 @@ const createSecondaryAction = ({
             lights.change(
               state.day
                 ? {
-                    top: 4,
+                    top: 3,
                     bottom: 0.5,
                     ambient: 0.2,
                     skyAlpha: 0.95,
