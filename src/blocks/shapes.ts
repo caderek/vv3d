@@ -222,6 +222,40 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
   },
+  {
+    id: 40,
+    name: "grass",
+    rotatable: true,
+    rotationType: "side",
+  },
+  {
+    id: 41,
+    name: "flower",
+    rotatable: true,
+    rotationType: "side",
+    children: [
+      {
+        name: "flower-petals",
+        rotation: -Math.PI / 2 - 0.3,
+      },
+      {
+        name: "flower-carpels",
+        rotation: -Math.PI / 2 - 0.3,
+      },
+    ],
+  },
+  {
+    id: 42,
+    name: "mushrooms",
+    rotatable: true,
+    rotationType: "side",
+    children: [
+      {
+        name: "mushrooms-hats",
+        rotation: Math.PI / 2 + 0.2,
+      },
+    ],
+  },
 ]
 
 const createShapes = (scene) =>

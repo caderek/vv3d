@@ -26,6 +26,7 @@ const createPrimaryAction = ({
       const meta = modelsMeta.get(pickedMesh)
       console.log(meta)
     } else if (state.mode === Modes.build) {
+      console.log(pickedMesh.name)
       if (state.reverseBuild) {
         build(game, pickedMesh, faceId, ship, sounds, blocks, state)
       } else {

@@ -421,7 +421,7 @@ const createMaterials = (scene) =>
       }
 
       if (entry.groups.includes("water")) {
-        material.bumpTexture = new BABYLON.Texture("textures/bump.jpg", scene)
+        // material.bumpTexture = new BABYLON.Texture("textures/bump.jpg", scene)
       }
 
       if (entry.groups.includes("grass")) {
@@ -432,7 +432,7 @@ const createMaterials = (scene) =>
           true,
           BABYLON.Texture.NEAREST_SAMPLINGMODE,
         )
-        material.albedoTexture.hasAlpha = true
+        // material.albedoTexture.hasAlpha = true
         material.albedoColor = BABYLON.Color3.White()
       }
 

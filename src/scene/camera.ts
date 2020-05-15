@@ -25,7 +25,7 @@ class Camera {
     camera.pinchToPanMaxDistance = 40
     camera.allowUpsideDown = false
     camera.checkCollisions = true
-    camera.lowerRadiusLimit = 10
+    // camera.lowerRadiusLimit = 10
     camera.upperRadiusLimit = 50
 
     camera.attachControl(canvas, true)

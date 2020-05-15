@@ -55,9 +55,22 @@ class Blocks {
       this.createBaseBlock(shapeId, materialId)
     }
 
-    const item = this.baseBlocks[baseBlockName].createInstance(
-      `item_${y}_${z}_${x}`,
-    )
+    const item = this.shapes[shapeId].children
+      ? // !TODO OPTIMIZE to instances!
+        this.baseBlocks[baseBlockName].clone(`item_${y}_${z}_${x}`)
+      : this.baseBlocks[baseBlockName].createInstance(`item_${y}_${z}_${x}`)
+
+    // if (this.shapes[shapeId].children) {
+    //   this.baseBlocks[baseBlockName].getChildren().forEach((child, index) => {
+    //     const childInstance = child.createInstance(
+    //       `child_${y}_${z}_${x}_${index}`,
+    //     )
+    //     childInstance.isVisible = true
+    //     childInstance.isPickable = false
+    //     childInstance.setParent(item)
+    //     childInstance.position = child.position
+    //   })
+    // }
 
     item.position.y = y + gap * y
     item.position.z = z + gap * z
