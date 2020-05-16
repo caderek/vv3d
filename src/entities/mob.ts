@@ -2,6 +2,7 @@ import * as BABYLON from "babylonjs"
 import { saveWorld } from "../save"
 import { Environments, Behaviors } from "../world/mobsData"
 import { materialsByID } from "../blocks/materials"
+import { shapesByID } from "../blocks/shapes"
 import { randomInt } from "../helpers/random"
 import Bullet from "./bullet"
 
@@ -168,7 +169,7 @@ class Mob {
   }
 
   private checkAir(worldItem) {
-    return worldItem === 0
+    return worldItem === 0 || shapesByID[worldItem.split("_")[0]].penetrable
   }
 
   private checkWater(worldItem, worldItemBelow) {
@@ -184,11 +185,16 @@ class Mob {
   }
 
   private checkLand(worldItem, worldItemBelow) {
-    const material = String(worldItemBelow).split("_")[1]
+    const shape = String(worldItem).split("_")[0]
+    const [shapeBelow, materialBelow] = String(worldItemBelow).split("_")
+
+    const isItemBelowPenetrable =
+      worldItemBelow === 0 || shapesByID[shapeBelow].penetrable
+
     return (
-      worldItem === 0 &&
-      worldItemBelow !== 0 &&
-      !materialsByID[material].groups.includes("water")
+      (worldItem === 0 || shapesByID[shape].penetrable) &&
+      !isItemBelowPenetrable &&
+      !materialsByID[materialBelow].groups.includes("water")
     )
   }
 
@@ -249,7 +255,6 @@ class Mob {
     }
   }
 
-
   private rotateTowards(target) {
     const angle = -this.getAngleToTarget(target) + Math.PI / 2
     const axis = new BABYLON.Vector3(0, 1, 0)
@@ -266,7 +271,6 @@ class Mob {
 
     return rad
   }
-
 
   private getInRange() {
     const heroFieldId = `${Math.round(
@@ -338,7 +342,9 @@ class Mob {
 
           this.remainingSteps = Math.round(1 / this.speed)
 
-          this.rotateTowards(new BABYLON.Vector3(waypoint.x, waypoint.y, waypoint.z))
+          this.rotateTowards(
+            new BABYLON.Vector3(waypoint.x, waypoint.y, waypoint.z),
+          )
         }
 
         this.gridPosition.y += this.velocityY * this.speed

@@ -28,11 +28,10 @@ const createSecondaryAction = ({
   const { hit, pickedMesh, faceId } = scene.pick(
     scene.pointerX,
     scene.pointerY,
-    (mesh) =>
-      mesh.isPickable && mesh.isEnabled && !blockNames.includes(mesh.id),
+    (mesh) => {
+      return mesh.isPickable && mesh.isEnabled && !blockNames.includes(mesh.id)
+    },
   )
-
-  // console.log({ picked: pickedMesh.name, pickedMesh })
 
   if (hit === true) {
     if (modelsMeta.has(pickedMesh)) {

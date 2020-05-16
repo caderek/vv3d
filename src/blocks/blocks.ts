@@ -103,7 +103,7 @@ class Blocks {
 
     item.freezeWorldMatrix()
 
-    this.createBox(y, z, x)
+    this.createBox(y, z, x, this.shapes[shapeId].box)
 
     this.game.world.items.push(item)
 
@@ -137,20 +137,28 @@ class Blocks {
     this.game.world.items.push(light)
   }
 
-  private createBox(y, z, x) {
+  private createBox(y, z, x, boxData) {
+    const height = boxData ? boxData.size[0] : 1
+    const depth = boxData ? boxData.size[1] : 1
+    const width = boxData ? boxData.size[2] : 1
+    const offsetY = boxData ? boxData.offset[0] : 0
+    const offsetZ = boxData ? boxData.offset[1] : 0
+    const offsetX = boxData ? boxData.offset[2] : 0
+
     const box = BABYLON.MeshBuilder.CreateBox(
       `${y}_${z}_${x}`,
       {
-        width: 1,
-        height: 1,
-        depth: 1,
+        width,
+        height,
+        depth,
       },
       this.scene,
     )
 
-    box.position.y = y
-    box.position.z = z
-    box.position.x = x
+    box.position.y = y + offsetY
+    box.position.z = z + offsetZ
+    box.position.x = x + offsetZ
+
     box.isVisible = false
 
     this.game.world.items.push(box)

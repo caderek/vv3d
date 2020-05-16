@@ -3,6 +3,7 @@ import createGraph from "ngraph.graph"
 // @ts-ignore
 import Path from "ngraph.path"
 import { materialsByID } from "../blocks/materials"
+import { shapesByID } from "../blocks/shapes"
 
 const perpendicularWeight = 1
 const diagonalWeight2d = Math.sqrt(2)
@@ -193,19 +194,12 @@ const diagonals3d = [
 ]
 
 class WorldGraph {
-  private pathFinder: any
   private game: any
   private graph: any
 
   constructor(game) {
     this.game = game
     this.create()
-
-    this.pathFinder = Path.nba(this.graph, {
-      distance(fromNode, toNode, link) {
-        return link.data.weight
-      },
-    })
   }
 
   create() {
@@ -222,7 +216,7 @@ class WorldGraph {
     }
   }
 
-  private isAirOrWater(worldItem) {
+  private isPenetrable(worldItem) {
     if (worldItem === undefined) {
       return false
     }
@@ -231,9 +225,12 @@ class WorldGraph {
       return true
     }
 
-    const material = worldItem.split("_")[1]
+    const [shape, material] = worldItem.split("_")
 
-    return materialsByID[material].groups.includes("water")
+    return (
+      materialsByID[material].groups.includes("water") ||
+      shapesByID[shape].penetrable
+    )
   }
 
   private checkTarget(base, inc) {
@@ -242,7 +239,7 @@ class WorldGraph {
     const xx = base.x + inc.x
 
     return {
-      isEmpty: this.isAirOrWater(this.game.world.map?.[yy]?.[zz]?.[xx]),
+      isEmpty: this.isPenetrable(this.game.world.map?.[yy]?.[zz]?.[xx]),
       yy,
       zz,
       xx,
@@ -250,7 +247,7 @@ class WorldGraph {
   }
 
   private addPaths(y, z, x) {
-    if (this.isAirOrWater(this.game.world.map?.[y]?.[z]?.[x])) {
+    if (this.isPenetrable(this.game.world.map?.[y]?.[z]?.[x])) {
       const base = { x, y, z }
 
       this.graph.addNode(`${y}_${z}_${x}`, { y, z, x })
@@ -296,7 +293,7 @@ class WorldGraph {
   }
 
   private removePaths(y, z, x) {
-    if (this.isAirOrWater(this.game.world.map?.[y]?.[z]?.[x])) {
+    if (this.isPenetrable(this.game.world.map?.[y]?.[z]?.[x])) {
       const base = { x, y, z }
 
       increments.forEach((inc) => {
@@ -354,12 +351,10 @@ class WorldGraph {
   find(from, to) {
     if (!this.graph.hasNode(from) || !this.graph.hasNode(to)) {
       return []
-      // const [y, z, x] = from.split("_")
-      // from = `${Math.round(y)}_${Math.round(z)}_${Math.round(x)}`
     }
 
     const pathFinder = Path.nba(this.graph, {
-      distance(fromNode, toNode, link) {
+      distance(_, __, link) {
         return link.data.weight
       },
     })

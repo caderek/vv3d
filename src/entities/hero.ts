@@ -3,6 +3,7 @@ import Bot from "./bot"
 import Gun from "./gun"
 import getFirstEmptyField from "../helpers/getFirstEmptyField"
 import { Modes } from "../types/enums"
+import { shapesByID, penetrableShapes } from "../blocks/shapes"
 
 class Hero {
   public mesh: any
@@ -195,10 +196,23 @@ class Hero {
     this.target = null
 
     const coords = destination.split("_").map(Number)
-    coords[0] += 1
+    const selectedBlock = this.game.world.map[coords[0]][coords[1]][coords[2]]
+    const shape = selectedBlock.split("_")[0]
+    const isPenetrable = penetrableShapes.includes(Number(shape))
+
+    if (!isPenetrable) {
+      coords[0] += 1
+    }
+
     const [y, z, x] = coords
 
-    if (this.game.world.map?.[y]?.[z]?.[x] !== 0) {
+    if (
+      !isPenetrable &&
+      this.game.world.map?.[y]?.[z]?.[x] !== 0 &&
+      !penetrableShapes.includes(
+        Number(this.game.world.map?.[y]?.[z]?.[x].split("_")[0]),
+      )
+    ) {
       this.sounds.denied.play()
       return
     }
@@ -290,7 +304,9 @@ class Hero {
         this.velocityX = waypoint.x - this.position.x / 10
         this.remainingSteps = 5
 
-        this.rotateTowards(new BABYLON.Vector3(waypoint.x, waypoint.y, waypoint.z))
+        this.rotateTowards(
+          new BABYLON.Vector3(waypoint.x, waypoint.y, waypoint.z),
+        )
       }
 
       this.position.y += this.velocityY * 2
