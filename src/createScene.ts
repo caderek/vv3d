@@ -134,7 +134,7 @@ const createScene = async (engine, canvas, mobile) => {
     game.pause = false
   }
 
-  var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 100.0 }, scene)
+  var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, scene)
   skybox.position.x = 9
   skybox.position.y = 9
   skybox.position.z = 9
