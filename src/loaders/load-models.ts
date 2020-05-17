@@ -116,6 +116,26 @@ const loadModels = async (scene) => {
       reject,
     )
   })
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
+      `pipes-and-fences.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
+      `decorations.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
 
   // console.log({ sceneLights: scene.lights.map((light) => light.name) })
   return modelsMeta

@@ -103,7 +103,10 @@ class Blocks {
 
     item.freezeWorldMatrix()
 
-    this.createBox(y, z, x, this.shapes[shapeId].box)
+    const boxAngle = this.shapes[shapeId].rotatable
+      ? rotationAngles[rotation]
+      : null
+    this.createBox(y, z, x, this.shapes[shapeId].box, boxAngle)
 
     this.game.world.items.push(item)
 
@@ -137,7 +140,7 @@ class Blocks {
     this.game.world.items.push(light)
   }
 
-  private createBox(y, z, x, boxData) {
+  private createBox(y, z, x, boxData, boxAngle) {
     const height = boxData ? boxData.size[0] : 1
     const depth = boxData ? boxData.size[1] : 1
     const width = boxData ? boxData.size[2] : 1
@@ -157,7 +160,19 @@ class Blocks {
 
     box.position.y = y + offsetY
     box.position.z = z + offsetZ
-    box.position.x = x + offsetZ
+    box.position.x = x + offsetX
+
+    if (boxData && boxData.pivot) {
+      const [pivotY, pivotZ, pivotX] = boxData.pivot
+      box.setPivotPoint(new BABYLON.Vector3(pivotX, pivotY, pivotZ))
+    }
+
+    if (boxAngle !== null) {
+      box.rotate(BABYLON.Axis.Y, -boxAngle, BABYLON.Space.LOCAL)
+    }
+
+    // box.material = new BABYLON.StandardMaterial("box", this.scene)
+    // box.material.alpha = 0.2
 
     box.isVisible = false
 

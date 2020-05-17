@@ -10,12 +10,20 @@ const shapeEntries = [
     name: "pillar",
     rotatable: false,
     penetrable: false,
+    box: {
+      size: [1, 0.5, 0.5],
+      offset: [0, 0, 0],
+    },
   },
   {
     id: 3,
     name: "pole",
     rotatable: false,
     penetrable: false,
+    box: {
+      size: [1, 0.25, 0.25],
+      offset: [0, 0, 0],
+    },
   },
   {
     id: 4,
@@ -43,6 +51,10 @@ const shapeEntries = [
     name: "stairs-tip",
     rotatable: false,
     penetrable: false,
+    box: {
+      size: [0.667, 1, 1],
+      offset: [-0.166, 0, 0],
+    },
   },
   {
     id: 8,
@@ -91,6 +103,10 @@ const shapeEntries = [
     name: "slope-tip",
     rotatable: false,
     penetrable: false,
+    box: {
+      size: [0.5, 1, 1],
+      offset: [-0.25, 0, 0],
+    },
   },
   {
     id: 15,
@@ -187,6 +203,10 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    box: {
+      size: [1, 0.25, 1],
+      offset: [0, 0, 0],
+    },
   },
   {
     id: 29,
@@ -194,6 +214,11 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    box: {
+      size: [1, 0.625, 0.625],
+      offset: [0, -0.1857, -0.1875],
+      pivot: [0, 0.1875, 0.1875],
+    },
   },
   {
     id: 30,
@@ -201,6 +226,11 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    box: {
+      size: [1, 0.625, 1],
+      offset: [0, 0.1875, 0],
+      pivot: [0, -0.1875, 0],
+    },
   },
   {
     id: 31,
@@ -214,18 +244,30 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    box: {
+      size: [0.5, 1, 0.5],
+      offset: [0, 0, 0],
+    },
   },
   {
     id: 33,
     name: "pipe-vertical",
     rotatable: false,
     penetrable: false,
+    box: {
+      size: [1, 0.5, 0.5],
+      offset: [0, 0, 0],
+    },
   },
   {
     id: 34,
     name: "pipe-cross",
     rotatable: false,
     penetrable: false,
+    box: {
+      size: [0.5, 1, 1],
+      offset: [0, 0, 0],
+    },
   },
   {
     id: 35,
@@ -233,6 +275,10 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    box: {
+      size: [1, 0.5, 1],
+      offset: [0, 0, 0],
+    },
   },
   {
     id: 36,
@@ -246,6 +292,11 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "flip",
     penetrable: false,
+    box: {
+      size: [0.5, 0.75, 0.75],
+      offset: [0, -0.125, 0.125],
+      pivot: [0, 0.125, -0.125],
+    },
   },
   {
     id: 38,
@@ -253,6 +304,11 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    box: {
+      size: [0.75, 0.75, 0.5],
+      offset: [-0.125, 0.125, 0],
+      pivot: [0, -0.125, 0],
+    },
   },
   {
     id: 39,
@@ -260,6 +316,11 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    box: {
+      size: [0.75, 0.75, 0.5],
+      offset: [0.125, -0.125, 0],
+      pivot: [0, 0.125, 0],
+    },
   },
   {
     id: 40,
@@ -269,7 +330,7 @@ const shapeEntries = [
     penetrable: true,
     box: {
       size: [0.3, 1, 1],
-      offset: [-0.4, 0, 0],
+      offset: [-0.35, 0, 0],
     },
   },
   {
@@ -286,6 +347,10 @@ const shapeEntries = [
       },
     ],
     penetrable: true,
+    box: {
+      size: [0.4, 0.3, 0.7],
+      offset: [-0.3, 0, 0],
+    },
   },
   {
     id: 42,
@@ -298,6 +363,10 @@ const shapeEntries = [
       },
     ],
     penetrable: true,
+    box: {
+      size: [0.3, 0.5, 0.5],
+      offset: [-0.35, 0, 0],
+    },
   },
 ]
 
