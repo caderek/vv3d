@@ -8,7 +8,7 @@ import mobsData, { Environments } from "./mobsData"
 import fragments from "./fragments"
 
 const treeModels = fragments.filter(
-  (fragment) => fragment.type === "tree-leafs",
+  (fragment) => fragment.type === "tree-leafs-cube",
 )
 
 const randomToInt = (num, min, max) => {
@@ -178,59 +178,45 @@ const createNatureWorld = (rng) => {
 }
 
 const addTrees = (rng, map, mobs, availableForPlants) => {
-  const numberOfTrees = randomInt(rng, 1, 10)
+  const numberOfTrees = randomInt(rng, 1, 20)
+  console.log({ numberOfTrees })
   const trees = []
 
   for (let i = 0; i < numberOfTrees; i++) {
     const rand = randomInt(rng, 0, treeModels.length - 1)
-    console.log(rand)
     trees.push(treeModels[rand])
   }
 
-  const places = []
+  const bookedPlaces = new Set(mobs.map(({ z, x }) => `${z}_${x}`))
 
   trees.forEach((tree) => {
-    let place
-    let bookedPlaces = new Set(mobs.map(({ y, z, x }) => `${y}_${z}_${x}`))
+    const place =
+      availableForPlants[randomInt(rng, 0, availableForPlants.length - 1)]
 
-    place = availableForPlants[randomInt(rng, 0, availableForPlants.length - 1)]
-
-    // ! check if tree TRUNK is in range
     if (
+      !bookedPlaces.has(`${place[0]}_${place[1]}_${place[2]}`) &&
       place[0] + tree.height - 1 < map.length - 2 &&
-      place[1] + Math.floor(tree.depth / 2) < map.length - 1 &&
-      place[1] - Math.floor(tree.depth / 2) > 0 &&
-      place[2] + Math.floor(tree.width / 2) < map.length - 1 &&
-      place[2] - Math.floor(tree.width / 2) > 0 &&
-      !bookedPlaces.has(`${place[0]}_${place[1]}_${place[2]}`)
+      place[1] + tree.depth - tree.center[0] - 1 < map.length - 1 &&
+      place[1] - tree.center[0] > 0 &&
+      place[2] + tree.width - tree.center[1] - 1 < map.length - 1 &&
+      place[2] - tree.center[1] > 0
     ) {
-      places.push(place)
-      bookedPlaces.add(`${place[0]}_${place[1]}_${place[2]}`)
-    } else {
-      places.push(null)
-    }
-  })
+      const [centerY, centerZ, centerX] = place
+      const startY = centerY
+      const startZ = centerZ - tree.center[0]
+      const startX = centerX - tree.center[1]
 
-  trees.forEach((tree, index) => {
-    if (places[index] === null) {
-      return
-    }
+      for (let y = startY, yy = 0; y < startY + tree.height; y++, yy++) {
+        for (let z = startZ, zz = 0; z < startZ + tree.depth; z++, zz++) {
+          for (let x = startX, xx = 0; x < startX + tree.width; x++, xx++) {
+            map[y][z][x] = tree.fragment[yy][zz][xx]
+          }
+        }
+      }
 
-    const [startY, startZ, startX] = places[index]
-
-    for (let y = startY, yy = 0; y < startY + tree.height; y++, yy++) {
-      for (
-        let z = startZ - Math.floor(tree.depth / 2), zz = 0;
-        z <= startZ + Math.floor(tree.depth / 2);
-        z++, zz++
-      ) {
-        for (
-          let x = startX - Math.floor(tree.width / 2), xx = 0;
-          x <= startX + Math.floor(tree.width / 2);
-          x++, xx++
-        ) {
-          map[y][z][x] =
-            map[y][z][x] === 0 ? tree.fragment[yy][zz][xx] : map[y][z][x]
+      for (let z = startZ - 1; z < startZ + tree.depth + 1; z++) {
+        for (let x = startX - 1; x < startX + tree.width + 1; x++) {
+          bookedPlaces.add(`${z}_${x}`)
         }
       }
     }

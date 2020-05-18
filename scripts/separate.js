@@ -30,13 +30,14 @@ files.forEach((file) => {
 
   const { map, fragments } = content
 
-  fragments.forEach(({ type, coords }) => {
+  fragments.forEach(({ type, coords, center }) => {
     items.push({
       type,
       fragment: cut(map, ...coords),
       height: coords[3] - coords[0] + 1,
       depth: coords[4] - coords[1] + 1,
       width: coords[5] - coords[2] + 1,
+      center,
     })
   })
 })

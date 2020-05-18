@@ -195,21 +195,31 @@ const materialEntries = [
   //   light: null,
   //   groups: ["resource"],
   // },
-  // {
-  //   id: 17,
-  //   name: "stone-light-blue",
-  //   color: [, , ],
-  //   roughness: 0.8,
-  //   metallic: 0,
-  //   alpha: 1,
-  //   emission: 0,
-  //   light: null,
-  //   groups: ["resource"],
-  // },
+  {
+    id: 17,
+    name: "leafs-green",
+    color: [1, 1, 1],
+    // color: [0.023, 0.296, 0.025],
+    texture: {
+      src: "textures/leafs2.png",
+      alpha: true,
+    },
+    colorHex: "#1f512b",
+    roughness: 0.8,
+    metallic: 0,
+    alpha: 1,
+    emission: 0,
+    light: null,
+    groups: ["leafs"],
+  },
   {
     id: 18,
     name: "plants-green",
-    color: [0.023, 0.296, 0.025],
+    color: [1, 1, 1],
+    texture: {
+      src: "textures/grass2.png",
+      alpha: false,
+    },
     colorHex: "#2A942C",
     roughness: 0.8,
     metallic: 0,
@@ -221,7 +231,11 @@ const materialEntries = [
   {
     id: 19,
     name: "plants-light-green",
-    color: [0.212, 0.558, 0.018],
+    color: [1, 1, 1],
+    texture: {
+      src: "textures/grass.png",
+      alpha: false,
+    },
     colorHex: "#7FC524",
     roughness: 0.8,
     metallic: 0,
@@ -233,7 +247,11 @@ const materialEntries = [
   {
     id: 20,
     name: "plants-dark-green",
-    color: [0.012, 0.102, 0.012],
+    color: [1, 1, 1],
+    texture: {
+      src: "textures/grass3.png",
+      alpha: false,
+    },
     colorHex: "#1D5A1D",
     roughness: 0.8,
     metallic: 0,
@@ -268,7 +286,7 @@ const materialEntries = [
   },
   {
     id: 23,
-    name: "snow",
+    name: "ice",
     color: [0.578, 0.831, 1],
     colorHex: "#C8EBFF",
     roughness: 0.2,
@@ -424,16 +442,18 @@ const createMaterials = (scene) =>
         // material.bumpTexture = new BABYLON.Texture("textures/bump.jpg", scene)
       }
 
-      if (entry.groups.includes("grass")) {
+      if (entry.texture) {
         material.albedoTexture = new BABYLON.Texture(
-          "textures/grass.png",
+          entry.texture.src,
           scene,
           true,
           true,
           BABYLON.Texture.NEAREST_SAMPLINGMODE,
         )
-        // material.albedoTexture.hasAlpha = true
-        material.albedoColor = BABYLON.Color3.White()
+        material.albedoTexture.hasAlpha = entry.texture.alpha
+        if (entry.texture.alpha) {
+          material.backFaceCulling = false
+        }
       }
 
       return [entry.id, { ...entry, material }]
