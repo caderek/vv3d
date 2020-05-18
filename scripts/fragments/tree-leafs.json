@@ -1064,7 +1064,23 @@
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]
   ],
+  "fragments": [
+    { "type": "tree-leafs", "coords": [2, 1, 1, 3, 1, 1] },
+    { "type": "tree-leafs", "coords": [2, 1, 3, 4, 1, 3] },
+    { "type": "tree-leafs", "coords": [2, 1, 5, 4, 1, 5] },
+    { "type": "tree-leafs", "coords": [2, 1, 7, 4, 1, 7] },
+    { "type": "tree-leafs", "coords": [2, 3, 1, 4, 5, 3] },
+    { "type": "tree-leafs", "coords": [2, 3, 5, 5, 5, 7] },
+    { "type": "tree-leafs", "coords": [2, 3, 9, 4, 5, 11] },
+    { "type": "tree-leafs", "coords": [2, 3, 13, 5, 5, 15] },
+    { "type": "tree-leafs", "coords": [2, 7, 1, 6, 9, 3] },
+    { "type": "tree-leafs", "coords": [2, 7, 5, 7, 9, 7] },
+    { "type": "tree-leafs", "coords": [2, 7, 9, 6, 9, 11] },
+    { "type": "tree-leafs", "coords": [2, 7, 13, 6, 9, 15] },
+    { "type": "tree-leafs", "coords": [2, 11, 2, 8, 16, 7] },
+    { "type": "tree-leafs", "coords": [2, 12, 9, 8, 16, 13] }
+  ],
   "data": { "name": "DTCA-732" },
   "mobs": [],
-  "version": "0.1.6"
+  "version": "0.1.7"
 }

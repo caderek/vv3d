@@ -5,6 +5,11 @@ import * as SimplexNoise from "simplex-noise"
 import seedrandom from "seedrandom"
 import getFirstEmptyField from "../helpers/getFirstEmptyField"
 import mobsData, { Environments } from "./mobsData"
+import fragments from "./fragments"
+
+const treeModels = fragments.filter(
+  (fragment) => fragment.type === "tree-leafs",
+)
 
 const randomToInt = (num, min, max) => {
   return Math.floor(num * (max - min + 1)) + min
@@ -51,7 +56,7 @@ const createNatureWorld = (rng) => {
     availableChunks[randomInt(rng, 0, availableChunks.length - 1)]
 
   const hasWater = rng() > 0.5
-  const hasGrass = rng() > 0.5 && hasWater
+  const hasGrass = true // rng() > 0.5 && hasWater
   const hasCaves = rng() > 0.5
   const lifeRand = rng()
   const hasLife = hasGrass
@@ -112,6 +117,7 @@ const createNatureWorld = (rng) => {
   }
 
   let map = []
+  const availableForPlants = []
 
   for (let y = 0; y < size + 2; y++) {
     map.push([])
@@ -157,6 +163,7 @@ const createNatureWorld = (rng) => {
           hasGrass &&
           (y >= horizon || !hasWater)
         ) {
+          availableForPlants.push([y + 1, z, x])
           map[y][z].push(`1_${grass}`)
         } else if (y < (hasGrass ? horizon : horizon - 1) && hasWater) {
           map[y][z].push(`1_${liquid}`)
@@ -167,7 +174,67 @@ const createNatureWorld = (rng) => {
     }
   }
 
-  return { map, hasLife }
+  return { map, hasLife, availableForPlants }
+}
+
+const addTrees = (rng, map, mobs, availableForPlants) => {
+  const numberOfTrees = randomInt(rng, 1, 10)
+  const trees = []
+
+  for (let i = 0; i < numberOfTrees; i++) {
+    const rand = randomInt(rng, 0, treeModels.length - 1)
+    console.log(rand)
+    trees.push(treeModels[rand])
+  }
+
+  const places = []
+
+  trees.forEach((tree) => {
+    let place
+    let bookedPlaces = new Set(mobs.map(({ y, z, x }) => `${y}_${z}_${x}`))
+
+    place = availableForPlants[randomInt(rng, 0, availableForPlants.length - 1)]
+
+    // ! check if tree TRUNK is in range
+    if (
+      place[0] + tree.height - 1 < map.length - 2 &&
+      place[1] + Math.floor(tree.depth / 2) < map.length - 1 &&
+      place[1] - Math.floor(tree.depth / 2) > 0 &&
+      place[2] + Math.floor(tree.width / 2) < map.length - 1 &&
+      place[2] - Math.floor(tree.width / 2) > 0 &&
+      !bookedPlaces.has(`${place[0]}_${place[1]}_${place[2]}`)
+    ) {
+      places.push(place)
+      bookedPlaces.add(`${place[0]}_${place[1]}_${place[2]}`)
+    } else {
+      places.push(null)
+    }
+  })
+
+  trees.forEach((tree, index) => {
+    if (places[index] === null) {
+      return
+    }
+
+    const [startY, startZ, startX] = places[index]
+
+    for (let y = startY, yy = 0; y < startY + tree.height; y++, yy++) {
+      for (
+        let z = startZ - Math.floor(tree.depth / 2), zz = 0;
+        z <= startZ + Math.floor(tree.depth / 2);
+        z++, zz++
+      ) {
+        for (
+          let x = startX - Math.floor(tree.width / 2), xx = 0;
+          x <= startX + Math.floor(tree.width / 2);
+          x++, xx++
+        ) {
+          map[y][z][x] =
+            map[y][z][x] === 0 ? tree.fragment[yy][zz][xx] : map[y][z][x]
+        }
+      }
+    }
+  })
 }
 
 const generateMobs = (rng, map) => {
@@ -227,8 +294,12 @@ const createRandomWorld = () => {
   const seed = name
   const rng = seedrandom(seed)
   const generator = createNatureWorld
-  const { map, hasLife } = generator(rng)
+  const { map, hasLife, availableForPlants } = generator(rng)
   const mobs = hasLife ? generateMobs(rng, map) : []
+
+  if (availableForPlants.length > 0) {
+    addTrees(rng, map, mobs, availableForPlants)
+  }
 
   return { map, data: { name }, mobs }
 }

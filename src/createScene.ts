@@ -16,7 +16,30 @@ import { Modes } from "./types/enums"
 import * as GUI from "babylonjs-gui"
 import createWorld from "./createWorld"
 import Blocks from "./blocks/blocks"
-import * as textures from "babylonjs-procedural-textures"
+
+const debug = (scene) => {
+  const blockNames = blocksValues.map(({ name }) => name)
+
+  document
+    .getElementById("viewport")
+    .addEventListener("auxclick", function (e) {
+      if (e.button == 1) {
+        const { hit, pickedMesh, faceId } = scene.pick(
+          scene.pointerX,
+          scene.pointerY,
+          (mesh) => {
+            return (
+              mesh.isPickable && mesh.isEnabled && !blockNames.includes(mesh.id)
+            )
+          },
+        )
+
+        if (pickedMesh) {
+          console.log(pickedMesh.name)
+        }
+      }
+    })
+}
 
 const createScene = async (engine, canvas, mobile) => {
   const state = {
@@ -35,6 +58,8 @@ const createScene = async (engine, canvas, mobile) => {
   scene.useGeometryIdsMap = true
   // @ts-ignore
   scene.useClonedMeshMap = true
+
+  debug(scene)
 
   const modelsMeta = await loadModels(scene)
 
@@ -134,11 +159,16 @@ const createScene = async (engine, canvas, mobile) => {
     game.pause = false
   }
 
-  var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, scene)
+  const skybox = BABYLON.MeshBuilder.CreateBox(
+    "skyBox",
+    { size: 10000.0 },
+    scene,
+  )
   skybox.position.x = 9
   skybox.position.y = 9
   skybox.position.z = 9
-  var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene)
+
+  const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene)
   skyboxMaterial.backFaceCulling = false
   skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
     "skybox/skybox",
