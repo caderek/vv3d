@@ -137,7 +137,6 @@ const loadModels = async (scene) => {
     )
   })
 
-  // console.log({ sceneLights: scene.lights.map((light) => light.name) })
   return modelsMeta
 }
 

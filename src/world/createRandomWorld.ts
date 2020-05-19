@@ -44,7 +44,9 @@ const createNatureWorld = (rng) => {
 
   const availableChunks = []
 
-  for (let i = 1; i <= size / 2; i++) {
+  const minChunkSize = rng() > 0.9 ? 1 : 2
+
+  for (let i = minChunkSize; i <= size / 2; i++) {
     if (size % i === 0) {
       availableChunks.push(i)
     }
@@ -56,7 +58,7 @@ const createNatureWorld = (rng) => {
     availableChunks[randomInt(rng, 0, availableChunks.length - 1)]
 
   const hasWater = rng() > 0.5
-  const hasGrass = true // rng() > 0.5 && hasWater
+  const hasGrass = rng() > 0.5 && hasWater
   const hasCaves = rng() > 0.5
   const lifeRand = rng()
   const hasLife = hasGrass
@@ -179,7 +181,6 @@ const createNatureWorld = (rng) => {
 
 const addTrees = (rng, map, mobs, availableForPlants) => {
   const numberOfTrees = randomInt(rng, 1, 20)
-  console.log({ numberOfTrees })
   const trees = []
 
   for (let i = 0; i < numberOfTrees; i++) {
@@ -194,7 +195,7 @@ const addTrees = (rng, map, mobs, availableForPlants) => {
       availableForPlants[randomInt(rng, 0, availableForPlants.length - 1)]
 
     if (
-      !bookedPlaces.has(`${place[0]}_${place[1]}_${place[2]}`) &&
+      !bookedPlaces.has(`${place[1]}_${place[2]}`) &&
       place[0] + tree.height - 1 < map.length - 2 &&
       place[1] + tree.depth - tree.center[0] - 1 < map.length - 1 &&
       place[1] - tree.center[0] > 0 &&

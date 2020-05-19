@@ -2,8 +2,6 @@ import * as BABYLON from "babylonjs"
 //@ts-ignore
 import * as textures from "babylonjs-procedural-textures"
 
-console.log({ textures })
-
 const materialEntries = [
   {
     id: 1,

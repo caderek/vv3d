@@ -341,7 +341,6 @@ class WorldGraph {
   }
 
   remove(y, z, x) {
-    console.log("removed node:", `${y}_${z}_${x}`)
     this.graph.removeNode(`${y}_${z}_${x}`)
     allNeighbors.forEach((inc) => {
       this.removePaths(y + inc.y, z + inc.z, x + inc.x)

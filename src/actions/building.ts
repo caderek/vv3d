@@ -86,9 +86,6 @@ const build = (game, pickedMesh, faceId, ship, sounds, blocks, state) => {
   const z = gridZ + inc.z
   const x = gridX + inc.x
 
-  // console.log({ gridY, gridZ, gridX })
-  // console.log({ faceId, rotation })
-
   if (
     y >= 0 &&
     y < game.world.size - 2 &&

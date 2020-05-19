@@ -37,8 +37,6 @@ const createSecondaryAction = ({
     if (modelsMeta.has(pickedMesh)) {
       const meta = modelsMeta.get(pickedMesh)
 
-      // console.log({ meta })
-
       if (meta.type === "mob" && state.mode === Modes.hero) {
         game.hero.attack(meta.model)
       }
