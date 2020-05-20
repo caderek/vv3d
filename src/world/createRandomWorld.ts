@@ -1,4 +1,4 @@
-import { materialEntries, materialsByID } from "../blocks/materials"
+import { materialEntries, materialsByID, leafsIds } from "../blocks/materials"
 // @ts-ignore
 import * as SimplexNoise from "simplex-noise"
 // @ts-ignore
@@ -57,7 +57,8 @@ const createNatureWorld = (rng) => {
   const chunkSize =
     availableChunks[randomInt(rng, 0, availableChunks.length - 1)]
 
-  const hasWater = rng() > 0.5
+  const hasLiquid = rng() > 0.5
+  const hasWater = hasLiquid && rng() > 0.2
   const hasGrass = rng() > 0.5 && hasWater
   const hasCaves = rng() > 0.5
   const lifeRand = rng()
@@ -77,7 +78,11 @@ const createNatureWorld = (rng) => {
     .filter(({ groups }) => groups.includes("bio"))
     .map((item) => item.id)
   const liquidMaterials = materialEntries
-    .filter(({ groups }) => groups.includes("water"))
+    .filter(({ groups }) =>
+      hasWater
+        ? groups.includes("water")
+        : groups.includes("liquid") && !groups.includes("water"),
+    )
     .map((item) => item.id)
 
   const liquid = liquidMaterials[randomInt(rng, 0, liquidMaterials.length - 1)]
@@ -163,11 +168,11 @@ const createNatureWorld = (rng) => {
           y === height &&
           !isEmpty &&
           hasGrass &&
-          (y >= horizon || !hasWater)
+          (y >= horizon || !hasLiquid)
         ) {
           availableForPlants.push([y + 1, z, x])
           map[y][z].push(`1_${grass}`)
-        } else if (y < (hasGrass ? horizon : horizon - 1) && hasWater) {
+        } else if (y < (hasGrass ? horizon : horizon - 1) && hasLiquid) {
           map[y][z].push(`1_${liquid}`)
         } else {
           map[y][z].push(0)
@@ -176,12 +181,14 @@ const createNatureWorld = (rng) => {
     }
   }
 
-  return { map, hasLife, availableForPlants }
+  return { map, hasLife, availableForPlants, grass }
 }
 
-const addTrees = (rng, map, mobs, availableForPlants) => {
+const addPlants = (rng, map, mobs, availableForPlants, grass) => {
   const numberOfTrees = randomInt(rng, 1, 20)
   const trees = []
+  const leafsId = leafsIds[randomInt(rng, 0, leafsIds.length - 1)] as string
+  const leafsColor = leafsId.slice(-1)
 
   for (let i = 0; i < numberOfTrees; i++) {
     const rand = randomInt(rng, 0, treeModels.length - 1)
@@ -189,6 +196,24 @@ const addTrees = (rng, map, mobs, availableForPlants) => {
   }
 
   const bookedPlaces = new Set(mobs.map(({ z, x }) => `${z}_${x}`))
+
+  availableForPlants.forEach(([y, z, x]) => {
+    const rand = rng()
+    const item =
+      rand > 0.6
+        ? `40_${grass}`
+        : rand > 0.45
+        ? `41_16${leafsColor}`
+        : rand > 0.4
+        ? `42_16${leafsColor}`
+        : null
+
+    if (item !== null) {
+      map[y][z][x] = `${item}_${randomInt(rng, 1, 4)}`
+
+      bookedPlaces.add(`${z}_${x}`)
+    }
+  })
 
   trees.forEach((tree) => {
     const place =
@@ -210,7 +235,10 @@ const addTrees = (rng, map, mobs, availableForPlants) => {
       for (let y = startY, yy = 0; y < startY + tree.height; y++, yy++) {
         for (let z = startZ, zz = 0; z < startZ + tree.depth; z++, zz++) {
           for (let x = startX, xx = 0; x < startX + tree.width; x++, xx++) {
-            map[y][z][x] = tree.fragment[yy][zz][xx]
+            map[y][z][x] =
+              tree.fragment[yy][zz][xx] === 0
+                ? 0
+                : tree.fragment[yy][zz][xx].replace("{leafs}", leafsId)
           }
         }
       }
@@ -281,11 +309,11 @@ const createRandomWorld = () => {
   const seed = name
   const rng = seedrandom(seed)
   const generator = createNatureWorld
-  const { map, hasLife, availableForPlants } = generator(rng)
+  const { map, hasLife, availableForPlants, grass } = generator(rng)
   const mobs = hasLife ? generateMobs(rng, map) : []
 
   if (availableForPlants.length > 0) {
-    addTrees(rng, map, mobs, availableForPlants)
+    addPlants(rng, map, mobs, availableForPlants, grass)
   }
 
   return { map, data: { name }, mobs }

@@ -80,12 +80,16 @@ const toolboxShapes = shapeEntries
   .map(({ name, id }) => renderToolboxShape(name, id))
   .join("\n")
 
-const renderToolboxMaterial = (id, colorHex, emission, light) => {
-  const style = light
-    ? `background-image: radial-gradient(${colorHex}, rgba(0, 0, 0, 0)); box-shadow: 0 0 20px ${colorHex}`
+const renderToolboxMaterial = (id, colorHex, emission, light, texture) => {
+  let style = light
+    ? `background-image: radial-gradient(${colorHex}, rgba(0, 0, 0, 0)); box-shadow: 0 0 20px ${colorHex};`
     : emission > 0
-    ? `background: ${colorHex}; box-shadow: 0 0 20px ${colorHex}`
+    ? `background: ${colorHex}; box-shadow: 0 0 20px ${colorHex};`
     : `background: ${colorHex};`
+
+  if (texture) {
+    style += `background: none; background-image: url(${texture.src}); background-size: cover;`
+  }
 
   return `
     <div
@@ -94,6 +98,7 @@ const renderToolboxMaterial = (id, colorHex, emission, light) => {
       data-color="${colorHex}"
       data-emission="${emission}"
       data-light=${light ? 1 : 0}
+      data-texture="${texture ? texture.src : ""}"
       data-id="${id}"
       style="${style}"
     ></div>
@@ -101,8 +106,8 @@ const renderToolboxMaterial = (id, colorHex, emission, light) => {
 }
 
 const toolboxMaterials = materialEntries
-  .map(({ id, colorHex, emission, light }) =>
-    renderToolboxMaterial(id, colorHex, emission, light),
+  .map(({ id, colorHex, emission, light, texture }) =>
+    renderToolboxMaterial(id, colorHex, emission, light, texture),
   )
   .join("\n")
 

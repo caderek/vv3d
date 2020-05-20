@@ -175,6 +175,15 @@
 
       .selected-material {
         background: #fafafa;
+        background-size: cover;
+        background-repeat: no-repeat;
+        image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
+        image-rendering: -moz-crisp-edges; /* Firefox                        */
+        image-rendering: -o-crisp-edges; /* Opera                          */
+        image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+        image-rendering: pixelated; /* Chrome */
+        image-rendering: optimize-contrast; /* CSS3 Proposed                  */
+        -ms-interpolation-mode: nearest-neighbor;
       }
 
       .shape {
@@ -195,6 +204,15 @@
         border-radius: 10px;
         margin: 10px;
         cursor: pointer;
+        background-size: cover;
+        background-repeat: no-repeat;
+        image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
+        image-rendering: -moz-crisp-edges; /* Firefox                        */
+        image-rendering: -o-crisp-edges; /* Opera                          */
+        image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+        image-rendering: pixelated; /* Chrome */
+        image-rendering: optimize-contrast; /* CSS3 Proposed                  */
+        -ms-interpolation-mode: nearest-neighbor;
       }
 
       .next {

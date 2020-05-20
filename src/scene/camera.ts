@@ -20,15 +20,33 @@ class Camera {
 
     camera.inertia = 0
     camera.panningInertia = 0
-    camera.panningSensibility = 100
+    camera.panningSensibility = 50
     camera.pinchPrecision = 20
-    camera.pinchToPanMaxDistance = 40
     camera.allowUpsideDown = false
     camera.checkCollisions = true
-    // camera.lowerRadiusLimit = 10
-    camera.upperRadiusLimit = 50
+    camera.lowerRadiusLimit = 10
+    camera.upperRadiusLimit = 100
+    camera.angularSensibilityY = 500
+    camera.angularSensibilityX = 500
+    camera.useNaturalPinchZoom = true
 
     camera.attachControl(canvas, true)
+
+    let touches = 0
+
+    scene.onPrePointerObservable.add((action) => {
+      const { type, event } = action
+
+      if (type === 1) {
+        touches++
+      } else if (type === 2) {
+        touches--
+      }
+
+      if (touches > 2) {
+        action.skipOnPointerObservable = true
+      }
+    })
 
     this.camera = camera
   }
