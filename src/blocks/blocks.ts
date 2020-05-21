@@ -49,10 +49,11 @@ class Blocks {
 
   create(y, z, x, shapeId, materialId, rotation = undefined, save = false) {
     const gap = 0.0
-    const baseBlockName = `${shapeId}_${materialId}`
+    const [baseMaterialId, ...childrenMaterialIds] = materialId.split(".")
+    const baseBlockName = `${shapeId}_${baseMaterialId}`
 
     if (!this.baseBlocks[baseBlockName]) {
-      this.createBaseBlock(shapeId, materialId)
+      this.createBaseBlock(shapeId, baseMaterialId)
     }
 
     const item = this.shapes[shapeId].children
@@ -60,17 +61,17 @@ class Blocks {
         this.baseBlocks[baseBlockName].clone(`item_${y}_${z}_${x}`)
       : this.baseBlocks[baseBlockName].createInstance(`item_${y}_${z}_${x}`)
 
-    // if (this.shapes[shapeId].children) {
-    //   this.baseBlocks[baseBlockName].getChildren().forEach((child, index) => {
-    //     const childInstance = child.createInstance(
-    //       `child_${y}_${z}_${x}_${index}`,
-    //     )
-    //     childInstance.isVisible = true
-    //     childInstance.isPickable = false
-    //     childInstance.setParent(item)
-    //     childInstance.position = child.position
-    //   })
-    // }
+    if (this.shapes[shapeId].children) {
+      this.shapes[shapeId].children.forEach((child, index) => {
+        const mesh = this.baseBlocks[baseBlockName]
+          .getChildren()
+          .find((item) => item.name.includes(child.name))
+
+        const childMaterialId = childrenMaterialIds[index]
+        console.log({ materialId, childMaterialId, childrenMaterialIds })
+        mesh.material = this.materials[childMaterialId].material
+      })
+    }
 
     item.position.y = y + gap * y
     item.position.z = z + gap * z
@@ -89,13 +90,13 @@ class Blocks {
     }
 
     if (
-      this.materials[materialId].emission === 0 &&
-      !this.materials[materialId].groups.includes("water")
+      this.materials[baseMaterialId].emission === 0 &&
+      !this.materials[baseMaterialId].groups.includes("water")
     ) {
       this.shadows.addCaster(item)
     }
 
-    const lightSettings = this.materials[materialId].light
+    const lightSettings = this.materials[baseMaterialId].light
 
     if (lightSettings) {
       this.addLight(y, z, x, lightSettings)

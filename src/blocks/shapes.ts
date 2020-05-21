@@ -2,7 +2,8 @@ const shapeEntries = [
   {
     id: 1,
     name: "cube",
-    rotatable: false,
+    rotatable: true,
+    rotationType: "side",
     penetrable: false,
   },
   {
@@ -336,6 +337,7 @@ const shapeEntries = [
   {
     id: 41,
     name: "flower",
+    type: "plant",
     rotatable: true,
     rotationType: "side",
     children: [
@@ -346,6 +348,13 @@ const shapeEntries = [
         name: "flower-carpels",
       },
     ],
+    pallets: [
+      [null, 6, 10],
+      [null, 10, 5],
+      [null, 11, 14],
+      [null, 13, 5],
+      [null, 14, 6],
+    ],
     penetrable: true,
     box: {
       size: [0.4, 0.3, 0.7],
@@ -355,12 +364,20 @@ const shapeEntries = [
   {
     id: 42,
     name: "mushrooms",
+    type: "plant",
     rotatable: true,
     rotationType: "side",
     children: [
       {
         name: "mushrooms-hats",
       },
+    ],
+    pallets: [
+      [1, 10],
+      [7, 8],
+      [8, 9],
+      [13, 25],
+      [14, 26],
     ],
     penetrable: true,
     box: {
@@ -398,5 +415,7 @@ const penetrableShapes = shapeEntries
   .filter((shape) => shape.penetrable)
   .map((shape) => shape.id)
 
-export { shapeEntries, shapesByID, penetrableShapes }
+const plants = shapeEntries.filter((shape) => shape.type === "plant")
+
+export { shapeEntries, shapesByID, penetrableShapes, plants }
 export default createShapes

@@ -226,9 +226,10 @@ class WorldGraph {
     }
 
     const [shape, material] = worldItem.split("_")
+    const baseMaterial = material.split(".")[0]
 
     return (
-      materialsByID[material].groups.includes("water") ||
+      materialsByID[baseMaterial].groups.includes("water") ||
       shapesByID[shape].penetrable
     )
   }

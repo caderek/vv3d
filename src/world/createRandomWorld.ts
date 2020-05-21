@@ -1,4 +1,5 @@
 import { materialEntries, materialsByID, leafsIds } from "../blocks/materials"
+import { plants } from "../blocks/shapes"
 // @ts-ignore
 import * as SimplexNoise from "simplex-noise"
 // @ts-ignore
@@ -93,7 +94,7 @@ const createNatureWorld = (rng) => {
   const variety = randomInt(rng, 1, 10)
 
   for (let i = 0; i < variety; i++) {
-    const threshold = i == 0 ? 0.01 : 0.1
+    const threshold = i == 0 ? 0.001 : 0.05
     const group = rng() > threshold ? resourceMaterials : crystalMaterials
     availableMaterials.push(group[randomInt(rng, 0, group.length - 1)])
   }
@@ -190,6 +191,18 @@ const addPlants = (rng, map, mobs, availableForPlants, grass) => {
   const leafsId = leafsIds[randomInt(rng, 0, leafsIds.length - 1)] as string
   const leafsColor = leafsId.slice(-1)
 
+  const plantsPallets = Object.fromEntries(
+    plants.map((plant) => {
+      console.log({ plant })
+      return [
+        plant.id,
+        plant.pallets[randomInt(rng, 0, plant.pallets.length - 1)].map((item) =>
+          item === null ? `16${leafsColor}` : item,
+        ),
+      ]
+    }),
+  )
+
   for (let i = 0; i < numberOfTrees; i++) {
     const rand = randomInt(rng, 0, treeModels.length - 1)
     trees.push(treeModels[rand])
@@ -199,17 +212,20 @@ const addPlants = (rng, map, mobs, availableForPlants, grass) => {
 
   availableForPlants.forEach(([y, z, x]) => {
     const rand = rng()
-    const item =
-      rand > 0.6
-        ? `40_${grass}`
-        : rand > 0.45
-        ? `41_16${leafsColor}`
-        : rand > 0.4
-        ? `42_16${leafsColor}`
-        : null
+    let item = null
+
+    if (rand > 0.6) {
+      item = `40_${grass}`
+    } else if (rand > 0.5) {
+      const plant = plants[randomInt(rng, 0, plants.length - 1)]
+      const palette = plantsPallets[plant.id]
+      item = `${plant.id}_${palette.join(".")}`
+    }
 
     if (item !== null) {
       map[y][z][x] = `${item}_${randomInt(rng, 1, 4)}`
+
+      console.log({ item: map[y][z][x] })
 
       bookedPlaces.add(`${z}_${x}`)
     }

@@ -433,6 +433,23 @@ const materialEntries = [
     light: null,
     groups: ["bio", "grass"],
   },
+  // {
+  //   id: "cube",
+  //   name: "cube",
+  //   color: [1, 1, 1],
+  //   texture: {
+  //     src: "textures/cube.png",
+  //     bumpSrc: "textures/cube_n.png",
+  //     metallicSrc: "textures/cube_m.png",
+  //     alpha: true,
+  //   },
+  //   roughness: 0.8,
+  //   metallic: 0.7,
+  //   alpha: 1,
+  //   emission: 0,
+  //   light: null,
+  //   groups: [],
+  // },
   {
     id: "21a",
     name: "water-salty",
@@ -460,8 +477,8 @@ const materialEntries = [
   {
     id: "21c",
     name: "water-dirty",
-    color: [0.2, 1, 0.3],
-    colorHex: "#008DFF",
+    color: [0, 1, 0.548],
+    colorHex: "#00FFC3",
     roughness: 0,
     metallic: 0,
     alpha: 0.8,
@@ -625,7 +642,60 @@ const materialEntries = [
     },
     groups: ["light"],
   },
+  {
+    id: 33,
+    name: "light-green",
+    color: [0, 1, 0],
+    colorHex: "#00FF00",
+    roughness: 1,
+    metallic: 0,
+    alpha: 0.7,
+    emission: 1,
+    light: {
+      intensity: 10,
+      color: [0, 1, 0],
+    },
+    groups: ["light"],
+  },
+  {
+    id: 34,
+    name: "light-yellow",
+    color: [1, 1, 0],
+    colorHex: "#FFFF00",
+    roughness: 1,
+    metallic: 0,
+    alpha: 0.7,
+    emission: 1,
+    light: {
+      intensity: 10,
+      color: [1, 1, 0],
+    },
+    groups: ["light"],
+  },
+  {
+    id: 35,
+    name: "light-blue",
+    color: [0, 0, 1],
+    colorHex: "#00FF",
+    roughness: 1,
+    metallic: 0,
+    alpha: 0.7,
+    emission: 1,
+    light: {
+      intensity: 10,
+      color: [0, 0, 1],
+    },
+    groups: ["light"],
+  },
 ]
+
+const preview = materialEntries.map(({ id, name, colorHex }) => ({
+  id,
+  name,
+  colorHex,
+}))
+
+console.log(preview)
 
 const createMaterials = (scene) =>
   Object.fromEntries(
@@ -656,13 +726,35 @@ const createMaterials = (scene) =>
           entry.texture.src,
           scene,
           true,
-          true,
+          false,
           BABYLON.Texture.NEAREST_SAMPLINGMODE,
         )
+
         material.albedoTexture.hasAlpha = entry.texture.alpha
+
         if (entry.texture.alpha) {
           material.backFaceCulling = false
         }
+
+        // if (entry.texture.bumpSrc) {
+        //   material.bumpTexture = new BABYLON.Texture(
+        //     entry.texture.bumpSrc,
+        //     scene,
+        //     true,
+        //     false,
+        //     BABYLON.Texture.NEAREST_SAMPLINGMODE,
+        //   )
+        // }
+
+        // if (entry.texture.metallicSrc) {
+        //   material.metallicTexture = material.bumpTexture = new BABYLON.Texture(
+        //     entry.texture.metallicSrc,
+        //     scene,
+        //     true,
+        //     false,
+        //     BABYLON.Texture.NEAREST_SAMPLINGMODE,
+        //   )
+        // }
       }
 
       return [entry.id, { ...entry, material }]
@@ -674,7 +766,11 @@ const materialsByID = Object.fromEntries(
 )
 const leafsIds = materialEntries
   .filter((material) => material.groups.includes("leafs"))
-  .map((leafs) => leafs.id)
+  .map((material) => material.id)
+
+const mushroomsIds = materialEntries
+  .filter((material) => material.groups.includes("mushrooms"))
+  .map((material) => material.id)
 
 export { materialEntries, materialsByID, leafsIds }
 
