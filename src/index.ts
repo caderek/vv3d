@@ -22,7 +22,7 @@ const targetFPS = 20
 const main = async () => {
   const canvas = document.getElementById("viewport") as HTMLCanvasElement
 
-  const engine = new BABYLON.Engine(canvas, true, {
+  const engine = new BABYLON.Engine(canvas, false, {
     preserveDrawingBuffer: true,
     // stencil: true,
     disableWebGL2Support: true,
