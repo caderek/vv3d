@@ -97,9 +97,14 @@ const materialEntries: Materials = [
   },
   {
     id: 7,
-    name: "stone-brown",
-    color: [0.178, 0.041, 0.013],
-    colorHex: "#75391E",
+    name: "wood",
+    color: [1, 1, 1],
+    // color: [0.178, 0.041, 0.013],
+    // colorHex: "#75391E",
+    texture: {
+      src: "textures/wood-brown.png",
+      alpha: false,
+    },
     roughness: 0.8,
     metallic: 0,
     alpha: 1,
@@ -109,9 +114,14 @@ const materialEntries: Materials = [
   },
   {
     id: 8,
-    name: "stone-light-brown",
-    color: [0.497, 0.184, 0.058],
-    colorHex: "#BB7744",
+    name: "wood-light",
+    color: [1, 1, 1],
+    // color: [0.497, 0.184, 0.058],
+    // colorHex: "#BB7744",
+    texture: {
+      src: "textures/wood-light-brown.png",
+      alpha: false,
+    },
     roughness: 0.8,
     metallic: 0,
     alpha: 1,
@@ -121,9 +131,14 @@ const materialEntries: Materials = [
   },
   {
     id: 9,
-    name: "stone-dark-brown",
-    color: [0.077, 0.018, 0.014],
-    colorHex: "#4E251F",
+    name: "wood-dark",
+    color: [1, 1, 1],
+    // color: [0.077, 0.018, 0.014],
+    // colorHex: "#4E251F",
+    texture: {
+      src: "textures/wood-dark-brown.png",
+      alpha: false,
+    },
     roughness: 0.8,
     metallic: 0,
     alpha: 1,
@@ -800,7 +815,10 @@ const createMaterials = (scene) =>
       }
 
       if (entry.groups.includes("water")) {
-        // material.bumpTexture = new BABYLON.Texture("textures/bump.jpg", scene)
+        material.bumpTexture = new BABYLON.Texture(
+          "textures/water_n.jpg",
+          scene,
+        )
       }
 
       if (entry.texture) {
