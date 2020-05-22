@@ -58,6 +58,10 @@ class Lights {
     this.glow = glow
   }
 
+  excludeFromGlow(mesh) {
+    this.glow.addExcludedMesh(mesh)
+  }
+
   private createLights() {
     const top = new BABYLON.DirectionalLight(
       "topLight",

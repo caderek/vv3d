@@ -108,6 +108,10 @@ const build = (game, pickedMesh, faceId, ship, sounds, blocks, state) => {
       true,
     )
   } else {
+    console.log({ y, z, x })
+    console.log("??", game.world.map[y][z][x])
+    console.log({ faceId })
+    console.log({ inc })
     sounds.denied.play()
   }
 }

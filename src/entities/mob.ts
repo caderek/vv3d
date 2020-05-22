@@ -38,6 +38,7 @@ class Mob {
   private speed: number
   private attackTicks: number
   private attacking: boolean
+  private attacked: boolean
 
   constructor(mobData, scene, game, sounds, modelsMeta, shadows) {
     this.game = game
@@ -175,11 +176,15 @@ class Mob {
   private checkWater(worldItem, worldItemBelow) {
     const isWater =
       worldItem !== 0 &&
-      materialsByID[worldItem.split("_")[1]].groups.includes("water")
+      materialsByID[worldItem.split("_")[1].split(".")[0]].groups.includes(
+        "water",
+      )
 
     const isWaterBelow =
       worldItemBelow !== 0 &&
-      materialsByID[worldItemBelow.split("_")[1]].groups.includes("water")
+      materialsByID[worldItemBelow.split("_")[1].split(".")[0]].groups.includes(
+        "water",
+      )
 
     return (worldItem === 0 && isWaterBelow) || isWater
   }
@@ -200,6 +205,7 @@ class Mob {
 
   takeDamage(damage, weaponCycle) {
     this.health -= damage
+    this.attacked = true
 
     if (this.health <= 0) {
       this.dying = true
@@ -378,7 +384,16 @@ class Mob {
           return
         }
 
-        if (this.mobData.behavior === Behaviors.aggressive) {
+        if (
+          this.mobData.behavior === Behaviors.aggressive &&
+          this.game.hero.onLand
+        ) {
+          if (this.attacked) {
+            this.speed = this.mobData.runSpeed
+            this.attack()
+            return
+          }
+
           const distanceToHero = this.game.hero.mesh.position
             .subtract(this.mesh.position)
             .length()

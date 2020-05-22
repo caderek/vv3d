@@ -5,6 +5,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 2,
@@ -15,6 +16,7 @@ const shapeEntries = [
       size: [1, 0.5, 0.5],
       offset: [0, 0, 0],
     },
+    groups: ["base"],
   },
   {
     id: 3,
@@ -25,6 +27,7 @@ const shapeEntries = [
       size: [1, 0.25, 0.25],
       offset: [0, 0, 0],
     },
+    groups: ["base"],
   },
   {
     id: 4,
@@ -32,6 +35,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 5,
@@ -39,6 +43,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 6,
@@ -46,6 +51,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 7,
@@ -56,6 +62,7 @@ const shapeEntries = [
       size: [0.667, 1, 1],
       offset: [-0.166, 0, 0],
     },
+    groups: ["base"],
   },
   {
     id: 8,
@@ -63,6 +70,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 9,
@@ -70,6 +78,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 10,
@@ -77,6 +86,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 11,
@@ -84,6 +94,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 12,
@@ -91,6 +102,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 13,
@@ -98,6 +110,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 14,
@@ -108,6 +121,7 @@ const shapeEntries = [
       size: [0.5, 1, 1],
       offset: [-0.25, 0, 0],
     },
+    groups: ["base"],
   },
   {
     id: 15,
@@ -115,6 +129,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 16,
@@ -122,6 +137,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 17,
@@ -129,6 +145,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 18,
@@ -136,6 +153,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 19,
@@ -143,6 +161,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 20,
@@ -150,6 +169,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 21,
@@ -157,6 +177,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 22,
@@ -164,6 +185,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 23,
@@ -171,6 +193,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 24,
@@ -178,18 +201,21 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "corner",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 25,
     name: "table",
     rotatable: false,
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 26,
     name: "table2",
     rotatable: false,
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 27,
@@ -197,6 +223,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 28,
@@ -208,6 +235,7 @@ const shapeEntries = [
       size: [1, 0.25, 1],
       offset: [0, 0, 0],
     },
+    groups: ["base"],
   },
   {
     id: 29,
@@ -220,6 +248,7 @@ const shapeEntries = [
       offset: [0, -0.1857, -0.1875],
       pivot: [0, 0.1875, 0.1875],
     },
+    groups: ["base"],
   },
   {
     id: 30,
@@ -232,12 +261,14 @@ const shapeEntries = [
       offset: [0, 0.1875, 0],
       pivot: [0, -0.1875, 0],
     },
+    groups: ["base"],
   },
   {
     id: 31,
     name: "fence-cross",
     rotatable: false,
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 32,
@@ -249,6 +280,7 @@ const shapeEntries = [
       size: [0.5, 1, 0.5],
       offset: [0, 0, 0],
     },
+    groups: ["base"],
   },
   {
     id: 33,
@@ -259,6 +291,7 @@ const shapeEntries = [
       size: [1, 0.5, 0.5],
       offset: [0, 0, 0],
     },
+    groups: ["base"],
   },
   {
     id: 34,
@@ -269,6 +302,7 @@ const shapeEntries = [
       size: [0.5, 1, 1],
       offset: [0, 0, 0],
     },
+    groups: ["base"],
   },
   {
     id: 35,
@@ -280,12 +314,14 @@ const shapeEntries = [
       size: [1, 0.5, 1],
       offset: [0, 0, 0],
     },
+    groups: ["base"],
   },
   {
     id: 36,
     name: "pipe-cross-multi",
     rotatable: false,
     penetrable: false,
+    groups: ["base"],
   },
   {
     id: 37,
@@ -298,6 +334,7 @@ const shapeEntries = [
       offset: [0, -0.125, 0.125],
       pivot: [0, 0.125, -0.125],
     },
+    groups: ["base"],
   },
   {
     id: 38,
@@ -310,6 +347,7 @@ const shapeEntries = [
       offset: [-0.125, 0.125, 0],
       pivot: [0, -0.125, 0],
     },
+    groups: ["base"],
   },
   {
     id: 39,
@@ -322,6 +360,7 @@ const shapeEntries = [
       offset: [0.125, -0.125, 0],
       pivot: [0, 0.125, 0],
     },
+    groups: ["base"],
   },
   {
     id: 40,
@@ -333,6 +372,8 @@ const shapeEntries = [
       size: [0.3, 1, 1],
       offset: [-0.35, 0, 0],
     },
+    pallets: [[38], [39]],
+    groups: ["item"],
   },
   {
     id: 41,
@@ -360,6 +401,7 @@ const shapeEntries = [
       size: [0.4, 0.3, 0.7],
       offset: [-0.3, 0, 0],
     },
+    groups: ["item"],
   },
   {
     id: 42,
@@ -384,6 +426,17 @@ const shapeEntries = [
       size: [0.3, 0.5, 0.5],
       offset: [-0.35, 0, 0],
     },
+    groups: ["item"],
+  },
+  {
+    id: 43,
+    name: "tv",
+    rotatable: true,
+    rotationType: "side",
+    penetrable: false,
+    glow: false,
+    groups: ["item"],
+    pallets: [[38], [39]],
   },
 ]
 
@@ -395,6 +448,9 @@ const createShapes = (scene) =>
         console.log({ entry })
       }
       mesh.isVisible = false
+      mesh.getChildren().forEach((child) => {
+        child.isVisible = false
+      })
       mesh.setParent(null)
 
       return [

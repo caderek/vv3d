@@ -137,6 +137,17 @@ const loadModels = async (scene) => {
     )
   })
 
+  await new Promise((resolve, reject) => {
+    BABYLON.SceneLoader.Append(
+      "models/",
+      `items.glb`,
+      scene,
+      resolve,
+      null,
+      reject,
+    )
+  })
+
   return modelsMeta
 }
 

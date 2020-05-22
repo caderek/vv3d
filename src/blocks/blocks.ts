@@ -36,30 +36,29 @@ class Blocks {
   private scene: any
   private game: any
   private shadows: any
+  private lights: any
   private baseBlocks: { [key: string]: any }
 
-  constructor(scene, game, shadows) {
+  constructor(scene, game, shadows, lights) {
     this.scene = scene
     this.game = game
     this.shadows = shadows
+    this.lights = lights
     this.materials = createMaterials(scene)
     this.shapes = createShapes(scene)
     this.baseBlocks = {}
   }
 
   create(y, z, x, shapeId, materialId, rotation = undefined, save = false) {
-    const gap = 0.0
-    const [baseMaterialId, ...childrenMaterialIds] = materialId.split(".")
+    const gap = 0
+    const [baseMaterialId, ...childrenMaterialIds] = String(materialId).split(
+      ".",
+    )
     const baseBlockName = `${shapeId}_${baseMaterialId}`
 
     if (!this.baseBlocks[baseBlockName]) {
       this.createBaseBlock(shapeId, baseMaterialId)
     }
-
-    const item = this.shapes[shapeId].children
-      ? // !TODO OPTIMIZE to instances!
-        this.baseBlocks[baseBlockName].clone(`item_${y}_${z}_${x}`)
-      : this.baseBlocks[baseBlockName].createInstance(`item_${y}_${z}_${x}`)
 
     if (this.shapes[shapeId].children) {
       this.shapes[shapeId].children.forEach((child, index) => {
@@ -68,10 +67,19 @@ class Blocks {
           .find((item) => item.name.includes(child.name))
 
         const childMaterialId = childrenMaterialIds[index]
-        console.log({ materialId, childMaterialId, childrenMaterialIds })
         mesh.material = this.materials[childMaterialId].material
       })
     }
+
+    const item = this.shapes[shapeId].children
+      ? // !TODO OPTIMIZE to instances!
+        this.baseBlocks[baseBlockName].clone(`item_${y}_${z}_${x}`)
+      : this.baseBlocks[baseBlockName].createInstance(`item_${y}_${z}_${x}`)
+
+    item.getChildren().forEach((child) => {
+      child.isVisible = true
+      child.isPickable = false
+    })
 
     item.position.y = y + gap * y
     item.position.z = z + gap * z
@@ -119,12 +127,15 @@ class Blocks {
   }
 
   private createBaseBlock(shapeId, materialId) {
-    const baseBlock = this.shapes[shapeId].mesh.clone(
-      `${shapeId}_${materialId}`,
-    )
+    const shapeEntry = this.shapes[shapeId]
+    const baseBlock = shapeEntry.mesh.clone(`${shapeId}_${materialId}`)
     baseBlock.material = this.materials[materialId].material
     baseBlock.receiveShadows = true
     baseBlock.makeGeometryUnique()
+
+    if (shapeEntry.glow === false) {
+      this.lights.excludeFromGlow(baseBlock)
+    }
 
     this.baseBlocks[`${shapeId}_${materialId}`] = baseBlock
   }

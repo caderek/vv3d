@@ -193,7 +193,6 @@ const addPlants = (rng, map, mobs, availableForPlants, grass) => {
 
   const plantsPallets = Object.fromEntries(
     plants.map((plant) => {
-      console.log({ plant })
       return [
         plant.id,
         plant.pallets[randomInt(rng, 0, plant.pallets.length - 1)].map((item) =>
@@ -216,16 +215,14 @@ const addPlants = (rng, map, mobs, availableForPlants, grass) => {
 
     if (rand > 0.6) {
       item = `40_${grass}`
-    } else if (rand > 0.5) {
+    } else if (rand > 0.45) {
       const plant = plants[randomInt(rng, 0, plants.length - 1)]
       const palette = plantsPallets[plant.id]
       item = `${plant.id}_${palette.join(".")}`
     }
 
     if (item !== null) {
-      map[y][z][x] = `${item}_${randomInt(rng, 1, 4)}`
-
-      console.log({ item: map[y][z][x] })
+      map[y][z][x] = `${item}_${randomInt(rng, 0, 3)}`
 
       bookedPlaces.add(`${z}_${x}`)
     }

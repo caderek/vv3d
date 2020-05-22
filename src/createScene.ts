@@ -124,7 +124,7 @@ const createScene = async (engine, canvas, mobile) => {
   }
 
   const camera = new Camera(scene, canvas, game)
-  const blocks = new Blocks(scene, game, shadows)
+  const blocks = new Blocks(scene, game, shadows, lights)
 
   createWorld(
     game,
@@ -136,6 +136,8 @@ const createScene = async (engine, canvas, mobile) => {
     sounds,
     modelsMeta,
   )
+
+  console.log(game.world.map[9][4][1])
 
   const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
   gui.idealHeight = 1080

@@ -2,7 +2,27 @@ import * as BABYLON from "babylonjs"
 //@ts-ignore
 import * as textures from "babylonjs-procedural-textures"
 
-const materialEntries = [
+type Materials = {
+  id: number | string
+  name: string
+  color: [number, number, number]
+  colorHex?: string
+  roughness: number
+  metallic: number
+  alpha: number
+  emission: number
+  light?: any
+  groups: string[]
+  texture?: {
+    src: string
+    metallicSrc?: string
+    emissiveSrc?: string
+    bumpSrc?: string
+    alpha: boolean
+  }
+}[]
+
+const materialEntries: Materials = [
   {
     id: 1,
     name: "stone-white",
@@ -687,15 +707,77 @@ const materialEntries = [
     },
     groups: ["light"],
   },
+  {
+    id: 36,
+    name: "chest",
+    color: [1, 1, 1],
+    texture: {
+      src: "textures/chest.png",
+      alpha: true,
+    },
+    roughness: 0.8,
+    metallic: 0,
+    alpha: 1,
+    emission: 0,
+    light: null,
+    groups: [],
+  },
+  {
+    id: 37,
+    name: "chest-dark",
+    color: [1, 1, 1],
+    texture: {
+      src: "textures/chest-dark.png",
+      alpha: true,
+    },
+    roughness: 0.8,
+    metallic: 0,
+    alpha: 1,
+    emission: 0,
+    light: null,
+    groups: [],
+  },
+  {
+    id: 38,
+    name: "cutv",
+    color: [1, 1, 1],
+    texture: {
+      src: "textures/cutv.png",
+      emissiveSrc: "textures/sweetv_e.png",
+      alpha: true,
+    },
+    roughness: 0.5,
+    metallic: 0,
+    alpha: 1,
+    emission: 0.5,
+    light: null,
+    groups: [],
+  },
+  {
+    id: 39,
+    name: "sweetv",
+    color: [1, 1, 1],
+    texture: {
+      src: "textures/sweetv.png",
+      emissiveSrc: "textures/sweetv_e.png",
+      alpha: true,
+    },
+    roughness: 0.5,
+    metallic: 0,
+    alpha: 1,
+    emission: 0.5,
+    light: null,
+    groups: [],
+  },
 ]
 
-const preview = materialEntries.map(({ id, name, colorHex }) => ({
-  id,
-  name,
-  colorHex,
-}))
+// const preview = materialEntries.map(({ id, name, colorHex }) => ({
+//   id,
+//   name,
+//   colorHex,
+// }))
 
-console.log(preview)
+// console.log(preview)
 
 const createMaterials = (scene) =>
   Object.fromEntries(
@@ -736,25 +818,35 @@ const createMaterials = (scene) =>
           material.backFaceCulling = false
         }
 
-        // if (entry.texture.bumpSrc) {
-        //   material.bumpTexture = new BABYLON.Texture(
-        //     entry.texture.bumpSrc,
-        //     scene,
-        //     true,
-        //     false,
-        //     BABYLON.Texture.NEAREST_SAMPLINGMODE,
-        //   )
-        // }
+        if (entry.texture.bumpSrc) {
+          material.bumpTexture = new BABYLON.Texture(
+            entry.texture.bumpSrc,
+            scene,
+            true,
+            false,
+            BABYLON.Texture.NEAREST_SAMPLINGMODE,
+          )
+        }
 
-        // if (entry.texture.metallicSrc) {
-        //   material.metallicTexture = material.bumpTexture = new BABYLON.Texture(
-        //     entry.texture.metallicSrc,
-        //     scene,
-        //     true,
-        //     false,
-        //     BABYLON.Texture.NEAREST_SAMPLINGMODE,
-        //   )
-        // }
+        if (entry.texture.metallicSrc) {
+          material.metallicTexture = new BABYLON.Texture(
+            entry.texture.metallicSrc,
+            scene,
+            true,
+            false,
+            BABYLON.Texture.NEAREST_SAMPLINGMODE,
+          )
+        }
+
+        if (entry.texture.emissiveSrc) {
+          material.emissiveTexture = new BABYLON.Texture(
+            entry.texture.emissiveSrc,
+            scene,
+            true,
+            false,
+            BABYLON.Texture.NEAREST_SAMPLINGMODE,
+          )
+        }
       }
 
       return [entry.id, { ...entry, material }]
