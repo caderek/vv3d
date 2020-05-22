@@ -36,7 +36,7 @@ const main = async () => {
 
   // new AmbientOcclusion(scene, camera)
 
-  // new BABYLON.FxaaPostProcess("fxaa", 1.0, camera)
+  new BABYLON.FxaaPostProcess("fxaa", 1.0, camera)
   // new BABYLON.BlackAndWhitePostProcess("bandw", 1.0, camera)
   // new BABYLON.BloomEffect(scene, 1, 1, 1);
   // scene.fogMode = BABYLON.Scene.FOGMODE_EXP
