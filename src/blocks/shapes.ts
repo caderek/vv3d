@@ -117,10 +117,6 @@ const shapeEntries = [
     name: "slope-tip",
     rotatable: false,
     penetrable: false,
-    box: {
-      size: [0.5, 1, 1],
-      offset: [-0.25, 0, 0],
-    },
     groups: ["base"],
   },
   {

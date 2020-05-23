@@ -9,7 +9,7 @@ import mobsData, { Environments } from "./mobsData"
 import fragments from "./fragments"
 
 const treeModels = fragments.filter(
-  (fragment) => fragment.type === "tree-leafs-cube",
+  (fragment) => fragment.type === "tree-leafs-slope",
 )
 
 const randomToInt = (num, min, max) => {
