@@ -82,6 +82,7 @@
         text-align: center;
         overflow: auto;
         background: rgba(0, 24, 46, 0.95);
+        cursor: url(/images/cursor.png) 18 18, pointer;
       }
 
       .size {
@@ -107,7 +108,8 @@
       }
 
       .toolbox__shapes,
-      .toolbox__materials {
+      .toolbox__materials,
+      .tab-container {
         padding: 20px;
         overflow: auto;
       }
@@ -126,7 +128,6 @@
         border: solid 5px black;
         border-radius: 10px;
         margin: 10px;
-        cursor: pointer;
         background-size: cover;
       }
 
@@ -167,7 +168,6 @@
         border: solid 5px black;
         border-radius: 10px;
         margin: 10px;
-        cursor: pointer;
         background-size: cover;
       }
 
@@ -177,7 +177,6 @@
         height: 80px;
         border-radius: 10px;
         margin: 10px;
-        cursor: pointer;
         background-size: cover;
         background-repeat: no-repeat;
         image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
@@ -187,6 +186,20 @@
         image-rendering: pixelated; /* Chrome */
         image-rendering: optimize-contrast; /* CSS3 Proposed                  */
         -ms-interpolation-mode: nearest-neighbor;
+      }
+
+      .liquid,
+      .item,
+      .plant {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        margin: 10px;
+        background-size: cover;
+      }
+
+      .liquid {
         -webkit-mask-image: url(/images/wave-mask.svg);
         mask-image: url(/images/wave-mask.svg);
         -webkit-mask-size: cover;
@@ -210,6 +223,7 @@
 
       .hidden {
         visibility: hidden;
+        height: 0;
       }
 
       .info {
@@ -219,7 +233,7 @@
       .tabs {
         padding: 20px 20px 0 20px;
         text-align: left;
-        border-bottom: solid 3px #000b14;
+        border-bottom: solid 10px #000b14;
       }
 
       .tab {
@@ -237,6 +251,10 @@
       .tab-selected {
         background: #000b14;
       }
+
+      .none {
+        display: none;
+      }
     </style>
   </head>
   <body role="application">
@@ -248,19 +266,45 @@
     <canvas id="viewport" touch-action="none" role="application"></canvas>
     <div id="toolbox" class="toolbox hidden">
       <div id="tabs" class="tabs">
-        <div id="tab-blocks" class="tab tab-selected">BLOCKS</div>
-        <div id="tab-constructions" class="tab">CONSTRUCTIONS</div>
-        <div id="tab-liquids" class="tab">LIQUIDS</div>
-        <div id="tab-plants" class="tab">PLANTS</div>
-        <div id="tab-items" class="tab">ITEMS</div>
+        <div
+          id="tab-blocks"
+          class="tab tab-selected"
+          data-id="blocks"
+          data-type="tab"
+        >
+          BLOCKS
+        </div>
+        <div id="tab-liquids" class="tab" data-id="liquids" data-type="tab">
+          LIQUIDS
+        </div>
+        <div id="tab-plants" class="tab" data-id="plants" data-type="tab">
+          PLANTS
+        </div>
+        <!-- <div id="tab-items" class="tab" data-id="items" data-type="tab">
+          ITEMS
+        </div> -->
       </div>
       <div id="toolbox-selected" class="js-submenu toolbox__selected">
         <div id="selected-shape" class="selected-shape">&nbsp;</div>
         <div id="selected-material" class="selected-material">&nbsp;</div>
         <button id="back" class="back">BACK</button>
       </div>
-      <div id="toolbox-shapes" class="js-submenu toolbox__shapes"></div>
-      <div id="toolbox-materials" class="js-submenu toolbox__materials"></div>
+      <div id="tab-toolbox-blocks" class="tab-toolbox">
+        <div id="toolbox-shapes" class="js-submenu toolbox__shapes"></div>
+        <div id="toolbox-materials" class="js-submenu toolbox__materials"></div>
+      </div>
+      <div
+        id="tab-toolbox-liquids"
+        class="tab-toolbox tab-container hidden"
+      ></div>
+      <div
+        id="tab-toolbox-plants"
+        class="tab-toolbox tab-container hidden"
+      ></div>
+      <!-- <div
+        id="tab-toolbox-items"
+        class="tab-toolbox tab-container hidden"
+      ></div> -->
     </div>
     <script src="main.js"></script>
   </body>

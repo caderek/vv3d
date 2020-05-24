@@ -20,11 +20,13 @@ type Materials = {
     bumpSrc?: string
     alpha: boolean
   }
+  type: "all" | "base" | "liquid" | "item" | "plant"
 }[]
 
 const materialEntries: Materials = [
   {
     id: 1,
+    type: "all",
     name: "stone-white",
     color: [0.956, 0.956, 0.956],
     colorHex: "#FAFAFA",
@@ -37,6 +39,7 @@ const materialEntries: Materials = [
   },
   {
     id: 2,
+    type: "all",
     name: "stone-light-gray",
     color: [0.402, 0.402, 0.402],
     colorHex: "#AAAAAA",
@@ -49,6 +52,7 @@ const materialEntries: Materials = [
   },
   {
     id: 3,
+    type: "all",
     name: "stone-dark-gray",
     color: [0.025, 0.025, 0.025],
     colorHex: "#2C2C2C",
@@ -61,6 +65,7 @@ const materialEntries: Materials = [
   },
   {
     id: 4,
+    type: "all",
     name: "stone-black",
     color: [0, 0, 0],
     colorHex: "#000000",
@@ -73,6 +78,7 @@ const materialEntries: Materials = [
   },
   {
     id: 5,
+    type: "all",
     name: "stone-yellow",
     color: [1, 0.509, 0.12],
     colorHex: "#FFBD1D",
@@ -85,6 +91,7 @@ const materialEntries: Materials = [
   },
   {
     id: 6,
+    type: "all",
     name: "stone-orange",
     color: [1, 0.144, 0.021],
     colorHex: "#FF6A28",
@@ -97,6 +104,7 @@ const materialEntries: Materials = [
   },
   {
     id: 7,
+    type: "all",
     name: "wood",
     color: [1, 1, 1],
     // color: [0.178, 0.041, 0.013],
@@ -114,6 +122,7 @@ const materialEntries: Materials = [
   },
   {
     id: 8,
+    type: "all",
     name: "wood-light",
     color: [1, 1, 1],
     // color: [0.497, 0.184, 0.058],
@@ -131,6 +140,7 @@ const materialEntries: Materials = [
   },
   {
     id: 9,
+    type: "all",
     name: "wood-dark",
     color: [1, 1, 1],
     // color: [0.077, 0.018, 0.014],
@@ -148,6 +158,7 @@ const materialEntries: Materials = [
   },
   {
     id: 10,
+    type: "all",
     name: "stone-red",
     color: [1, 0.016, 0.019],
     colorHex: "#FF2225",
@@ -160,6 +171,7 @@ const materialEntries: Materials = [
   },
   {
     id: 11,
+    type: "all",
     name: "stone-light-red",
     color: [1, 0.141, 0.141],
     colorHex: "#FF6969",
@@ -172,6 +184,7 @@ const materialEntries: Materials = [
   },
   {
     id: 12,
+    type: "all",
     name: "stone-dark-red",
     color: [0.162, 0.005, 0.005],
     colorHex: "#700F10",
@@ -184,6 +197,7 @@ const materialEntries: Materials = [
   },
   {
     id: 13,
+    type: "all",
     name: "stone-pink",
     color: [1, 0.014, 0.474],
     colorHex: "#FF1FB7",
@@ -196,6 +210,7 @@ const materialEntries: Materials = [
   },
   {
     id: 14,
+    type: "all",
     name: "stone-purple",
     color: [0.22, 0.003, 1],
     colorHex: "#810AFF",
@@ -230,6 +245,7 @@ const materialEntries: Materials = [
   // },
   {
     id: "15a",
+    type: "base",
     name: "leafs-green",
     color: [1, 1, 1],
     texture: {
@@ -245,6 +261,7 @@ const materialEntries: Materials = [
   },
   {
     id: "15b",
+    type: "base",
     name: "leafs-light-green",
     color: [1, 1, 1],
     texture: {
@@ -260,6 +277,7 @@ const materialEntries: Materials = [
   },
   {
     id: "15c",
+    type: "base",
     name: "leafs-dark-green",
     color: [1, 1, 1],
     texture: {
@@ -275,6 +293,7 @@ const materialEntries: Materials = [
   },
   {
     id: "15d",
+    type: "base",
     name: "leafs-yellow",
     color: [1, 1, 1],
     texture: {
@@ -290,6 +309,7 @@ const materialEntries: Materials = [
   },
   {
     id: "15e",
+    type: "base",
     name: "leafs-red",
     color: [1, 1, 1],
     texture: {
@@ -305,6 +325,7 @@ const materialEntries: Materials = [
   },
   {
     id: "15f",
+    type: "base",
     name: "leafs-pink",
     color: [1, 1, 1],
     texture: {
@@ -320,6 +341,7 @@ const materialEntries: Materials = [
   },
   {
     id: "15g",
+    type: "base",
     name: "leafs-purple",
     color: [1, 1, 1],
     texture: {
@@ -335,6 +357,7 @@ const materialEntries: Materials = [
   },
   {
     id: "15h",
+    type: "base",
     name: "leafs-blue",
     color: [1, 1, 1],
     texture: {
@@ -350,6 +373,7 @@ const materialEntries: Materials = [
   },
   {
     id: "16a",
+    type: "base",
     name: "grass-green",
     color: [1, 1, 1],
     texture: {
@@ -365,6 +389,7 @@ const materialEntries: Materials = [
   },
   {
     id: "16b",
+    type: "base",
     name: "grass-light-green",
     color: [1, 1, 1],
     texture: {
@@ -380,6 +405,7 @@ const materialEntries: Materials = [
   },
   {
     id: "16c",
+    type: "base",
     name: "grass-dark-green",
     color: [1, 1, 1],
     texture: {
@@ -395,6 +421,7 @@ const materialEntries: Materials = [
   },
   {
     id: "16d",
+    type: "base",
     name: "grass-yellow",
     color: [1, 1, 1],
     texture: {
@@ -410,6 +437,7 @@ const materialEntries: Materials = [
   },
   {
     id: "16e",
+    type: "base",
     name: "grass-red",
     color: [1, 1, 1],
     texture: {
@@ -425,6 +453,7 @@ const materialEntries: Materials = [
   },
   {
     id: "16f",
+    type: "base",
     name: "grass-pink",
     color: [1, 1, 1],
     texture: {
@@ -440,6 +469,7 @@ const materialEntries: Materials = [
   },
   {
     id: "16g",
+    type: "base",
     name: "grass-purple",
     color: [1, 1, 1],
     texture: {
@@ -455,6 +485,7 @@ const materialEntries: Materials = [
   },
   {
     id: "16h",
+    type: "base",
     name: "grass-blue",
     color: [1, 1, 1],
     texture: {
@@ -487,6 +518,7 @@ const materialEntries: Materials = [
   // },
   {
     id: "21a",
+    type: "liquid",
     name: "water-salty",
     color: [0.018, 0.122, 1],
     colorHex: "#2462FF",
@@ -499,6 +531,7 @@ const materialEntries: Materials = [
   },
   {
     id: "21b",
+    type: "liquid",
     name: "water-fresh",
     color: [0, 0.266, 1],
     colorHex: "#008DFF",
@@ -511,6 +544,7 @@ const materialEntries: Materials = [
   },
   {
     id: "21c",
+    type: "liquid",
     name: "water-dirty",
     color: [0, 1, 0.548],
     colorHex: "#00FFC3",
@@ -523,6 +557,7 @@ const materialEntries: Materials = [
   },
   {
     id: "21d",
+    type: "liquid",
     name: "acid",
     color: [0.292, 0.509, 0],
     colorHex: "#93BD00",
@@ -535,6 +570,7 @@ const materialEntries: Materials = [
   },
   {
     id: "21e",
+    type: "liquid",
     name: "lava",
     color: [1, 0.1, 0],
     colorHex: "#FF5900",
@@ -547,6 +583,7 @@ const materialEntries: Materials = [
   },
   {
     id: 23,
+    type: "base",
     name: "ice",
     color: [0.578, 0.831, 1],
     colorHex: "#C8EBFF",
@@ -559,6 +596,7 @@ const materialEntries: Materials = [
   },
   {
     id: 24,
+    type: "all",
     name: "crystal-yellow",
     color: [1, 0.468, 0],
     colorHex: "#FFB600",
@@ -571,6 +609,7 @@ const materialEntries: Materials = [
   },
   {
     id: 25,
+    type: "all",
     name: "crystal-magenta",
     color: [0.799, 0, 0.178],
     colorHex: "#E70075",
@@ -583,6 +622,7 @@ const materialEntries: Materials = [
   },
   {
     id: 26,
+    type: "all",
     name: "crystal-cyan",
     color: [0, 0.266, 0.799],
     colorHex: "#008DE7",
@@ -595,6 +635,7 @@ const materialEntries: Materials = [
   },
   {
     id: 27,
+    type: "all",
     name: "crystal-red",
     color: [1, 0.011, 0],
     colorHex: "#FF1B00",
@@ -607,6 +648,7 @@ const materialEntries: Materials = [
   },
   {
     id: 28,
+    type: "all",
     name: "crystal-green",
     color: [0.266, 1, 0],
     colorHex: "#8DFF00",
@@ -619,6 +661,7 @@ const materialEntries: Materials = [
   },
   {
     id: 29,
+    type: "base",
     name: "light-white",
     color: [1, 1, 1],
     colorHex: "#FFFFFF",
@@ -634,6 +677,7 @@ const materialEntries: Materials = [
   },
   {
     id: 30,
+    type: "base",
     name: "light-red",
     color: [1, 0, 0],
     colorHex: "#FF0000",
@@ -649,6 +693,7 @@ const materialEntries: Materials = [
   },
   {
     id: 31,
+    type: "base",
     name: "light-magenta",
     color: [0.799, 0, 0.178],
     colorHex: "#E70075",
@@ -664,6 +709,7 @@ const materialEntries: Materials = [
   },
   {
     id: 32,
+    type: "base",
     name: "light-cyan",
     color: [0, 0.266, 0.799],
     colorHex: "#008DE7",
@@ -679,6 +725,7 @@ const materialEntries: Materials = [
   },
   {
     id: 33,
+    type: "base",
     name: "light-green",
     color: [0, 1, 0],
     colorHex: "#00FF00",
@@ -694,6 +741,7 @@ const materialEntries: Materials = [
   },
   {
     id: 34,
+    type: "base",
     name: "light-yellow",
     color: [1, 1, 0],
     colorHex: "#FFFF00",
@@ -709,6 +757,7 @@ const materialEntries: Materials = [
   },
   {
     id: 35,
+    type: "base",
     name: "light-blue",
     color: [0, 0, 1],
     colorHex: "#00FF",
@@ -724,6 +773,7 @@ const materialEntries: Materials = [
   },
   {
     id: 36,
+    type: "item",
     name: "chest",
     color: [1, 1, 1],
     texture: {
@@ -739,6 +789,7 @@ const materialEntries: Materials = [
   },
   {
     id: 37,
+    type: "item",
     name: "chest-dark",
     color: [1, 1, 1],
     texture: {
@@ -754,6 +805,7 @@ const materialEntries: Materials = [
   },
   {
     id: 38,
+    type: "item",
     name: "cutv",
     color: [1, 1, 1],
     texture: {
@@ -770,6 +822,7 @@ const materialEntries: Materials = [
   },
   {
     id: 39,
+    type: "item",
     name: "sweetv",
     color: [1, 1, 1],
     texture: {
@@ -814,12 +867,12 @@ const createMaterials = (scene) =>
         material.emissiveIntensity = entry.emission
       }
 
-      if (entry.groups.includes("liquid")) {
-        material.bumpTexture = new BABYLON.Texture(
-          "textures/water_n.jpg",
-          scene,
-        )
-      }
+      // if (entry.groups.includes("liquid")) {
+      //   material.bumpTexture = new BABYLON.Texture(
+      //     "textures/water_n.jpg",
+      //     scene,
+      //   )
+      // }
 
       if (entry.texture) {
         material.albedoTexture = new BABYLON.Texture(

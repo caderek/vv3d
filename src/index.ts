@@ -15,6 +15,9 @@ import AmbientOcclusion from "./scene/ambient-occlusion"
 
 const $toolboxShapes = document.getElementById("toolbox-shapes")
 const $toolboxMaterials = document.getElementById("toolbox-materials")
+const $toolboxLiquids = document.getElementById("tab-toolbox-liquids")
+const $toolboxPlants = document.getElementById("tab-toolbox-plants")
+const $toolboxItems = document.getElementById("tab-toolbox-items")
 
 const mobile = isMobile()
 const targetFPS = 20
@@ -73,10 +76,11 @@ const main = async () => {
 
 main()
 
-const renderToolboxShape = (name, id) => `
+const renderToolboxShape = (name, id, type) => `
   <div
     class="shape"
     data-type="shape"
+    data-shape-type="${type}"
     data-name="${name}"
     data-id="${id}"
     style="background-image: url(/models/ico/${name}.png);"
@@ -84,10 +88,20 @@ const renderToolboxShape = (name, id) => `
 `
 
 const toolboxShapes = shapeEntries
-  .map(({ name, id }) => renderToolboxShape(name, id))
+  .filter(
+    ({ groups }) => groups.includes("base") || groups.includes("constructions"),
+  )
+  .map(({ name, id, type }) => renderToolboxShape(name, id, type))
   .join("\n")
 
-const renderToolboxMaterial = (id, colorHex, emission, light, texture) => {
+const renderToolboxMaterial = (
+  id,
+  colorHex,
+  emission,
+  light,
+  texture,
+  type,
+) => {
   let style = light
     ? `background-image: radial-gradient(${colorHex}, rgba(0, 0, 0, 0)); box-shadow: 0 0 20px ${colorHex};`
     : emission > 0
@@ -107,16 +121,75 @@ const renderToolboxMaterial = (id, colorHex, emission, light, texture) => {
       data-light=${light ? 1 : 0}
       data-texture="${texture ? texture.src : ""}"
       data-id="${id}"
+      data-material-type="${type}"
       style="${style}"
     ></div>
   `
 }
 
 const toolboxMaterials = materialEntries
-  .map(({ id, colorHex, emission, light, texture }) =>
-    renderToolboxMaterial(id, colorHex, emission, light, texture),
+  .filter(({ groups }) => groups.includes("building"))
+  .map(({ id, colorHex, emission, light, texture, type }) =>
+    renderToolboxMaterial(id, colorHex, emission, light, texture, type),
   )
+  .join("\n")
+
+const renderLiquids = (id, colorHex) => {
+  const style = `background: ${colorHex};`
+  return `
+    <div
+      class="liquid"
+      data-type="liquid"
+      data-id="${id}"
+      style="${style}"
+    ></div>
+  `
+}
+
+const toolboxLiquids = materialEntries
+  .filter(({ type }) => type === "liquid")
+  .map(({ id, colorHex }) => renderLiquids(id, colorHex))
+  .join("\n")
+
+const renderPlants = (id, name, pallets) => {
+  if (pallets.length === 0) {
+    return `
+      <div
+        class="plant"
+        data-type="plant"
+        data-id="${id}"
+        data-material-id="{${name}}"
+        style="background-image: url(/models/ico/${name}.png)"
+      ></div>
+    `
+  }
+
+  return pallets
+    .map((palette) => {
+      const materials = palette.filter((item) => item !== null)
+      const ico = `${name}_${materials.join("_")}`
+
+      return `
+      <div
+        class="plant"
+        data-type="plant"
+        data-id="${id}"
+        data-material-id="${
+          palette[0] === null ? "{leafs}." : ""
+        }${materials.join(".")}"
+        style="background-image: url(/models/ico/${ico}.png)"
+      ></div>
+    `
+    })
+    .join("\n")
+}
+
+const toolboxPlants = shapeEntries
+  .filter(({ type }) => type === "plant" || type === "grass")
+  .map(({ id, name, pallets }) => renderPlants(id, name, pallets))
   .join("\n")
 
 $toolboxShapes.innerHTML = toolboxShapes
 $toolboxMaterials.innerHTML = toolboxMaterials
+$toolboxLiquids.innerHTML = toolboxLiquids
+$toolboxPlants.innerHTML = toolboxPlants

@@ -184,7 +184,7 @@ const createNatureWorld = (rng) => {
     }
   }
 
-  return { map, hasLife, availableForPlants, grass }
+  return { map, hasLife, availableForPlants, grass, hasGrass }
 }
 
 const addPlants = (rng, map, mobs, availableForPlants, grass) => {
@@ -266,6 +266,8 @@ const addPlants = (rng, map, mobs, availableForPlants, grass) => {
       }
     }
   })
+
+  return { plantsMaterial: `16${leafsColor}` }
 }
 
 const generateMobs = (rng, map) => {
@@ -325,14 +327,20 @@ const createRandomWorld = () => {
   const seed = name
   const rng = seedrandom(seed)
   const generator = createNatureWorld
-  const { map, hasLife, availableForPlants, grass } = generator(rng)
+  const { map, hasLife, availableForPlants, grass, hasGrass } = generator(rng)
   const mobs = hasLife ? generateMobs(rng, map) : []
+  let plantsMaterial = null
 
   if (availableForPlants.length > 0) {
-    addPlants(rng, map, mobs, availableForPlants, grass)
+    plantsMaterial = addPlants(rng, map, mobs, availableForPlants, grass)
+      .plantsMaterial
   }
 
-  return { map, data: { name }, mobs }
+  return {
+    map,
+    data: { name, plantsMaterial, grassMaterial: hasGrass ? grass : null },
+    mobs,
+  }
 }
 
 export default createRandomWorld

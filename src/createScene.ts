@@ -16,6 +16,7 @@ import { Modes } from "./types/enums"
 import * as GUI from "babylonjs-gui"
 import createWorld from "./createWorld"
 import Blocks from "./blocks/blocks"
+import { materialsByID } from "./blocks/materials"
 
 const debug = (scene) => {
   const blockNames = blocksValues.map(({ name }) => name)
@@ -50,6 +51,8 @@ const createScene = async (engine, canvas, mobile) => {
     music: false,
     track: 0,
     reverseBuild: false,
+    tab: "blocks",
+    tabAll: true,
   }
 
   const scene = new BABYLON.Scene(engine)
@@ -110,6 +113,7 @@ const createScene = async (engine, canvas, mobile) => {
   const game = {
     world: {
       map: null,
+      data: {},
       graph: null,
       size: null,
       items: [],
@@ -137,8 +141,6 @@ const createScene = async (engine, canvas, mobile) => {
     sounds,
     modelsMeta,
   )
-
-  console.log(game.world.map[9][4][1])
 
   const gui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI")
   gui.idealHeight = 1080
@@ -231,6 +233,13 @@ const createScene = async (engine, canvas, mobile) => {
   const $selectedShape = document.getElementById("selected-shape")
   const $selectedMaterial = document.getElementById("selected-material")
 
+  const $allMaterials = [
+    ...document.querySelectorAll('[data-material-type="all"]'),
+  ]
+  const $baseMaterials = [
+    ...document.querySelectorAll('[data-material-type="base"]'),
+  ]
+
   // @ts-ignore
   document
     .getElementById("toolbox-shapes")
@@ -242,6 +251,36 @@ const createScene = async (engine, canvas, mobile) => {
         state.activeShape = target.dataset.id
         // @ts-ignore
         $selectedShape.style.backgroundImage = `url(/models/ico/${target.dataset.name}.png)`
+
+        // @ts-ignore
+        const shapeType = target.dataset.shapeType
+        const tabAll = shapeType === "all"
+
+        if (tabAll !== state.tabAll) {
+          state.tabAll = !state.tabAll
+
+          if (state.tabAll) {
+            $allMaterials.forEach(($material) => {
+              $material.classList.remove("none")
+            })
+            $baseMaterials.forEach(($material) => {
+              $material.classList.remove("none")
+            })
+          } else {
+            $baseMaterials.forEach(($material) => {
+              $material.classList.add("none")
+            })
+
+            if (materialsByID[state.activeMaterial].type !== "all") {
+              state.activeMaterial = 1
+              // @ts-ignore
+              $selectedMaterial.style.backgroundImage = "none"
+              // @ts-ignore
+              $selectedMaterial.style.background = materialsByID[1].colorHex
+              $selectedMaterial.style.boxShadow = "none"
+            }
+          }
+        }
       }
     })
 
@@ -284,10 +323,81 @@ const createScene = async (engine, canvas, mobile) => {
       }
     })
 
+  document
+    .getElementById("tab-toolbox-liquids")
+    .addEventListener("click", ({ target }) => {
+      // @ts-ignore
+      if (target.dataset.type === "liquid") {
+        sounds.button.play()
+        // @ts-ignore
+        state.activeMaterial = target.dataset.id
+        state.activeShape = 1
+        $toolbox.classList.toggle("hidden")
+        game.pause = false
+      }
+    })
+
+  document
+    .getElementById("tab-toolbox-plants")
+    .addEventListener("click", ({ target }) => {
+      // @ts-ignore
+      if (target.dataset.type === "plant") {
+        sounds.button.play()
+        // @ts-ignore
+        state.activeShape = target.dataset.id
+        // @ts-ignore
+        state.activeMaterial = target.dataset.materialId
+          // @ts-ignore
+          .replace("{grass}", game.world.data.grassMaterial || "16c")
+          // @ts-ignore
+          .replace("{leafs}", game.world.data.plantsMaterial || "16a")
+        $toolbox.classList.toggle("hidden")
+        game.pause = false
+      }
+    })
+
   document.getElementById("back").addEventListener("click", () => {
     sounds.button.play()
     $toolbox.classList.toggle("hidden")
     game.pause = false
+  })
+
+  const $tabs = [...document.getElementsByClassName("tab")]
+  const $tabsContent = [...document.getElementsByClassName("tab-toolbox")]
+  const $toolboxSelected = document.getElementById("toolbox-selected")
+
+  document.getElementById("tabs").addEventListener("click", ({ target }) => {
+    // @ts-ignore
+    if (target.dataset.type === "tab") {
+      // @ts-ignore
+      if (target.dataset.id === "blocks") {
+        $toolboxSelected.classList.remove("hidden")
+      } else {
+        $toolboxSelected.classList.add("hidden")
+      }
+
+      sounds.button.play()
+      // @ts-ignore
+      state.tab = target.dataset.id
+
+      $tabsContent.forEach(($tabContent) => {
+        $tabContent.classList.add("hidden")
+      })
+
+      $tabs.forEach(($tab) => {
+        $tab.classList.remove("tab-selected")
+      })
+
+      document
+        // @ts-ignore
+        .getElementById(`tab-toolbox-${target.dataset.id}`)
+        .classList.remove("hidden")
+
+      document
+        // @ts-ignore
+        .getElementById(`tab-${target.dataset.id}`)
+        .classList.add("tab-selected")
+    }
   })
 
   return { renderFrame, scene, game }

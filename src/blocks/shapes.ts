@@ -1,6 +1,7 @@
 const shapeEntries = [
   {
     id: 1,
+    type: "all",
     name: "cube",
     rotatable: true,
     rotationType: "side",
@@ -9,6 +10,7 @@ const shapeEntries = [
   },
   {
     id: 2,
+    type: "all",
     name: "pillar",
     rotatable: false,
     penetrable: false,
@@ -20,6 +22,7 @@ const shapeEntries = [
   },
   {
     id: 3,
+    type: "all",
     name: "pole",
     rotatable: false,
     penetrable: false,
@@ -31,6 +34,7 @@ const shapeEntries = [
   },
   {
     id: 4,
+    type: "all",
     name: "stairs",
     rotatable: true,
     rotationType: "side",
@@ -39,6 +43,7 @@ const shapeEntries = [
   },
   {
     id: 5,
+    type: "all",
     name: "stairs-inset",
     rotatable: true,
     rotationType: "corner",
@@ -47,6 +52,7 @@ const shapeEntries = [
   },
   {
     id: 6,
+    type: "all",
     name: "stairs-outset",
     rotatable: true,
     rotationType: "corner",
@@ -55,6 +61,7 @@ const shapeEntries = [
   },
   {
     id: 7,
+    type: "all",
     name: "stairs-tip",
     rotatable: false,
     penetrable: false,
@@ -66,6 +73,7 @@ const shapeEntries = [
   },
   {
     id: 8,
+    type: "all",
     name: "stairs-reverse",
     rotatable: true,
     rotationType: "side",
@@ -74,6 +82,7 @@ const shapeEntries = [
   },
   {
     id: 9,
+    type: "all",
     name: "stairs-reverse-inset",
     rotatable: true,
     rotationType: "corner",
@@ -82,6 +91,7 @@ const shapeEntries = [
   },
   {
     id: 10,
+    type: "all",
     name: "stairs-reverse-outset",
     rotatable: true,
     rotationType: "corner",
@@ -90,6 +100,7 @@ const shapeEntries = [
   },
   {
     id: 11,
+    type: "all",
     name: "slope",
     rotatable: true,
     rotationType: "side",
@@ -98,6 +109,7 @@ const shapeEntries = [
   },
   {
     id: 12,
+    type: "all",
     name: "slope-inset",
     rotatable: true,
     rotationType: "corner",
@@ -106,6 +118,7 @@ const shapeEntries = [
   },
   {
     id: 13,
+    type: "all",
     name: "slope-outset",
     rotatable: true,
     rotationType: "corner",
@@ -114,6 +127,7 @@ const shapeEntries = [
   },
   {
     id: 14,
+    type: "all",
     name: "slope-tip",
     rotatable: false,
     penetrable: false,
@@ -121,6 +135,7 @@ const shapeEntries = [
   },
   {
     id: 15,
+    type: "all",
     name: "slope-reverse",
     rotatable: true,
     rotationType: "side",
@@ -129,6 +144,7 @@ const shapeEntries = [
   },
   {
     id: 16,
+    type: "all",
     name: "slope-reverse-inset",
     rotatable: true,
     rotationType: "corner",
@@ -137,6 +153,7 @@ const shapeEntries = [
   },
   {
     id: 17,
+    type: "all",
     name: "slope-reverse-outset",
     rotatable: true,
     rotationType: "corner",
@@ -145,6 +162,7 @@ const shapeEntries = [
   },
   {
     id: 18,
+    type: "all",
     name: "hill",
     rotatable: true,
     rotationType: "side",
@@ -153,6 +171,7 @@ const shapeEntries = [
   },
   {
     id: 19,
+    type: "all",
     name: "hill-inset",
     rotatable: true,
     rotationType: "corner",
@@ -161,6 +180,7 @@ const shapeEntries = [
   },
   {
     id: 20,
+    type: "all",
     name: "hill-outset",
     rotatable: true,
     rotationType: "corner",
@@ -169,6 +189,7 @@ const shapeEntries = [
   },
   {
     id: 21,
+    type: "all",
     name: "cylinder-quarter",
     rotatable: true,
     rotationType: "corner",
@@ -177,6 +198,7 @@ const shapeEntries = [
   },
   {
     id: 22,
+    type: "all",
     name: "hill-reverse",
     rotatable: true,
     rotationType: "side",
@@ -185,6 +207,7 @@ const shapeEntries = [
   },
   {
     id: 23,
+    type: "all",
     name: "hill-reverse-inset",
     rotatable: true,
     rotationType: "corner",
@@ -193,6 +216,7 @@ const shapeEntries = [
   },
   {
     id: 24,
+    type: "all",
     name: "hill-reverse-outset",
     rotatable: true,
     rotationType: "corner",
@@ -201,6 +225,7 @@ const shapeEntries = [
   },
   {
     id: 25,
+    type: "constructions",
     name: "table",
     rotatable: false,
     penetrable: false,
@@ -208,6 +233,7 @@ const shapeEntries = [
   },
   {
     id: 26,
+    type: "constructions",
     name: "table2",
     rotatable: false,
     penetrable: false,
@@ -215,6 +241,7 @@ const shapeEntries = [
   },
   {
     id: 27,
+    type: "constructions",
     name: "chair",
     rotatable: true,
     rotationType: "side",
@@ -223,6 +250,7 @@ const shapeEntries = [
   },
   {
     id: 28,
+    type: "constructions",
     name: "fence",
     rotatable: true,
     rotationType: "side",
@@ -235,6 +263,7 @@ const shapeEntries = [
   },
   {
     id: 29,
+    type: "constructions",
     name: "fence-corner",
     rotatable: true,
     rotationType: "corner",
@@ -248,6 +277,7 @@ const shapeEntries = [
   },
   {
     id: 30,
+    type: "constructions",
     name: "fence-tee",
     rotatable: true,
     rotationType: "side",
@@ -261,6 +291,7 @@ const shapeEntries = [
   },
   {
     id: 31,
+    type: "constructions",
     name: "fence-cross",
     rotatable: false,
     penetrable: false,
@@ -268,6 +299,7 @@ const shapeEntries = [
   },
   {
     id: 32,
+    type: "constructions",
     name: "pipe",
     rotatable: true,
     rotationType: "side",
@@ -280,6 +312,7 @@ const shapeEntries = [
   },
   {
     id: 33,
+    type: "constructions",
     name: "pipe-vertical",
     rotatable: false,
     penetrable: false,
@@ -291,6 +324,7 @@ const shapeEntries = [
   },
   {
     id: 34,
+    type: "constructions",
     name: "pipe-cross",
     rotatable: false,
     penetrable: false,
@@ -302,6 +336,7 @@ const shapeEntries = [
   },
   {
     id: 35,
+    type: "constructions",
     name: "pipe-cross-vertical",
     rotatable: true,
     rotationType: "side",
@@ -314,6 +349,7 @@ const shapeEntries = [
   },
   {
     id: 36,
+    type: "constructions",
     name: "pipe-cross-multi",
     rotatable: false,
     penetrable: false,
@@ -321,6 +357,7 @@ const shapeEntries = [
   },
   {
     id: 37,
+    type: "constructions",
     name: "pipe-corner",
     rotatable: true,
     rotationType: "flip",
@@ -334,6 +371,7 @@ const shapeEntries = [
   },
   {
     id: 38,
+    type: "constructions",
     name: "pipe-corner-top",
     rotatable: true,
     rotationType: "side",
@@ -347,6 +385,7 @@ const shapeEntries = [
   },
   {
     id: 39,
+    type: "constructions",
     name: "pipe-corner-down",
     rotatable: true,
     rotationType: "side",
@@ -360,6 +399,7 @@ const shapeEntries = [
   },
   {
     id: 40,
+    type: "grass",
     name: "grass",
     rotatable: true,
     rotationType: "side",
@@ -368,7 +408,8 @@ const shapeEntries = [
       size: [0.3, 1, 1],
       offset: [-0.35, 0, 0],
     },
-    pallets: [[38], [39]],
+    // pallets: [[38], [39]],
+    pallets: [],
     groups: ["item"],
   },
   {
@@ -426,6 +467,7 @@ const shapeEntries = [
   },
   {
     id: 43,
+    type: "item",
     name: "tv",
     rotatable: true,
     rotationType: "side",
