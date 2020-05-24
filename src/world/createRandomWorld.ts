@@ -8,9 +8,11 @@ import getFirstEmptyField from "../helpers/getFirstEmptyField"
 import mobsData, { Environments } from "./mobsData"
 import fragments from "./fragments"
 
-const treeModels = fragments.filter(
-  (fragment) => fragment.type === "tree-leafs-slope",
-)
+const treeModels = {
+  cube: fragments.filter((fragment) => fragment.type === "tree-leafs-cube"),
+  slope: fragments.filter((fragment) => fragment.type === "tree-leafs-slope"),
+}
+const treeTypes = ["cube", "cube", "slope"]
 
 const randomToInt = (num, min, max) => {
   return Math.floor(num * (max - min + 1)) + min
@@ -70,7 +72,7 @@ const createNatureWorld = (rng) => {
     : lifeRand > 0.9
 
   const resourceMaterials = materialEntries
-    .filter(({ groups }) => groups.includes("resource"))
+    .filter(({ groups }) => groups.includes("stone"))
     .map((item) => item.id)
   const crystalMaterials = materialEntries
     .filter(({ groups }) => groups.includes("crystal"))
@@ -190,6 +192,7 @@ const addPlants = (rng, map, mobs, availableForPlants, grass) => {
   const trees = []
   const leafsId = leafsIds[randomInt(rng, 0, leafsIds.length - 1)] as string
   const leafsColor = leafsId.slice(-1)
+  const treeType = treeTypes[randomInt(rng, 0, treeTypes.length - 1)]
 
   const plantsPallets = Object.fromEntries(
     plants.map((plant) => {
@@ -203,8 +206,8 @@ const addPlants = (rng, map, mobs, availableForPlants, grass) => {
   )
 
   for (let i = 0; i < numberOfTrees; i++) {
-    const rand = randomInt(rng, 0, treeModels.length - 1)
-    trees.push(treeModels[rand])
+    const rand = randomInt(rng, 0, treeModels[treeType].length - 1)
+    trees.push(treeModels[treeType][rand])
   }
 
   const bookedPlaces = new Set(mobs.map(({ z, x }) => `${z}_${x}`))

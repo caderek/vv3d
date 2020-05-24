@@ -204,14 +204,14 @@ const shapeEntries = [
     name: "table",
     rotatable: false,
     penetrable: false,
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 26,
     name: "table2",
     rotatable: false,
     penetrable: false,
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 27,
@@ -219,7 +219,7 @@ const shapeEntries = [
     rotatable: true,
     rotationType: "side",
     penetrable: false,
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 28,
@@ -231,7 +231,7 @@ const shapeEntries = [
       size: [1, 0.25, 1],
       offset: [0, 0, 0],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 29,
@@ -244,7 +244,7 @@ const shapeEntries = [
       offset: [0, -0.1857, -0.1875],
       pivot: [0, 0.1875, 0.1875],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 30,
@@ -257,14 +257,14 @@ const shapeEntries = [
       offset: [0, 0.1875, 0],
       pivot: [0, -0.1875, 0],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 31,
     name: "fence-cross",
     rotatable: false,
     penetrable: false,
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 32,
@@ -276,7 +276,7 @@ const shapeEntries = [
       size: [0.5, 1, 0.5],
       offset: [0, 0, 0],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 33,
@@ -287,7 +287,7 @@ const shapeEntries = [
       size: [1, 0.5, 0.5],
       offset: [0, 0, 0],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 34,
@@ -298,7 +298,7 @@ const shapeEntries = [
       size: [0.5, 1, 1],
       offset: [0, 0, 0],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 35,
@@ -310,14 +310,14 @@ const shapeEntries = [
       size: [1, 0.5, 1],
       offset: [0, 0, 0],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 36,
     name: "pipe-cross-multi",
     rotatable: false,
     penetrable: false,
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 37,
@@ -330,7 +330,7 @@ const shapeEntries = [
       offset: [0, -0.125, 0.125],
       pivot: [0, 0.125, -0.125],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 38,
@@ -343,7 +343,7 @@ const shapeEntries = [
       offset: [-0.125, 0.125, 0],
       pivot: [0, -0.125, 0],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 39,
@@ -356,7 +356,7 @@ const shapeEntries = [
       offset: [0.125, -0.125, 0],
       pivot: [0, 0.125, 0],
     },
-    groups: ["base"],
+    groups: ["constructions"],
   },
   {
     id: 40,

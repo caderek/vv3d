@@ -101,7 +101,7 @@ const createScene = async (engine, canvas, mobile) => {
   if (savedWorldEntry) {
     savedWorld = JSON.parse(savedWorldEntry)
 
-    if (savedWorld.version !== "0.1.10") {
+    if (savedWorld.version !== "0.1.11") {
       window.localStorage.removeItem("world")
       savedWorld = undefined
     }
@@ -120,6 +120,7 @@ const createScene = async (engine, canvas, mobile) => {
     hero: null,
     ship: null,
     pause: false,
+    sounds,
     mobile,
   }
 
@@ -211,7 +212,7 @@ const createScene = async (engine, canvas, mobile) => {
     camera,
   })
 
-  const controls = handleControls(scene, action1, action2, canvas, mobile)
+  const controls = handleControls(scene, game, action1, action2, canvas, mobile)
 
   const renderFrame = () => {
     controls()
@@ -286,6 +287,7 @@ const createScene = async (engine, canvas, mobile) => {
   document.getElementById("back").addEventListener("click", () => {
     sounds.button.play()
     $toolbox.classList.toggle("hidden")
+    game.pause = false
   })
 
   return { renderFrame, scene, game }

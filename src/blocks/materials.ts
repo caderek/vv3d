@@ -33,7 +33,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 2,
@@ -45,7 +45,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 3,
@@ -57,7 +57,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 4,
@@ -69,7 +69,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 5,
@@ -81,7 +81,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 6,
@@ -93,7 +93,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 7,
@@ -110,7 +110,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["wood", "building"],
   },
   {
     id: 8,
@@ -127,7 +127,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["wood", "building"],
   },
   {
     id: 9,
@@ -144,7 +144,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["wood", "building"],
   },
   {
     id: 10,
@@ -156,7 +156,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 11,
@@ -168,7 +168,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 12,
@@ -180,7 +180,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 13,
@@ -192,7 +192,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   {
     id: 14,
@@ -204,7 +204,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["resource"],
+    groups: ["stone", "building"],
   },
   // {
   //   id: 15,
@@ -215,7 +215,7 @@ const materialEntries: Materials = [
   //   alpha: 1,
   //   emission: 0,
   //   light: null,
-  //   groups: ["resource"],
+  //   groups: ["stone"],
   // },
   // {
   //   id: 16,
@@ -226,7 +226,7 @@ const materialEntries: Materials = [
   //   alpha: 1,
   //   emission: 0,
   //   light: null,
-  //   groups: ["resource"],
+  //   groups: ["stone"],
   // },
   {
     id: "15a",
@@ -241,7 +241,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["leafs"],
+    groups: ["leafs", "building"],
   },
   {
     id: "15b",
@@ -256,7 +256,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["leafs"],
+    groups: ["leafs", "building"],
   },
   {
     id: "15c",
@@ -271,7 +271,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["leafs"],
+    groups: ["leafs", "building"],
   },
   {
     id: "15d",
@@ -286,7 +286,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["leafs"],
+    groups: ["leafs", "building"],
   },
   {
     id: "15e",
@@ -301,14 +301,14 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["leafs"],
+    groups: ["leafs", "building"],
   },
   {
     id: "15f",
     name: "leafs-pink",
     color: [1, 1, 1],
     texture: {
-      src: "textures/leafs-red.png",
+      src: "textures/leafs-pink.png",
       alpha: true,
     },
     roughness: 0.8,
@@ -316,7 +316,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["leafs"],
+    groups: ["leafs", "building"],
   },
   {
     id: "15g",
@@ -331,7 +331,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["leafs"],
+    groups: ["leafs", "building"],
   },
   {
     id: "15h",
@@ -346,7 +346,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["leafs"],
+    groups: ["leafs", "building"],
   },
   {
     id: "16a",
@@ -361,7 +361,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio", "grass"],
+    groups: ["bio", "grass", "building"],
   },
   {
     id: "16b",
@@ -376,7 +376,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio", "grass"],
+    groups: ["bio", "grass", "building"],
   },
   {
     id: "16c",
@@ -391,7 +391,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio", "grass"],
+    groups: ["bio", "grass", "building"],
   },
   {
     id: "16d",
@@ -406,7 +406,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio", "grass"],
+    groups: ["bio", "grass", "building"],
   },
   {
     id: "16e",
@@ -421,7 +421,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio", "grass"],
+    groups: ["bio", "grass", "building"],
   },
   {
     id: "16f",
@@ -436,7 +436,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio", "grass"],
+    groups: ["bio", "grass", "building"],
   },
   {
     id: "16g",
@@ -451,7 +451,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio", "grass"],
+    groups: ["bio", "grass", "building"],
   },
   {
     id: "16h",
@@ -466,7 +466,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio", "grass"],
+    groups: ["bio", "grass", "building"],
   },
   // {
   //   id: "cube",
@@ -524,12 +524,12 @@ const materialEntries: Materials = [
   {
     id: "21d",
     name: "acid",
-    color: [0.2, 1, 0.2],
-    colorHex: "#008DFF",
+    color: [0.292, 0.509, 0],
+    colorHex: "#93BD00",
     roughness: 0,
     metallic: 0,
     alpha: 0.8,
-    emission: 0.1,
+    emission: 0.05,
     light: null,
     groups: ["acid", "liquid"],
   },
@@ -537,11 +537,11 @@ const materialEntries: Materials = [
     id: "21e",
     name: "lava",
     color: [1, 0.1, 0],
-    colorHex: "#008DFF",
+    colorHex: "#FF5900",
     roughness: 0,
     metallic: 0,
     alpha: 0.95,
-    emission: 0.1,
+    emission: 0.05,
     light: null,
     groups: ["lava", "liquid"],
   },
@@ -555,7 +555,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: ["bio"],
+    groups: ["bio", "building"],
   },
   {
     id: 24,
@@ -567,7 +567,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 1,
     light: null,
-    groups: ["crystal"],
+    groups: ["crystal", "building"],
   },
   {
     id: 25,
@@ -579,7 +579,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 1,
     light: null,
-    groups: ["crystal"],
+    groups: ["crystal", "building"],
   },
   {
     id: 26,
@@ -591,7 +591,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 1,
     light: null,
-    groups: ["crystal"],
+    groups: ["crystal", "building"],
   },
   {
     id: 27,
@@ -603,7 +603,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 1,
     light: null,
-    groups: ["crystal"],
+    groups: ["crystal", "building"],
   },
   {
     id: 28,
@@ -615,7 +615,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 1,
     light: null,
-    groups: ["crystal"],
+    groups: ["crystal", "building"],
   },
   {
     id: 29,
@@ -630,7 +630,7 @@ const materialEntries: Materials = [
       intensity: 10,
       color: [1, 1, 1],
     },
-    groups: ["light"],
+    groups: ["light", "building"],
   },
   {
     id: 30,
@@ -645,7 +645,7 @@ const materialEntries: Materials = [
       intensity: 10,
       color: [1, 0, 0],
     },
-    groups: ["light"],
+    groups: ["light", "building"],
   },
   {
     id: 31,
@@ -660,7 +660,7 @@ const materialEntries: Materials = [
       intensity: 10,
       color: [0.799, 0, 0.178],
     },
-    groups: ["light"],
+    groups: ["light", "building"],
   },
   {
     id: 32,
@@ -675,7 +675,7 @@ const materialEntries: Materials = [
       intensity: 10,
       color: [0, 0.266, 0.799],
     },
-    groups: ["light"],
+    groups: ["light", "building"],
   },
   {
     id: 33,
@@ -690,7 +690,7 @@ const materialEntries: Materials = [
       intensity: 10,
       color: [0, 1, 0],
     },
-    groups: ["light"],
+    groups: ["light", "building"],
   },
   {
     id: 34,
@@ -705,7 +705,7 @@ const materialEntries: Materials = [
       intensity: 10,
       color: [1, 1, 0],
     },
-    groups: ["light"],
+    groups: ["light", "building"],
   },
   {
     id: 35,
@@ -720,7 +720,7 @@ const materialEntries: Materials = [
       intensity: 10,
       color: [0, 0, 1],
     },
-    groups: ["light"],
+    groups: ["light", "building"],
   },
   {
     id: 36,
@@ -735,7 +735,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: [],
+    groups: ["item"],
   },
   {
     id: 37,
@@ -750,7 +750,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0,
     light: null,
-    groups: [],
+    groups: ["item"],
   },
   {
     id: 38,
@@ -766,7 +766,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0.5,
     light: null,
-    groups: [],
+    groups: ["item"],
   },
   {
     id: 39,
@@ -782,7 +782,7 @@ const materialEntries: Materials = [
     alpha: 1,
     emission: 0.5,
     light: null,
-    groups: [],
+    groups: ["item"],
   },
 ]
 
@@ -814,7 +814,7 @@ const createMaterials = (scene) =>
         material.emissiveIntensity = entry.emission
       }
 
-      if (entry.groups.includes("water")) {
+      if (entry.groups.includes("liquid")) {
         material.bumpTexture = new BABYLON.Texture(
           "textures/water_n.jpg",
           scene,

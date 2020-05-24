@@ -43,7 +43,14 @@ const main = async () => {
   // scene.fogDensity = 0.1
   // scene.fogColor = new BABYLON.Color3(0, 0, 0)
 
+  let gpon = false
   gameLoop(() => {
+    const gp = navigator.getGamepads()[0]
+    if (gp && !gpon) {
+      console.log({ gp })
+      game.sounds.die.play()
+      gpon = true
+    }
     if (!game.pause) {
       // stats.begin()
       renderFrame()

@@ -1,10 +1,13 @@
 import * as BABYLON from "babylonjs"
 
-const handleControls = (scene, action1, action2, canvas, mobile) => {
+const handleControls = (scene, game, action1, action2, canvas, mobile) => {
   const input = {
     down: false,
     up: false,
   }
+
+  let gamepadConnected = false
+  const gamepadButtons = [false, false, false, false]
 
   let right = false
   let left = false
@@ -31,7 +34,53 @@ const handleControls = (scene, action1, action2, canvas, mobile) => {
     }
   })
 
+  var gamepadManager = new BABYLON.GamepadManager()
+  gamepadManager.onGamepadConnectedObservable.add((gamepad, state) => {
+    console.log("Gamepad connected")
+    gamepadConnected = true
+    //@ts-ignore
+    gamepad.onButtonDownObservable.add((button, state) => {
+      //Button has been pressed
+      game.sounds.button.play()
+      gamepadButtons[button] = true
+      console.log(button)
+    })
+    //@ts-ignore
+    gamepad.onButtonUpObservable.add((button, state) => {
+      //Button has been pressed
+      gamepadButtons[button] = false
+      console.log(button)
+    })
+  })
+  gamepadManager.onGamepadDisconnectedObservable.add((gamepad, state) => {
+    gamepadConnected = false
+    console.log("Gamepad disconnected")
+  })
+
+  const camera = scene.activeCamera
+
   return () => {
+    if (gamepadConnected) {
+      if (gamepadButtons[0]) {
+        console.log("X")
+        action2()
+      }
+      if (gamepadButtons[1]) {
+        console.log("O")
+        action1()
+      }
+      if (gamepadButtons[4]) {
+        console.log("L1")
+        camera.alpha += 0.05
+      }
+      if (gamepadButtons[5]) {
+        console.log("R1")
+        camera.alpha -= 0.05
+      }
+
+      // gamepadButtons.fill(false)
+    }
+
     const cameraNotMoved =
       scene.activeCamera.position.x === prevCameraPosition.x &&
       scene.activeCamera.position.y === prevCameraPosition.y &&

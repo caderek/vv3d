@@ -53,6 +53,7 @@ const createSecondaryAction = ({
         const buttons = {
           "button-pink": () => {
             toolbox.classList.toggle("hidden")
+            game.pause = true
           },
           "button-green": () => {
             if (!mobile) {

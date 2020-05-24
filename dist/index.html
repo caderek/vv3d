@@ -74,41 +74,14 @@
         cursor: pointer;
       }
 
-      .options {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-      }
-
-      .light-switch {
-        display: inline-block;
-        margin-right: 5px;
-        background: MediumVioletRed;
-        color: white;
-        padding: 20px;
-        font-size: 18px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-family: sans-serif;
-      }
-
-      .toolbox,
-      .splash {
+      .toolbox {
         width: 100%;
         height: 100%;
-        background: #222;
         position: absolute;
         top: 0;
         text-align: center;
         overflow: auto;
-      }
-
-      .splash p {
-        margin-top: 30px;
-        color: white;
-        font-size: 18px;
-        font-family: sans-serif;
-        text-align: center;
+        background: rgba(0, 24, 46, 0.95);
       }
 
       .size {
@@ -130,12 +103,13 @@
 
       .toolbox__selected {
         padding: 20px;
-        background: #111;
+        background: #000b14;
       }
 
       .toolbox__shapes,
       .toolbox__materials {
         padding: 20px;
+        overflow: auto;
       }
 
       .toolbox-switch p {
@@ -213,6 +187,21 @@
         image-rendering: pixelated; /* Chrome */
         image-rendering: optimize-contrast; /* CSS3 Proposed                  */
         -ms-interpolation-mode: nearest-neighbor;
+        -webkit-mask-image: url(/images/wave-mask.svg);
+        mask-image: url(/images/wave-mask.svg);
+        -webkit-mask-size: cover;
+        mask-size: cover; /* Can be changed in the live sample */
+      }
+
+      @media (min-width: 1024px) {
+        .material {
+          width: 60px;
+          height: 60px;
+        }
+        .shape {
+          width: 80px;
+          height: 80px;
+        }
       }
 
       .next {
@@ -222,37 +211,56 @@
       .hidden {
         visibility: hidden;
       }
+
+      .info {
+        height: 0;
+      }
+
+      .tabs {
+        padding: 20px 20px 0 20px;
+        text-align: left;
+        border-bottom: solid 3px #000b14;
+      }
+
+      .tab {
+        background: #001d36;
+        display: inline-block;
+        color: #dddddd;
+        padding: 40px 20px;
+        margin-right: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        font-family: sans-serif;
+        font-size: 18px;
+      }
+
+      .tab-selected {
+        background: #000b14;
+      }
     </style>
   </head>
   <body role="application">
-    <pwa-install></pwa-install>
+    <div class="info hidden">
+      Space sandbox RPG, where you travel through the infinite universe,
+      building, crafting, and interacting with alien species.
+    </div>
+    <!-- <pwa-install></pwa-install> -->
     <canvas id="viewport" touch-action="none" role="application"></canvas>
     <div id="toolbox" class="toolbox hidden">
-      <div id="toolbox-selected" class="toolbox__selected">
+      <div id="tabs" class="tabs">
+        <div id="tab-blocks" class="tab tab-selected">BLOCKS</div>
+        <div id="tab-constructions" class="tab">CONSTRUCTIONS</div>
+        <div id="tab-liquids" class="tab">LIQUIDS</div>
+        <div id="tab-plants" class="tab">PLANTS</div>
+        <div id="tab-items" class="tab">ITEMS</div>
+      </div>
+      <div id="toolbox-selected" class="js-submenu toolbox__selected">
         <div id="selected-shape" class="selected-shape">&nbsp;</div>
         <div id="selected-material" class="selected-material">&nbsp;</div>
         <button id="back" class="back">BACK</button>
       </div>
-      <div id="toolbox-shapes" class="toolbox__shapes"></div>
-      <div id="toolbox-materials" class="toolbox__materials"></div>
-    </div>
-    <div class="options hidden">
-      <div id="light-switch" class="light-switch">DAY / NIGHT</div>
-      <div id="mode-switch" class="light-switch">BUILD</div>
-      <div id="screenshot" class="light-switch">TAKE SCREENSHOT</div>
-      <div id="next" class="light-switch next">NEXT</div>
-    </div>
-    <div id="splash" class="splash hidden">
-      <p>World size:</p>
-      <button data-type="size" data-value="s" class="size">
-        SMALL (12x12x12)
-      </button>
-      <button data-type="size" data-value="m" class="size">
-        MEDIUM (20x20x20)
-      </button>
-      <button data-type="size" data-value="l" class="size">
-        LARGE (30x30x30)
-      </button>
+      <div id="toolbox-shapes" class="js-submenu toolbox__shapes"></div>
+      <div id="toolbox-materials" class="js-submenu toolbox__materials"></div>
     </div>
     <script src="main.js"></script>
   </body>
