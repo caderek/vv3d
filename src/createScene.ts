@@ -356,6 +356,21 @@ const createScene = async (engine, canvas, mobile) => {
       }
     })
 
+  document
+    .getElementById("tab-toolbox-items")
+    .addEventListener("click", ({ target }) => {
+      // @ts-ignore
+      if (target.dataset.type === "item") {
+        sounds.button.play()
+        // @ts-ignore
+        state.activeMaterial = target.dataset.materialId
+        // @ts-ignore
+        state.activeShape = target.dataset.shapeId
+        $toolbox.classList.toggle("hidden")
+        game.pause = false
+      }
+    })
+
   document.getElementById("back").addEventListener("click", () => {
     sounds.button.play()
     $toolbox.classList.toggle("hidden")
@@ -372,6 +387,13 @@ const createScene = async (engine, canvas, mobile) => {
       // @ts-ignore
       if (target.dataset.id === "blocks") {
         $toolboxSelected.classList.remove("hidden")
+        state.activeMaterial = 1
+        state.activeShape = 1
+        $selectedMaterial.style.backgroundImage = "none"
+        // @ts-ignore
+        $selectedMaterial.style.background = materialsByID[1].colorHex
+        $selectedMaterial.style.boxShadow = "none"
+        $selectedShape.style.backgroundImage = `url(/models/ico/cube.png)`
       } else {
         $toolboxSelected.classList.add("hidden")
       }

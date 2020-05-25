@@ -11,6 +11,7 @@ import createScene from "./createScene"
 import * as GUI from "babylonjs-gui"
 import { shapeEntries } from "./blocks/shapes"
 import { materialEntries } from "./blocks/materials"
+import { itemEntries } from "./blocks/items"
 import AmbientOcclusion from "./scene/ambient-occlusion"
 
 const $toolboxShapes = document.getElementById("toolbox-shapes")
@@ -189,7 +190,28 @@ const toolboxPlants = shapeEntries
   .map(({ id, name, pallets }) => renderPlants(id, name, pallets))
   .join("\n")
 
+const renderItems = (id, name, shapeId, materialId) => {
+  const style = `background-image: url(/models/ico/${name}.png);`
+  return `
+    <div
+      class="item"
+      data-type="item"
+      data-id="${id}"
+      data-shape-id="${shapeId}"
+      data-material-id="${materialId}"
+      style="${style}"
+    ></div>
+  `
+}
+
+const toolboxItems = itemEntries
+  .map(({ id, name, shapeId, materialId }) =>
+    renderItems(id, name, shapeId, materialId),
+  )
+  .join("\n")
+
 $toolboxShapes.innerHTML = toolboxShapes
 $toolboxMaterials.innerHTML = toolboxMaterials
 $toolboxLiquids.innerHTML = toolboxLiquids
 $toolboxPlants.innerHTML = toolboxPlants
+$toolboxItems.innerHTML = toolboxItems

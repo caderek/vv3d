@@ -177,15 +177,6 @@
         height: 80px;
         border-radius: 10px;
         margin: 10px;
-        background-size: cover;
-        background-repeat: no-repeat;
-        image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
-        image-rendering: -moz-crisp-edges; /* Firefox                        */
-        image-rendering: -o-crisp-edges; /* Opera                          */
-        image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
-        image-rendering: pixelated; /* Chrome */
-        image-rendering: optimize-contrast; /* CSS3 Proposed                  */
-        -ms-interpolation-mode: nearest-neighbor;
       }
 
       .liquid,
@@ -204,6 +195,19 @@
         mask-image: url(/images/wave-mask.svg);
         -webkit-mask-size: cover;
         mask-size: cover; /* Can be changed in the live sample */
+      }
+
+      .item,
+      .material {
+        background-size: cover;
+        background-repeat: no-repeat;
+        image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
+        image-rendering: -moz-crisp-edges; /* Firefox                        */
+        image-rendering: -o-crisp-edges; /* Opera                          */
+        image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+        image-rendering: pixelated; /* Chrome */
+        image-rendering: optimize-contrast; /* CSS3 Proposed                  */
+        -ms-interpolation-mode: nearest-neighbor;
       }
 
       @media (min-width: 1024px) {
@@ -280,9 +284,9 @@
         <div id="tab-plants" class="tab" data-id="plants" data-type="tab">
           PLANTS
         </div>
-        <!-- <div id="tab-items" class="tab" data-id="items" data-type="tab">
+        <div id="tab-items" class="tab" data-id="items" data-type="tab">
           ITEMS
-        </div> -->
+        </div>
       </div>
       <div id="toolbox-selected" class="js-submenu toolbox__selected">
         <div id="selected-shape" class="selected-shape">&nbsp;</div>
@@ -300,10 +304,10 @@
         id="tab-toolbox-plants"
         class="tab-toolbox tab-container hidden"
       ></div>
-      <!-- <div
+      <div
         id="tab-toolbox-items"
         class="tab-toolbox tab-container hidden"
-      ></div> -->
+      ></div>
       <button id="back" class="back">BACK</button>
     </div>
     <script src="main.js"></script>

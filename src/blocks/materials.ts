@@ -810,7 +810,7 @@ const materialEntries: Materials = [
     color: [1, 1, 1],
     texture: {
       src: "textures/cutv.png",
-      emissiveSrc: "textures/sweetv_e.png",
+      emissiveSrc: "textures/cutv_e.png",
       alpha: true,
     },
     roughness: 0.5,
