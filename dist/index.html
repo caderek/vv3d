@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta property="og:title" content="Void Voyage" />
+    <meta property="og:description" content="The space sandbox game." />
+    <meta
+      property="og:image"
+      content="https://voidvoyage.netlify.app/images/vv-hd-min.png"
+    />
+    <meta property="og:url" content="https://voidvoyage.netlify.app" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="images//favicon-16x16.png"
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <style>
+      * {
+        box-sizing: border-box;
+        outline: none;
+        margin: 0;
+        padding: 0;
+        border: none;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      body {
+        margin: 0;
+      }
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+
+      #viewport {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+        cursor: url(/images/cursor.png) 18 18, pointer;
+      }
+
+      .toolbox-switch {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background: MediumVioletRed;
+        color: white;
+        padding: 20px;
+        font-size: 18px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .toolbox {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        text-align: center;
+        overflow: auto;
+        background: rgba(0, 24, 46, 0.95);
+        cursor: url(/images/cursor.png) 18 18, pointer;
+      }
+
+      .size {
+        display: block;
+        width: 300px;
+        background-color: #d92949;
+        padding: 10px;
+        margin: 20px auto;
+        font-size: 18px;
+        font-family: sans-serif;
+        color: white;
+        cursor: pointer;
+      }
+
+      .toolbox__img {
+        width: 128px;
+        border-radius: 10px;
+      }
+
+      .toolbox__selected {
+        padding: 20px;
+        background: #000b14;
+      }
+
+      .toolbox__shapes,
+      .toolbox__materials,
+      .tab-container {
+        padding: 20px;
+        overflow: auto;
+      }
+
+      .toolbox-switch p {
+        margin-top: 10px;
+        text-align: center;
+        font-family: sans-serif;
+      }
+
+      .selected-shape,
+      .selected-material {
+        display: inline-block;
+        width: 128px;
+        height: 128px;
+        border: solid 5px black;
+        border-radius: 10px;
+        margin: 10px;
+        background-size: cover;
+      }
+
+      .back {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #008dff;
+        padding: 20px;
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+        font-family: sans-serif;
+        border-radius: 10px;
+      }
+
+      .selected-shape {
+        background-image: url(/models/ico/cube.png);
+      }
+
+      .selected-material {
+        background: #fafafa;
+        background-size: cover;
+        background-repeat: no-repeat;
+        image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
+        image-rendering: -moz-crisp-edges; /* Firefox                        */
+        image-rendering: -o-crisp-edges; /* Opera                          */
+        image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+        image-rendering: pixelated; /* Chrome */
+        image-rendering: optimize-contrast; /* CSS3 Proposed                  */
+        -ms-interpolation-mode: nearest-neighbor;
+      }
+
+      .shape {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        border: solid 5px black;
+        border-radius: 10px;
+        margin: 10px;
+        background-size: cover;
+      }
+
+      .material {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        margin: 10px;
+        image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
+        image-rendering: -moz-crisp-edges; /* Firefox                        */
+        image-rendering: -o-crisp-edges; /* Opera                          */
+        image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+        image-rendering: pixelated; /* Chrome */
+        image-rendering: optimize-contrast; /* CSS3 Proposed                  */
+        -ms-interpolation-mode: nearest-neighbor;
+      }
+
+      .liquid,
+      .item,
+      .plant {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        margin: 10px;
+        background-size: cover;
+      }
+
+      .liquid {
+        -webkit-mask-image: url(/images/wave-mask.svg);
+        mask-image: url(/images/wave-mask.svg);
+        -webkit-mask-size: cover;
+        mask-size: cover; /* Can be changed in the live sample */
+      }
+
+      .item,
+      .material {
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      @media (min-width: 1024px) {
+        .material {
+          width: 60px;
+          height: 60px;
+        }
+        .shape {
+          width: 80px;
+          height: 80px;
+        }
+      }
+
+      .next {
+        background-color: #d92949;
+      }
+
+      .hidden {
+        visibility: hidden;
+        height: 0;
+      }
+
+      .info {
+        height: 0;
+      }
+
+      .tabs {
+        padding: 20px 20px 0 20px;
+        text-align: left;
+        border-bottom: solid 10px #000b14;
+      }
+
+      .tab {
+        background: #001d36;
+        display: inline-block;
+        color: #dddddd;
+        padding: 40px 20px;
+        margin-right: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        font-family: sans-serif;
+        font-size: 18px;
+      }
+
+      .tab-selected {
+        background: #000b14;
+      }
+
+      .none {
+        display: none;
+      }
+    </style>
+  </head>
+  <body role="application">
+    <div class="info hidden">
+      Space sandbox demo.
+    </div>
+    <!-- <pwa-install></pwa-install> -->
+    <canvas id="viewport" touch-action="none" role="application"></canvas>
+    <div id="toolbox" class="toolbox hidden">
+      <div id="tabs" class="tabs">
+        <div
+          id="tab-blocks"
+          class="tab tab-selected"
+          data-id="blocks"
+          data-type="tab"
+        >
+          BLOCKS
+        </div>
+        <div id="tab-liquids" class="tab" data-id="liquids" data-type="tab">
+          LIQUIDS
+        </div>
+        <div id="tab-plants" class="tab" data-id="plants" data-type="tab">
+          PLANTS
+        </div>
+        <div id="tab-items" class="tab" data-id="items" data-type="tab">
+          ITEMS
+        </div>
+      </div>
+      <div id="toolbox-selected" class="js-submenu toolbox__selected">
+        <div id="selected-shape" class="selected-shape">&nbsp;</div>
+        <div id="selected-material" class="selected-material">&nbsp;</div>
+      </div>
+      <div id="tab-toolbox-blocks" class="tab-toolbox">
+        <div id="toolbox-shapes" class="js-submenu toolbox__shapes"></div>
+        <div id="toolbox-materials" class="js-submenu toolbox__materials"></div>
+      </div>
+      <div
+        id="tab-toolbox-liquids"
+        class="tab-toolbox tab-container hidden"
+      ></div>
+      <div
+        id="tab-toolbox-plants"
+        class="tab-toolbox tab-container hidden"
+      ></div>
+      <div
+        id="tab-toolbox-items"
+        class="tab-toolbox tab-container hidden"
+      ></div>
+      <button id="back" class="back">BACK</button>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>

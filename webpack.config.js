@@ -16,10 +16,10 @@ module.exports = {
   },
   output: {
     filename: "main.js",
-    path: path.resolve(__dirname, "game"),
+    path: path.resolve(__dirname, "dist"),
   },
   devServer: {
-    contentBase: path.join(__dirname, "game"),
+    contentBase: path.join(__dirname, "dist"),
     compress: true,
     host: "192.168.1.17",
     port: 9000,
